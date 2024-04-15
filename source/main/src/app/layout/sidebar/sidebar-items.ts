@@ -617,6 +617,18 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
+    path: '/doctor/prescription',
+    title: 'MENUITEMS.DOCTOR.PRESCRIPTION',
+    iconType: 'material-icons-outlined',
+    icon: 'assignment',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Doctor'],
+    submenu: [],
+  },
+  {
     path: '/doctor/doctors',
     title: 'MENUITEMS.DOCTOR.DOCTORS',
     iconType: 'material-icons-outlined',

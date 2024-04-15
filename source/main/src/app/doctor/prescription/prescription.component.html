@@ -5,7 +5,7 @@
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Item Stock List'" [items]="['Inventory']" [active_item]="'Item Stock List'">
+      <app-breadcrumb [title]="'Prescription list'" [items]="['Prescription']" [active_item]="'prescription'">
       </app-breadcrumb>
     </div>
     <div class="row">
@@ -15,7 +15,7 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
-                  <h2>Stock List</h2>
+                  <h2>Prescription List</h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
@@ -83,37 +83,50 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+                  <mat-cell *matCellDef="let row">#{{row.id}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="i_name">
+
+
+
+                <ng-container matColumnDef="title">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Item Name
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Item Name:</span> {{row.i_name}}</mat-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.title}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="category">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Category:</span>{{row.category}}
+
+                <ng-container matColumnDef="prescPhoto">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>prescPhoto
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="table-img tbl-col-width-per-7">
+
+                  </span> <img [src]="row.prescPhoto" />
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="qty">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Quantity
+              <!--  <ng-container matColumnDef="patient">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>patient Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.patient.address}}</mat-cell>
+                </ng-container>  -->
+
+                <ng-container matColumnDef="diseases">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">diseases
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">Quantity:</span>{{row.qty}}</span></mat-cell>
+                        class="mobile-label">diseases:</span>{{row.diseases}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="date">
+
+
+
+                <ng-container matColumnDef="createdDate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Purchase Date</mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="mobile-label">Purchase
-                      Date:</span>{{row.date | date: 'MM/dd/yyyy'}}</mat-cell>
+                      Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="price">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Price($)</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Price:</span>{{row.price}}</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="details">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Details</mat-header-cell>
+
+                <ng-container matColumnDef="medicamentList">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>med list</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <span class="truncate-text"><span class="mobile-label">Details:</span>{{row.details}}</span>
+                    <span class="truncate-text"><span class="mobile-label">medicamentList:</span>{{row.medicamentList}}</span>
                   </mat-cell>
                 </ng-container>
 
@@ -158,33 +171,8 @@
         </div>
       </div>
     </div>
-    <section>
-    <div class="row clearfix">
-      <!-- Pie Chart -->
-      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="card">
-          <div class="header">
-            <h2>Pie Chart</h2>
-          </div>
-          <div class="body">
-            <div echarts [options]="pie_chart2" class="echart-height"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Line Graph Chart -->
-      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div class="card">
-          <div class="header">
-            <h2>Aria Line Chart</h2>
-          </div>
-          <div class="body">
-            <div echarts [options]="area_line_chart" class="echart-height"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
+
+
 
 </section>
-
-
-

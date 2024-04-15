@@ -10,7 +10,7 @@ export class Patient {
   treatment: string;
   constructor(patient: Patient) {
     {
-      this.id = patient.id || this.getRandomID();
+      this.id = patient.id ;
       this.img = patient.img || 'assets/images/user/user1.jpg';
       this.name = patient.name || '';
       this.gender = patient.gender || 'male';

@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AppointmentsService } from './appointments.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { Appointments } from './appointments.model';
 import { DataSource } from '@angular/cdk/collections';
+import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component';
+import { DeleteDialogComponent } from './dialog/delete/delete.component';
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -13,9 +13,7 @@ import {
 } from '@angular/material/snack-bar';
 import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatMenuTrigger, MatMenuModule } from '@angular/material/menu';
 import { SelectionModel } from '@angular/cdk/collections';
-import { FormComponent } from './form/form.component';
 import { Direction } from '@angular/cdk/bidi';
 import {
   TableExportUtil,
@@ -25,85 +23,128 @@ import {
 import { formatDate, NgClass, DatePipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
+import { EChartsOption , } from "echarts";
+import {Chart, registerables} from "chart.js";
+import {PrescriptionService} from "./prescription.service";
+import {Prescription} from "./prescription.model";
 
-import { PrescriptionsComponent } from '../prescription/prescription.component';
-import {FeatherIconsComponent} from "@shared/components/feather-icons/feather-icons.component";
+
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
+Chart.register(...registerables);
 
 @Component({
-  selector: 'app-appointments',
-  templateUrl: './appointments.component.html',
-  styleUrls: ['./appointments.component.scss'],
+  selector: 'app-prescription',
+  templateUrl: './prescription.component.html',
+  styleUrls: ['./prescription.component.scss'],
   standalone: true,
   imports: [
     BreadcrumbComponent,
     MatTooltipModule,
+    MatButtonModule,
+    MatIconModule,
     MatTableModule,
     MatSortModule,
     NgClass,
     MatCheckboxModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
+    FeatherIconsComponent,
     MatRippleModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
     DatePipe,
-    FeatherIconsComponent,
+    NgxEchartsDirective,
+
   ],
+  providers: [
+    provideEcharts(),
+  ]
 })
-export class AppointmentsComponent
+export class PrescriptionsComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit {
-  filterToggle = false;
   displayedColumns = [
     'select',
-    'img',
-    'name',
-    'dateTime',
-    'email',
-    'mobile',
-    'disease',
+    'title',
+    'createdDate',
+    'prescPhoto',
+    'diseases',
+    //'medicamentList',
     'actions',
-
   ];
-  exampleDatabase?: AppointmentsService;
+  exampleDatabase?: PrescriptionService;
   dataSource!: ExampleDataSource;
-  selection = new SelectionModel<Appointments>(true, []);
+  selection = new SelectionModel<Prescription>(true, []);
+  index?: number;
   id?: number;
-  appointments?: Appointments;
-  PrescriptionsComponent : PrescriptionsComponent | undefined;
+  itemStockList?: Prescription;
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public appointmentsService: AppointmentsService,
+    public itemStockListService: PrescriptionService,
     private snackBar: MatSnackBar
   ) {
     super();
   }
+
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
-  @ViewChild(MatMenuTrigger)
-  contextMenu?: MatMenuTrigger;
-  contextMenuPosition = { x: '0px', y: '0px' };
 
   ngOnInit() {
     this.loadData();
   }
+
+  generatePDF(){
+    const myData = this.dataSource.filteredData;
+
+// Create the PDF content dynamically
+    const docDefinition = {
+      content: [
+        { text: 'My presctiption Data', style: 'header' }, // Header
+        {
+          table: {
+            body: [
+              ['TITLE', 'MEDLIST', 'createddate'], // Table header
+              ...myData.map(item => [
+                item.title,
+               // item.medicamentList,
+                formatDate(new Date(item.createdDate), 'yyyy-MM-dd', 'en') || '',
+
+              ]),
+            ],
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 10, 0, 10], // Adjusted margin format (top, right, bottom, left)
+        },
+      },
+    };
+
+// Generate and download the PDF
+    // @ts-ignore
+    pdfMake.createPdf(docDefinition).download('prescription_data.pdf');
+
+  }
   refresh() {
     this.loadData();
   }
-  addNewPrescription(){
-   this.PrescriptionsComponent?.addNew();
-  }
+
   addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -111,9 +152,9 @@ export class AppointmentsComponent
     } else {
       tempDirection = 'ltr';
     }
-    const dialogRef = this.dialog.open(FormComponent, {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        appointments: this.appointments,
+        itemStockList: this.itemStockList,
         action: 'add',
       },
       direction: tempDirection,
@@ -121,9 +162,9 @@ export class AppointmentsComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
         // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataServicex
+        // For add we're just pushing a new row inside DataService
         this.exampleDatabase?.dataChange.value.unshift(
-          this.appointmentsService.getDialogData()
+          this.itemStockListService.getDialogData()
         );
         this.refreshTable();
         this.showNotification(
@@ -135,25 +176,77 @@ export class AppointmentsComponent
       }
     });
   }
-  detailsCall(row: Appointments) {
+  editCall(row: Prescription) {
+    this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
     } else {
       tempDirection = 'ltr';
     }
-    this.dialog.open(FormComponent, {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        appointments: row,
-        action: 'details',
+        itemStockList: row,
+        action: 'edit',
       },
       direction: tempDirection,
-      height: '70%',
-      width: '35%',
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
+          (x) => x.id === this.id
+        );
+        // Then you update that record using data from dialogData (values you enetered)
+
+        if (foundIndex != null && this.exampleDatabase ) {
+          // if ( this.exampleDatabase.dataChange.value[foundIndex].qty <3 )
+
+          this.exampleDatabase.dataChange.value[foundIndex] =
+            this.itemStockListService.getDialogData();
+          // And lastly refresh table
+          this.refreshTable();
+          this.showNotification(
+            'black',
+            'Edit  Successfully...!!!',
+            'bottom',
+            'center'
+          );
+        }
+      }
     });
   }
-  toggleStar(row: Appointments) {
-    console.log(row);
+  deleteItem(row: Prescription) {
+    this.id = row.id;
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: row,
+      direction: tempDirection,
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
+          (x) => x.id === this.id
+        );
+        // for delete we use splice in order to remove single object from DataService
+        if (foundIndex != null && this.exampleDatabase) {
+          this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
+
+          this.refreshTable();
+          this.showNotification(
+            'snackbar-danger',
+            'Delete Record Successfully...!!!',
+            'bottom',
+            'center'
+          );
+        }
+      }
+    });
   }
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);
@@ -182,7 +275,7 @@ export class AppointmentsComponent
       // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
       this.exampleDatabase?.dataChange.value.splice(index, 1);
       this.refreshTable();
-      this.selection = new SelectionModel<Appointments>(true, []);
+      this.selection = new SelectionModel<Prescription>(true, []);
     });
     this.showNotification(
       'snackbar-danger',
@@ -192,7 +285,7 @@ export class AppointmentsComponent
     );
   }
   public loadData() {
-    this.exampleDatabase = new AppointmentsService(this.httpClient);
+    this.exampleDatabase = new PrescriptionService(this.httpClient);
     this.dataSource = new ExampleDataSource(
       this.exampleDatabase,
       this.paginator,
@@ -204,20 +297,22 @@ export class AppointmentsComponent
           return;
         }
         this.dataSource.filter = this.filter?.nativeElement.value;
+
       }
     );
   }
-  // export table data in excel file
+
+
+
   exportExcel() {
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        'Patient Name': x.name,
-        Email: x.email,
-        'Date & Time':
-          formatDate(new Date(x.dateTime), 'yyyy-MM-dd', 'en') || '',
-        Mobile: x.mobile,
-        Disease: x.disease,
+        title: x.title,
+        Diseases: x.diseases,
+       // med: x.medicamentList,
+        'Purchase Date': formatDate(new Date(x.createdDate), 'yyyy-MM-dd', 'en') || '',
+
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
@@ -236,8 +331,9 @@ export class AppointmentsComponent
       panelClass: colorName,
     });
   }
+
 }
-export class ExampleDataSource extends DataSource<Appointments> {
+export class ExampleDataSource extends DataSource<Prescription> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -245,10 +341,10 @@ export class ExampleDataSource extends DataSource<Appointments> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: Appointments[] = [];
-  renderedData: Appointments[] = [];
+  filteredData: Prescription[] = [];
+  renderedData: Prescription[] = [];
   constructor(
-    public exampleDatabase: AppointmentsService,
+    public exampleDatabase: PrescriptionService,
     public paginator: MatPaginator,
     public _sort: MatSort
   ) {
@@ -257,7 +353,7 @@ export class ExampleDataSource extends DataSource<Appointments> {
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Appointments[]> {
+  connect(): Observable<Prescription[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -265,19 +361,19 @@ export class ExampleDataSource extends DataSource<Appointments> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllAppointmentss();
+    this.exampleDatabase.getAllItemStockLists();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((appointments: Appointments) => {
+          .filter((itemStockList: Prescription) => {
             const searchStr = (
-              appointments.name +
-              appointments.dateTime +
-              appointments.email +
-              appointments.mobile +
-              appointments.address
+              itemStockList.title +
+              itemStockList.createdDate +
+              itemStockList.diseases +
+              itemStockList.prescPhoto
+
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -296,7 +392,7 @@ export class ExampleDataSource extends DataSource<Appointments> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() { }
   /** Returns a sorted copy of the database data. */
-  sortData(data: Appointments[]): Appointments[] {
+  sortData(data: Prescription[]): Prescription[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -307,18 +403,19 @@ export class ExampleDataSource extends DataSource<Appointments> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'name':
-          [propertyA, propertyB] = [a.name, b.name];
+        case 'title':
+          [propertyA, propertyB] = [a.title, b.title];
           break;
-        case 'email':
-          [propertyA, propertyB] = [a.email, b.email];
+        case 'createdDate':
+          [propertyA, propertyB] = [a.createdDate, b.createdDate];
           break;
-        case 'dateTime':
-          [propertyA, propertyB] = [a.dateTime, b.dateTime];
+        case 'diseases':
+          [propertyA, propertyB] = [a.diseases, b.diseases];
           break;
-        case 'address':
-          [propertyA, propertyB] = [a.address, b.address];
+        case 'prescPhoto':
+          [propertyA, propertyB] = [a.prescPhoto, b.prescPhoto];
           break;
+
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
@@ -327,4 +424,11 @@ export class ExampleDataSource extends DataSource<Appointments> {
       );
     });
   }
+
+
+
+
+
+
+
 }

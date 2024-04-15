@@ -10,6 +10,12 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 
 export class MedicineListService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'assets/data/medicineList.json';
+
+
+  private baseUrl :string ="http://localhost:8085/Examen/Medicines/getAll";
+  private baseUrl1 :string ="http://localhost:8085/Examen/Medicines/add";
+  private baseUrlUpt :string ="http://localhost:8085/Examen/Medicines/update";
+  private  readonly  baseUrl3 ="http://localhost:8085/Examen/Medicines/delete/";
   isTblLoading = true;
   dataChange: BehaviorSubject<MedicineList[]> = new BehaviorSubject<
     MedicineList[]
@@ -28,7 +34,7 @@ export class MedicineListService extends UnsubscribeOnDestroyAdapter {
   /** CRUD METHODS */
   getAllMedicineLists(): void {
     this.subs.sink = this.httpClient
-      .get<MedicineList[]>(this.API_URL)
+      .get<MedicineList[]>(this.baseUrl)
       .subscribe({
         next: (data) => {
           this.isTblLoading = false;
@@ -43,40 +49,40 @@ export class MedicineListService extends UnsubscribeOnDestroyAdapter {
   addMedicineList(medicineList: MedicineList): void {
     this.dialogData = medicineList;
 
-    // this.httpClient.post(this.API_URL, medicineList)
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.dialogData = medicineList;
-    //     },
-    //     error: (error: HttpErrorResponse) => {
-    //        // error code here
-    //     },
-    //   });
+     this.httpClient.post(this.baseUrl1, medicineList)
+       .subscribe({
+         next: (data) => {
+           this.dialogData = medicineList;
+         },
+         error: (error: HttpErrorResponse) => {
+            // error code here
+         },
+       });
   }
   updateMedicineList(medicineList: MedicineList): void {
     this.dialogData = medicineList;
 
-    // this.httpClient.put(this.API_URL + medicineList.id, medicineList)
-    //     .subscribe({
-    //       next: (data) => {
-    //         this.dialogData = medicineList;
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+     this.httpClient.put(this.baseUrlUpt + medicineList.id, medicineList)
+         .subscribe({
+          next: (data) => {
+             this.dialogData = medicineList;
+          },
+          error: (error: HttpErrorResponse) => {
+             // error code here
+           },
+         });
   }
   deleteMedicineList(id: number): void {
     console.log(id);
 
-    // this.httpClient.delete(this.API_URL + id)
-    //     .subscribe({
-    //       next: (data) => {
-    //         console.log(id);
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+     this.httpClient.delete(this.baseUrl3 + id)
+         .subscribe({
+           next: (data) => {
+             console.log(id);
+           },
+           error: (error: HttpErrorResponse) => {
+              // error code here
+           },
+         });
   }
 }

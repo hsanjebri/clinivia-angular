@@ -213,7 +213,6 @@ export class ApexchartComponent {
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [50, 0, 100, 100],
         },
       },
       yaxis: {
@@ -414,7 +413,6 @@ export class ApexchartComponent {
           type: 'horizontal',
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [0, 100, 100, 100],
         },
       },
       markers: {
