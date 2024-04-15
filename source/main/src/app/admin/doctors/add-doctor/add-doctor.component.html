@@ -56,6 +56,11 @@
                     <mat-label>Mobile</mat-label>
                     <input matInput formControlName="mobile" type="number" required>
                   </mat-form-field>
+                  @if (docForm.get('mobile')?.hasError('invalidMobile') && docForm.get('mobile')?.touched){
+                    <mat-error>
+                      phone number invalid
+                    </mat-error>
+                  }
                 </div>
               </div>
               <div class="row">
@@ -68,6 +73,11 @@
                       password is required
                     </mat-error>
                     }
+                    @if (docForm.get('password')?.hasError('passwordRequirements')){
+                      <mat-error>
+                        password must contain at least 1 uppercase , 1 lowercase , 1 number and a symbol also it must be at least 8 characters long
+                      </mat-error>
+                    }
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
@@ -79,30 +89,35 @@
                       Re-Enter password is required
                     </mat-error>
                     }
+                    @if (docForm.get('conformPassword')?.hasError('passwordMismatch')){
+                      <mat-error>
+                        password Mismatch
+                      </mat-error>
+                    }
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Designation</mat-label>
-                    <input matInput formControlName="designation">
+                    <mat-label>Spetialization</mat-label>
+                    <input matInput formControlName="specialization">
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Select Department</mat-label>
                     <mat-select formControlName="department" required>
-                      <mat-option [value]="'1'">
+                      <mat-option [value]="'Neurology'">
                         Neurology
                       </mat-option>
-                      <mat-option [value]="'2'">
+                      <mat-option [value]="'Orthopedics'">
                         Orthopedics
                       </mat-option>
-                      <mat-option [value]="'3'">
+                      <mat-option [value]="'Gynaecology'">
                         Gynaecology
                       </mat-option>
-                      <mat-option [value]="'4'">
+                      <mat-option [value]="'Microbiology'">
                         Microbiology
                       </mat-option>
                     </mat-select>
@@ -132,18 +147,33 @@
                       Please enter a valid email address
                     </mat-error>
                     }
+                    @if (docForm.get('email')?.hasError('required') && docForm.get('email')?.touched) {
+                      <mat-error>
+                        Please insert your email
+                      </mat-error>
+                      }
+                    @if (docForm.get('email')?.hasError('emailNotUnique')) {
+                    <mat-error>
+                      Email alredy in use
+                    </mat-error>
+                    }
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Date Of Birth</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="dob" required>
+                    <input matInput [matDatepicker]="picker" formControlName="date" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-                    @if (docForm.get('dob')?.hasError('required')) {
+                    @if (docForm.get('date')?.hasError('required')) {
                     <mat-error>
                       Please select date
                     </mat-error>
+                    }
+                    @if (docForm.get('date')?.hasError('minimumAge')){
+                      <mat-error>
+                        You must be at least 18 years old to register.                    
+                      </mat-error>
                     }
                   </mat-form-field>
                 </div>
@@ -151,8 +181,8 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Education</mat-label>
-                    <textarea matInput formControlName="education"></textarea>
+                    <mat-label>Degree</mat-label>
+                    <textarea matInput formControlName="degree"></textarea>
                   </mat-form-field>
                 </div>
               </div>
@@ -165,7 +195,7 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <button class="btn-space" [disabled]="!docForm.valid " mat-raised-button
-                    color="primary">Submit</button>
+                    color="primary" (click)="onSubmit">Submit</button>
                   <button type="button" mat-raised-button color="warn">Cancel</button>
                 </div>
               </div>

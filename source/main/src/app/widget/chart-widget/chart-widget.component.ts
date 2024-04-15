@@ -302,6 +302,7 @@ export class ChartWidgetComponent {
           type: 'horizontal',
           opacityFrom: 1,
           opacityTo: 1,
+
         },
       },
       grid: {
