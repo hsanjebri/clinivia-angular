@@ -137,7 +137,7 @@ export class HeaderComponent
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Patient') {
       this.homePage = 'patient/dashboard';
-    } else if (userRole === 'Doctor') {
+    } else if (userRole === 'DOCTOR') {
       this.homePage = 'doctor/dashboard';
     } else {
       this.homePage = 'admin/dashboard/main';

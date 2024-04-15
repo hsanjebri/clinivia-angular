@@ -51,6 +51,7 @@ export class SigninComponent
   adminSet() {
     this.authForm.get('username')?.setValue('admin@hospital.org');
     this.authForm.get('password')?.setValue('admin@123');
+    
   }
   doctorSet() {
     this.authForm.get('username')?.setValue('doctor@hospital.org');
