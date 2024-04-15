@@ -47,6 +47,7 @@ export class HeaderComponent
   implements OnInit {
   public config!: InConfiguration;
   userImg?: string;
+  username?: string;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -130,7 +131,7 @@ export class HeaderComponent
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
     this.userImg = this.authService.currentUserValue.img;
-
+    this.username = this.authService.currentUserValue.firstName;
     this.docElement = document.documentElement;
 
     if (userRole === 'Admin') {

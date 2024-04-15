@@ -172,6 +172,7 @@ export class SignupComponent implements OnInit {
       return;
     } else {
       this.ds.addDoctors(this.authForm.value as any)
+      this.router.navigate(['/authentication/signin']);
       //this.router.navigate(['/admin/dashboard/main']);
     }
   }
