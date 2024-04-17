@@ -3,125 +3,84 @@
     <div class="editRowModal">
       <div class="modalHeader clearfix">
         <div class="modal-about">
-          {{dialogTitle}}
+          {{ dialogTitle }}
         </div>
       </div>
     </div>
-    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+    <button  (click)="dialogRef.close()" class="modal-close-button" aria-label="Fermer la boîte de dialogue">
       <mat-icon>close</mat-icon>
     </button>
   </div>
-  <div mat-dialog-content>
-    <form class="register-form m-4" [formGroup]="itemStockListForm" (ngSubmit)="submit">
+
+    <form class="register-form m-4" [formGroup]="itemStockListForm" (ngSubmit)="submit()">
       <div class="row">
-
-
-
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>prescription title</mat-label>
+            <mat-label>Titre de la prescription</mat-label>
             <input matInput formControlName="title" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>badge</mat-icon>
-            @if (itemStockListForm.get('title')?.hasError('required')) {
-            <mat-error>
-              title Name is required
-            </mat-error>
-            }
+            <mat-error *ngIf="itemStockListForm.get('title')?.hasError('required')">Le titre est requis</mat-error>
           </mat-form-field>
         </div>
-
-
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>patient email</mat-label>
-            <input matInput formControlName="emailPatient" >
+            <mat-label>Email du patient</mat-label>
+            <input matInput formControlName="emailPatient">
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>badge</mat-icon>
           </mat-form-field>
         </div>
-
-      </div>
-
-
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <div class="example-button-row">
-          </div>
-        </div>
       </div>
       <div class="row">
-
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Purchase date</mat-label>
+            <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="createdDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            @if (itemStockListForm.get('createdDate')?.hasError('required')) {
-            <mat-error>
-              Please select date
-            </mat-error>
-            }
-            @if (itemStockListForm.get('createdDate')?.hasError('minimumAge')) {
-            <mat-error>
-              Date cannot be before today
-            </mat-error>
-            }
+            <mat-error *ngIf="itemStockListForm.get('createdDate')?.hasError('required')">date is required</mat-error>
+            <mat-error *ngIf="itemStockListForm.get('createdDate')?.hasError('dateMinimum')">the date should be before today</mat-error>
           </mat-form-field>
         </div>
-      </div>
-      <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>diseases</mat-label>
-            <input matInput formControlName="diseases"  required >
+            <mat-label>Maladies</mat-label>
+            <input matInput formControlName="diseases" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>attach_money</mat-icon>
-            @if (itemStockListForm.get('diseases')?.hasError('required')) {
-            <mat-error>
-              diseases is required
-            </mat-error>
-            }
-
+            <mat-error *ngIf="itemStockListForm.get('diseases')?.hasError('required')">Les maladies sont requises</mat-error>
           </mat-form-field>
         </div>
-       <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>medicament list</mat-label>
-            <textarea matInput formControlName="medicamentList"></textarea>
-            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>medicamentList</mat-icon>
-            @if (itemStockListForm.get('medicamentList')?.hasError('required')) {
-            <mat-error>
-              medicamentList is required
-            </mat-error>
-            }
-          </mat-form-field>
-        </div> -->
       </div>
+
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
-          <label>Upload</label>
+          <label>prescription photo</label>
           <app-file-upload formControlName="prescPhoto"></app-file-upload>
         </div>
       </div>
+      <div class="row">
 
-
-
-
+        <div formArrayName="medicines">
+          <label>medicines:</label>
+          <div *ngFor="let medicine of listMedicaments; let i = index" class="form-group">
+            <input type="checkbox" [formControlName]="i">{{ medicine.m_name }}
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Medicament Description</mat-label>
+          <input matInput formControlName="description" required>
+          <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>attach_money</mat-icon>
+          <mat-error *ngIf="itemStockListForm.get('description')?.hasError('required')"> description  required</mat-error>
+        </mat-form-field>
+      </div>
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <div class="example-button-row">
-            <button mat-raised-button color="primary" [disabled]="!itemStockListForm.valid" [mat-dialog-close]="1"
-              (click)="confirmAdd()">Save</button>
-            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+            <button mat-raised-button color="primary" [disabled]="!itemStockListForm.valid" [mat-dialog-close]="1" (click)="submit()">Enregistrer</button>
+            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Annuler</button>
           </div>
         </div>
       </div>
     </form>
-
-
   </div>
-</div>

@@ -4,8 +4,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import {WebSocketSubject} from "rxjs/internal/observable/dom/WebSocketSubject";
 import {webSocket} from "rxjs/webSocket";
-import {Prescription} from "./prescription.model";
+import {Prescription} from "../../doctor/prescription/prescription.model";
 import {Patient} from "../../admin/patients/allpatients/patient.model";
+import {MedicineList} from "../../admin/pharmacy/medicine-list/medicine-list.model";
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,9 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   private baseUrl1 :string ="http://localhost:8085/Examen/Prescriptions/add";
   private baseUrlUpt :string ="http://localhost:8085/Examen/Prescriptions/update";
   private  readonly  baseUrl3 ="http://localhost:8085/Examen/Prescriptions/delete/";
+  private    baseUrlAddMed ="http://localhost:8085/Examen/Prescriptions/Addmedicines/";
+  private    baseUrlGetMed ="http://localhost:8085/Examen/Prescriptions/GetMedicines";
+
 
   webSocketUrl = 'http://your-backend-url/ws';
 
@@ -52,25 +56,14 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
         },
       });
   }
-  addItemStockList(itemStockList: Prescription ): void {
+  addItemStockList(itemStockList: Prescription ): Observable<Prescription> {
     this.dialogData = itemStockList;
 
-    this.httpClient.post(this.baseUrl1, itemStockList  )
-      .subscribe({
-        next: (data) => {
-          this.dialogData = itemStockList;
+    return  this.httpClient.post<Prescription>(this.baseUrl1, itemStockList  );
 
-
-        },
-        error: (error: HttpErrorResponse) => {
-          // error code here
-        },
-      });
   }
-  updateItemStockList(itemStockList: Prescription): Observable<any> {
-    this.dialogData = itemStockList;
-
-    return   this.httpClient.put(this.baseUrlUpt + itemStockList.id, itemStockList) ;
+  updateItemStockList(itemStockList: Prescription): Observable<Object> {
+    return   this.httpClient.put(this.baseUrlUpt , itemStockList) ;
 
   }
   deleteItemStockList(id: number): void {
@@ -102,10 +95,16 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
     return this.socket$;
   }
 
-  // Function to handle incoming notifications
   handleNotification(message: any) {
     console.log('Received notification:', message);
     // Update UI or data based on the notification content (e.g., update equipment list)
+  }
+
+  addMedicinesToPrescription(PrescripitonId: number, MedicinesIds: Set<number>): Observable<any> {
+    return this.httpClient.post(this.baseUrlAddMed + PrescripitonId, Array.from(MedicinesIds));
+  }
+  getMedicinesByPrescriptionId(PrescriptionId: number): Observable<MedicineList[]> {
+    return this.httpClient.get<MedicineList[]>(this.baseUrlGetMed +PrescriptionId);
   }
 
 

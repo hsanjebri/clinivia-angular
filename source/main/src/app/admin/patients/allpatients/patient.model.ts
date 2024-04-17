@@ -8,6 +8,7 @@ export class Patient {
   address: string;
   mobile: string;
   treatment: string;
+  email : string;
   constructor(patient: Patient) {
     {
       this.id = patient.id ;
@@ -19,6 +20,7 @@ export class Patient {
       this.address = patient.address || '';
       this.mobile = patient.mobile || '';
       this.treatment = patient.treatment || '';
+      this.email = patient.email ||'';
     }
   }
   public getRandomID(): number {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { MedicineList } from './medicine-list.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
@@ -32,19 +32,9 @@ export class MedicineListService extends UnsubscribeOnDestroyAdapter {
     return this.dialogData;
   }
   /** CRUD METHODS */
-  getAllMedicineLists(): void {
-    this.subs.sink = this.httpClient
-      .get<MedicineList[]>(this.baseUrl)
-      .subscribe({
-        next: (data) => {
-          this.isTblLoading = false;
-          this.dataChange.next(data);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.isTblLoading = false;
-          console.log(error.name + ' ' + error.message);
-        },
-      });
+  getAllMedicineLists(): Observable<MedicineList[]> {
+   return  this.httpClient
+      .get<MedicineList[]>(this.baseUrl);
   }
   addMedicineList(medicineList: MedicineList): void {
     this.dialogData = medicineList;

@@ -37,6 +37,7 @@ import { EChartsOption , } from "echarts";
 import {Chart, registerables} from "chart.js";
 import {PrescriptionService} from "./prescription.service";
 import {Prescription} from "./prescription.model";
+import{SigninComponent} from "../../authentication/signin/signin.component";
 
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
@@ -63,6 +64,7 @@ Chart.register(...registerables);
     DatePipe,
     NgxEchartsDirective,
 
+
   ],
   providers: [
     provideEcharts(),
@@ -77,6 +79,7 @@ export class PrescriptionsComponent
     'createdDate',
     'prescPhoto',
     'diseases',
+    'patient email',
     //'medicamentList',
     'actions',
   ];
@@ -91,7 +94,7 @@ export class PrescriptionsComponent
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public itemStockListService: PrescriptionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     super();
   }
@@ -104,6 +107,7 @@ export class PrescriptionsComponent
 
   ngOnInit() {
     this.loadData();
+
   }
 
   generatePDF(){
@@ -156,6 +160,9 @@ export class PrescriptionsComponent
       data: {
         itemStockList: this.itemStockList,
         action: 'add',
+        //doctor_id : this.comp.doctor_id ,
+
+
       },
       direction: tempDirection,
     });
@@ -188,6 +195,7 @@ export class PrescriptionsComponent
       data: {
         itemStockList: row,
         action: 'edit',
+        //doctor_id : this.comp.doctor_id ,
       },
       direction: tempDirection,
     });
@@ -200,7 +208,6 @@ export class PrescriptionsComponent
         // Then you update that record using data from dialogData (values you enetered)
 
         if (foundIndex != null && this.exampleDatabase ) {
-          // if ( this.exampleDatabase.dataChange.value[foundIndex].qty <3 )
 
           this.exampleDatabase.dataChange.value[foundIndex] =
             this.itemStockListService.getDialogData();

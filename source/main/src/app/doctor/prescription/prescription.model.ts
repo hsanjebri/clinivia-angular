@@ -9,28 +9,30 @@ export class Prescription {
   createdDate: string;
   diseases: string;
   emailPatient : string ;
-
-  Allmedicines:  MedicineList[];
+  description : string ;
   medicines :  MedicineList[];
-
-  doctor: Doctors;
-  patient : Patient;
+  approved : boolean;
+ // symptoms : string;
+  doctor_id: number;
+  //patient : Patient;
   constructor(prescription: Prescription) {
     {
       this.id = prescription.id ;
-
-
-      this.Allmedicines = prescription.Allmedicines ;
       this.medicines = prescription.medicines;
 
+      this.approved = true;
+
+      this.description = prescription.description || '';
 
       this.emailPatient = prescription.emailPatient || '';
       this.title = prescription.title || '';
+     // this.symptoms = prescription.symptoms || '';
+
       this.prescPhoto = prescription.prescPhoto || '';
       this.createdDate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.doctor = prescription.doctor ;
+     this.doctor_id = prescription.doctor_id ;
       this.diseases = prescription.diseases || '';
-      this.patient = prescription.patient ;
+     // this.patient = prescription.patient ;
 
 
     }

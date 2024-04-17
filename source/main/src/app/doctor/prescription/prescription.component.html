@@ -89,7 +89,7 @@
 
 
                 <ng-container matColumnDef="title">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Item Name
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Prescription title
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.title}}</mat-cell>
                 </ng-container>
@@ -99,7 +99,8 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"><span class="table-img tbl-col-width-per-7">
 
-                  </span> <img [src]="row.prescPhoto" />
+                  </span>
+                    <img [src]="row.prescPhoto" />
                   </mat-cell>
                 </ng-container>
               <!--  <ng-container matColumnDef="patient">
@@ -107,27 +108,26 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.patient.address}}</mat-cell>
                 </ng-container>  -->
+                <ng-container matColumnDef="patient email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>patient email
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.emailPatient}}</mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="diseases">
                   <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">diseases
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">diseases:</span>{{row.diseases}}</span></mat-cell>
+                  <mat-cell *matCellDef="let row"> <span     class="badge col-green" [ngClass]="'tbl-col-width-per-80'"><span
+                ></span>{{row.diseases}}</span></mat-cell>
                 </ng-container>
+
 
 
 
                 <ng-container matColumnDef="createdDate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Purchase Date</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Purchase
+                  <mat-cell  *matCellDef="let row"> <span class="mobile-label">Purchase
                       Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="medicamentList">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>med list</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <span class="truncate-text"><span class="mobile-label">medicamentList:</span>{{row.medicamentList}}</span>
-                  </mat-cell>
                 </ng-container>
 
 

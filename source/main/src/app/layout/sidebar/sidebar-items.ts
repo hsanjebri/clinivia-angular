@@ -592,6 +592,7 @@ export const ROUTES: RouteInfo[] = [
   },
 
   // Doctor Modules
+
   {
     path: '/doctor/dashboard',
     title: 'MENUITEMS.DOCTOR.DASHBOARD',
@@ -603,7 +604,18 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     role: ['DOCTOR'],
     submenu: [],
-  },
+  },{
+  path: '/doctor/prescription',
+  title: 'Prescription',
+  iconType: 'material-icons-outlined',
+  icon: 'space_dashboard',
+  class: '',
+  groupTitle: false,
+  badge: '',
+  badgeClass: '',
+  role: ['DOCTOR'],
+  submenu: [],
+},
   {
     path: '/doctor/appointments',
     title: 'MENUITEMS.DOCTOR.APPOINTMENTS',
@@ -616,18 +628,7 @@ export const ROUTES: RouteInfo[] = [
     role: ['DOCTOR'],
     submenu: [],
   },
-  {
-    path: '/doctor/prescription',
-    title: 'MENUITEMS.DOCTOR.PRESCRIPTION',
-    iconType: 'material-icons-outlined',
-    icon: 'assignment',
-    class: '',
-    groupTitle: false,
-    badge: '',
-    badgeClass: '',
-    role: ['Doctor'],
-    submenu: [],
-  },
+
   {
     path: '/doctor/doctors',
     title: 'MENUITEMS.DOCTOR.DOCTORS',
