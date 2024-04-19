@@ -10,6 +10,7 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 
 export class PatientService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'assets/data/patient.json';
+  private readonly API_URLdelete = "http://localhost:8085/Examen/patients/delete/";
   isTblLoading = true;
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);
   // Temporarily stores data from dialogs
@@ -24,8 +25,11 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
     return this.dialogData;
   }
   /** CRUD METHODS */
+  getUs(){
+    return this.httpClient.get<Patient[]>("http://localhost:8085/Examen/patients/getall")
+  }
   getAllPatients(): void {
-    this.subs.sink = this.httpClient.get<Patient[]>(this.API_URL).subscribe({
+    this.subs.sink = this.httpClient.get<Patient[]>("http://localhost:8085/Examen/patients/getall").subscribe({
       next: (data) => {
         this.isTblLoading = false;
         this.dataChange.next(data);
@@ -39,40 +43,40 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   addPatient(patient: Patient): void {
     this.dialogData = patient;
 
-    // this.httpClient.post(this.API_URL, patient)
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.dialogData = patient;
-    //     },
-    //     error: (error: HttpErrorResponse) => {
-    //        // error code here
-    //     },
-    //   });
+     this.httpClient.post("http://localhost:8085/Examen/patients/add", patient)
+       .subscribe({
+         next: (data) => {
+           this.dialogData = patient;
+         },
+         error: (error: HttpErrorResponse) => {
+            // error code here
+         },
+       });
   }
   updatePatient(patient: Patient): void {
     this.dialogData = patient;
 
-    // this.httpClient.put(this.API_URL + patient.id, patient)
-    //     .subscribe({
-    //       next: (data) => {
-    //         this.dialogData = patient;
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+     this.httpClient.put("http://localhost:8085/Examen/patients/update" + patient.id, patient)
+         .subscribe({
+           next: (data) => {
+             this.dialogData = patient;
+           },
+           error: (error: HttpErrorResponse) => {
+              // error code here
+           },
+         });
   }
   deletePatient(id: number): void {
     console.log(id);
 
-    // this.httpClient.delete(this.API_URL + id)
-    //     .subscribe({
-    //       next: (data) => {
-    //         console.log(id);
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+     this.httpClient.delete(`${this.API_URLdelete}${id}`)
+         .subscribe({
+           next: (data) => {
+             console.log(id);
+           },
+           error: (error: HttpErrorResponse) => {
+              // error code here
+           },
+         });
   }
 }

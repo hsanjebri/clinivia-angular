@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,8 +13,13 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 import { FileUploadComponent } from '@shared/components/file-upload/file-upload.component';
 import { MatSelectModule } from '@angular/material/select';
 import { Doctors } from 'app/admin/doctors/alldoctors/doctors.model';
-
-
+import { PatientService } from 'app/admin/patients/allpatients/patient.service';
+import { Patient } from 'app/admin/patients/allpatients/patient.model';
+import { HttpClient } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import * as LR from "@uploadcare/blocks";
+LR.registerBlocks(LR);
+//import { UploaderComponent } from './uploader.component';
 
 
 function minimumAgeValidator(minimumAge: number) {
@@ -118,11 +123,17 @@ export function rolevalid(control: FormControl):
         BreadcrumbComponent,
         MatSelectModule,
         FileUploadComponent,
-
-
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SignupComponent implements OnInit {
+  /*@NgModule({
+    declarations: [Uploader],
+    imports: [BrowserModule],
+    providers: [],
+    bootstrap: [UploaderComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})*/
   doc!:Doctors;
   authForm!: UntypedFormGroup;
   submitted = false;
@@ -134,7 +145,10 @@ export class SignupComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private ds:DoctorsService
+    private ds:DoctorsService,
+    private ps:PatientService,
+    //private up:FileUploadComponent,
+    private http: HttpClient
   ) { }
   ngOnInit() {
     this.authForm = this.formBuilder.group({
@@ -159,10 +173,14 @@ export class SignupComponent implements OnInit {
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
+
+  
+
   get f() {
     return this.authForm.controls;
   }
   onSubmit() {
+    
     this.submitted = true;
     this.doc = this.authForm.value as Doctors
     this.doc.name = this.authForm.controls["username"].value
@@ -171,9 +189,13 @@ export class SignupComponent implements OnInit {
       console.log("iiiiiiinvalid")
       return;
     } else {
-      this.ds.addDoctors(this.authForm.value as any)
+      let ttt = this.authForm.value as Patient;
+      console.log(ttt.password)
+        if(this.authForm.get('role')?.value != 'Patient')
+          this.ds.addDoctors(this.authForm.value as any)
+        if(this.authForm.get('role')?.value == 'Patient')
+          this.ps.addPatient(this.authForm.value as any)
       this.router.navigate(['/authentication/signin']);
-      //this.router.navigate(['/admin/dashboard/main']);
     }
   }
 }

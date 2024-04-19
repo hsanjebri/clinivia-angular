@@ -4,7 +4,8 @@ import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
 import { Page404Component } from './authentication/page404/page404.component';
 import { Role } from '@core';
-
+import * as LR from "@uploadcare/blocks";
+LR.registerBlocks(LR);
 export const APP_ROUTE: Route[] = [
     {
         path: '',
