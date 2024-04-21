@@ -1,198 +1,177 @@
- <section class="content">
+
+
+<section class="content">
+
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Prescriptions'" [items]="[]" [active_item]="'Prescriptions'"></app-breadcrumb>
+      <app-breadcrumb [title]="'Prescription list'" [items]="['Prescription']" [active_item]="'prescription'">
+      </app-breadcrumb>
     </div>
-    <div class="row clearfix">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="header">
-            <h2>Prescriptions</h2>
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+                <li class="tbl-title">
+                  <h2>Prescription List</h2>
+                </li>
+                <li class="tbl-search-box">
+                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                  <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                         aria-label="Search box">
+                </li>
 
+              </ul>
+            </div>
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button mat-mini-fab color="primary" (click)="addNew()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="REFRESH">
+                    <button mat-mini-fab color="primary" (click)="refresh()">
+                      <mat-icon class="col-white">refresh</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" [hidden]=!selection.hasValue() matTooltip="DELETE">
+                    <button mat-mini-fab color="warn" (click)="removeSelectedRows()">
+                      <mat-icon class="col-white">delete
+                      </mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li>
+                  <div class="export-button m-l-10" matTooltip="XLSX">
+                    <img src="assets/images/icons/xlsx.png" alt="" (click)="exportExcel()" />
+                  </div>
+                </li>
+                <li>
+                  <div class="export-button m-l-10" matTooltip="pdf">
+                    <img src="assets/images/icons/pdf.jpg" alt="" (click)="generatePDF()" />
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="body">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover ">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Title</th>
-                      <th>Created by</th>
-                      <th>Date</th>
-                      <th>Diseases</th>
-                      <th>Actions </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>#A348</td>
-                      <td>Prescription 1</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Jacob Ryan </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-red">Fever</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A645</td>
-                      <td>Prescription 2</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Rajesh </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-green">Cholera</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A873</td>
-                      <td>Prescription 3</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Jay Soni </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-purple">Jaundice</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A927</td>
-                      <td>Prescription 4</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.John Deo </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-purple">Typhod</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A228</td>
-                      <td>Prescription 5</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Megha Trivedi </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-orange">Maleria</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A345</td>
-                      <td>Prescription 6</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Sarah Smith </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-cyan">Infection</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A765</td>
-                      <td>Prescription 7</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Jacob Ryan </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-red">Fever</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>#A125</td>
-                      <td>Prescription 8</td>
-                      <td><a href="mailto:test@gmail.com"> Dr.Rajesh </a></td>
-                      <td>12/05/2016 </td>
-                      <td>
-                        <div class="badge col-green">Cholera</div>
-                      </td>
-                      <td>
-                        <button mat-icon-button>
-                          <mat-icon class="col-purple">cloud_download</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-green">visibility</mat-icon>
-                        </button>
-                        <button mat-icon-button>
-                          <mat-icon class="col-orange">delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+
+          <div class="body overflow-auto">
+            <div class="responsive_table">
+              <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
+                <!-- Checkbox Column -->
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+                  <mat-cell *matCellDef="let row">#{{row.id}}</mat-cell>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="title">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Prescription title
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.title?.toString() || 'No Title'}}</mat-cell>
+                </ng-container>
+
+
+                <!--  <ng-container matColumnDef="patient">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>patient Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.patient.address}}</mat-cell>
+                  </ng-container>  -->
+                <ng-container matColumnDef="patient email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>patient email
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.emailPatient}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="diseases">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">diseases
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span     class="badge col-green" [ngClass]="'tbl-col-width-per-80'"><span
+                  ></span>{{row.diseases}}</span></mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="suggestedmed">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-150'">Suggested Medicines</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <span [ngClass]="'tbl-col-width-per-150'">{{ row.suggestedMedicines }}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="symptoms">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">diseases
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span   [ngClass]="'tbl-col-width-per-80'"><span
+                  ></span>{{row.symptoms}}</span></mat-cell>
+                </ng-container>
+
+
+
+
+
+                <ng-container matColumnDef="createdDate">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Purchase Date</mat-header-cell>
+                  <mat-cell  *matCellDef="let row"> <span class="mobile-label">Purchase
+                      Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="approved">
+                  <mat-header-cell *matHeaderCellDef>Approved</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <span class="mobile-label">Approved:</span>
+                    <span [ngClass]="{'col-green': row.approved, 'col-red': !row.approved}">
+                          {{ row.approved ? 'Yes' : 'No' }}
+                  </span>
+                  </mat-cell>
+
+                </ng-container>
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+              <!--      <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(row)"
+                            class="tbl-action-btn">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>  -->
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              <!--  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row)"
+                         [style.cursor]="'pointer'" matRipple>
+                </mat-row> -->
+              </table>
+              <!-- Loading spinner -->
+              @if (exampleDatabase?.isTblLoading) {
+              <div class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
               </div>
+              }
+              @if (!exampleDatabase?.isTblLoading) {
+              <div class="no-results" [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
+                No results
+              </div>
+              }
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="50"
+                             [pageSizeOptions]="[50, 10, 25, 100]">
+              </mat-paginator>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
+
 </section>

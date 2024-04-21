@@ -5,6 +5,7 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 import {WebSocketSubject} from "rxjs/internal/observable/dom/WebSocketSubject";
 import {webSocket} from "rxjs/webSocket";
 import {Prescription} from "../../doctor/prescription/prescription.model";
+import {Patient} from "../../admin/patients/allpatients/patient.model";
 import {MedicineList} from "../../admin/pharmacy/medicine-list/medicine-list.model";
 import {AuthService} from "@core";
 
@@ -15,19 +16,15 @@ import {AuthService} from "@core";
 
 export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'assets/data/itemStockList.json';
-  private baseUrl :string ="http://localhost:8085/Examen/Prescriptions/getAll";
   private baseUrl1 :string ="http://localhost:8085/Examen/Prescriptions/add";
   private baseUrlUpt :string ="http://localhost:8085/Examen/Prescriptions/update";
-  private  readonly  baseUrl3 ="http://localhost:8085/Examen/Prescriptions/delete/";
-  private    baseUrlAddMed ="http://localhost:8085/Examen/Prescriptions/Addmedicines/";
   private    baseUrlGetMed ="http://localhost:8085/Examen/Prescriptions/GetMedicines";
-  private baseUrlGet = 'http://localhost:8085/Examen/Prescriptions/GetPrescriptionsByDoctor/'; // Adjust URL based on your backend endpoint
-
-
+  private baseUrlGet = 'http://localhost:8085/Examen/Prescriptions/GetPrescriptionsByPatient/'; // Adjust URL based on your backend endpoint
+private urlgenerate = 'http://localhost:8085/Examen/Prescriptions/generateprescription/';
   webSocketUrl = 'http://your-backend-url/ws';
 
-  doctorId! : number | undefined;
-
+  patient_id ! : number | undefined;
+auth : AuthService | undefined
   isTblLoading = true;
   dataChange: BehaviorSubject<Prescription[]> = new BehaviorSubject<
     Prescription[]
@@ -35,8 +32,11 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   // Temporarily stores data from dialogs
   dialogData!: Prescription;
   constructor(private httpClient: HttpClient,
-              private authService: AuthService) {
+              private authService: AuthService // Inject AuthService
+
+  ) {
     super();
+
   }
   get data(): Prescription[] {
     return this.dataChange.value;
@@ -46,33 +46,19 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   }
   /** CRUD METHODS */
 
-  public getPrescriptionsByDoctorId(): void {
-    this.doctorId = this.authService.currentUserValue.id; // Retrieve doctorId from AuthService
-
-    this.subs.sink = this.httpClient.get<Prescription[]>(`${this.baseUrlGet}${this.doctorId}`).subscribe({
+  public getPrescriptionsByPatientId(): void {
+    this.patient_id = this.authService.currentUserValue.id; // Retrieve doctorId from AuthService
+    this.subs.sink = this.httpClient.get<Prescription[]>(`${this.baseUrlGet}${this.patient_id}`).subscribe({
       next: (data: Prescription[]) => {
         this.isTblLoading = false;
         this.dataChange.next(data); // Update the dataChange subject with the fetched prescriptions
       },
       error: (error: HttpErrorResponse) => {
-        console.error(error.name + 'hhhhhhh' + error.message);
+        console.error(error.name + ' ' + error.message);
       }
     });
   }
-  getAllItemStockLists(): void {
-    this.subs.sink = this.httpClient
-      .get<Prescription[]>(this.baseUrl)
-      .subscribe({
-        next: (data) => {
-          this.isTblLoading = false;
-          this.dataChange.next(data);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.isTblLoading = false;
-          console.log(error.name + ' ' + error.message);
-        },
-      });
-  }
+
   addItemStockList(itemStockList: Prescription ): Observable<Prescription> {
     this.dialogData = itemStockList;
 
@@ -82,20 +68,6 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   updateItemStockList(itemStockList: Prescription): Observable<Object> {
     return   this.httpClient.put(this.baseUrlUpt , itemStockList) ;
 
-  }
-  deleteItemStockList(id: number): void {
-    console.log(id);
-
-
-    this.httpClient.delete(this.baseUrl3 + id)
-      .subscribe({
-        next: (data) => {
-          console.log(id);
-        },
-        error: (error: HttpErrorResponse) => {
-          // error code here
-        },
-      });
   }
 
   // WebSocket connection subject
@@ -117,12 +89,16 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
     // Update UI or data based on the notification content (e.g., update equipment list)
   }
 
-  addMedicinesToPrescription(PrescripitonId: number, MedicinesIds: Set<number>): Observable<any> {
-    return this.httpClient.post(this.baseUrlAddMed + PrescripitonId, Array.from(MedicinesIds));
-  }
+
   getMedicinesByPrescriptionId(PrescriptionId: number): Observable<MedicineList[]> {
     return this.httpClient.get<MedicineList[]>(this.baseUrlGetMed +PrescriptionId);
   }
+
+  generatePrescription(prescription: Prescription ): Observable<Prescription> {
+   this.dialogData = prescription
+    return this.httpClient.post<Prescription>(this.urlgenerate, prescription);
+  }
+
 
 
 }

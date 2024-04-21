@@ -12,27 +12,26 @@ export class Prescription {
   description : string ;
   medicines :  MedicineList[];
   approved : boolean;
- // symptoms : string;
+  symptoms : string;
   doctor_id: number;
-  //patient : Patient;
+  patient_id: number;
+  suggestedMedicines : string;
+
   constructor(prescription: Prescription) {
     {
       this.id = prescription.id ;
       this.medicines = prescription.medicines;
-
       this.approved = true;
-
+      this.suggestedMedicines = prescription.suggestedMedicines || '';
       this.description = prescription.description || '';
-
       this.emailPatient = prescription.emailPatient || '';
       this.title = prescription.title || '';
-     // this.symptoms = prescription.symptoms || '';
-
+      this.symptoms = prescription.symptoms || '';
       this.prescPhoto = prescription.prescPhoto || '';
       this.createdDate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
      this.doctor_id = prescription.doctor_id ;
+      this.patient_id = prescription.patient_id ;
       this.diseases = prescription.diseases || '';
-     // this.patient = prescription.patient ;
 
 
     }

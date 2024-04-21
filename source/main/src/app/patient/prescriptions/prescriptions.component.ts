@@ -3,24 +3,46 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import {TableElement, TableExportUtil, UnsubscribeOnDestroyAdapter} from "@shared";
-import {PrescriptionService} from "../../doctor/prescription/prescription.service";
+import {PrescriptionService} from "./prescriptions.service";
 import {DataSource, SelectionModel} from "@angular/cdk/collections";
 import {Prescription} from "../../doctor/prescription/prescription.model";
 import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
-import {SigninComponent} from "../../authentication/signin/signin.component";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {formatDate} from "@angular/common";
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {MatSort, MatSortModule} from "@angular/material/sort";
+import {DatePipe, formatDate, NgClass, NgIf} from "@angular/common";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import {Direction} from "@angular/cdk/bidi";
-import {FormDialogComponent} from "../../doctor/prescription/dialog/form-dialog/form-dialog.component";
+import {FormDialogComponent} from './dialog/form-dialog/form-dialog.component';
 import {DeleteDialogComponent} from "../../doctor/prescription/dialog/delete/delete.component";
 import {BehaviorSubject, fromEvent, merge, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 // @ts-ignore
 import {constructor} from "apexcharts";
+import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
+import {AuthService} from "@core";
+import {
+  MatCell, MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef,
+  MatTable, MatTableModule
+} from "@angular/material/table";
+import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
+import {FeatherIconsComponent} from "@shared/components/feather-icons/feather-icons.component";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+
+import { MatTableDataSource } from '@angular/material/table';
+import {MatRipple, MatRippleModule} from "@angular/material/core";
+import {NgxEchartsDirective} from "ngx-echarts";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+
 
 @Component({
   selector: 'app-prescriptions',
@@ -31,18 +53,63 @@ import {constructor} from "apexcharts";
     BreadcrumbComponent,
     MatButtonModule,
     MatIconModule,
+    MatTooltip,
+    MatCell,
+    MatCheckbox,
+    NgClass,
+    MatHeaderCell,
+    DatePipe,
+    MatPaginator,
+    MatTable,
+    MatHeaderRow,
+    FeatherIconsComponent,
+    MatRow,
+    MatProgressSpinnerModule,
+    MatHeaderCellDef,
+    MatColumnDef,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatRipple,
+    MatSort,
+    BreadcrumbComponent,
+    MatTooltipModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatSortModule,
+    NgClass,
+    MatCheckboxModule,
+    FeatherIconsComponent,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    DatePipe,
+    NgxEchartsDirective,
+    FormsModule,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSuffix,
+    NgIf,
+    ReactiveFormsModule,
+
   ],
 })
-export class PrescriptionsComponent {
-  /** extends UnsubscribeOnDestroyAdapter
+export class PrescriptionsComponent extends UnsubscribeOnDestroyAdapter
   implements OnInit {
   displayedColumns = [
-    'select',
     'title',
     'createdDate',
-    'prescPhoto',
     'diseases',
-    'patient email',
+    'approved',
+      'suggestedmed',
+      'symptoms',
+
     //'medicamentList',
     'actions',
   ];
@@ -52,35 +119,77 @@ export class PrescriptionsComponent {
   index?: number;
   id?: number;
   itemStockList?: Prescription;
+  patient_id!: number;
 
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public itemStockListService: PrescriptionService,
     private snackBar: MatSnackBar,
-    public  comp :SigninComponent
+    private auth: AuthService
   ) {
     super();
   }
 
-  @ViewChild(MatPaginator, { static: true })
+  @ViewChild(MatPaginator, {static: true})
   paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true })
+  @ViewChild(MatSort, {static: true})
   sort!: MatSort;
-  @ViewChild('filter', { static: true }) filter?: ElementRef;
+  @ViewChild('filter', {static: true}) filter?: ElementRef;
+
 
   ngOnInit() {
+    this.patient_id = this.auth.currentUserValue.id;
+
     this.loadData();
 
   }
+  addNew() {
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
 
-  generatePDF(){
+
+
+
+
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+        width: '600px',
+      data: {
+        prescription: this.itemStockList,
+        action: 'add',
+      },
+      direction: tempDirection,
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        // After dialog is closed we're doing frontend updates
+        // For add we're just pushing a new row inside DataService
+        this.exampleDatabase?.dataChange.value.unshift(
+          this.itemStockListService.getDialogData()
+        );
+        this.refreshTable();
+        this.showNotification(
+          'snackbar-success',
+          'Add Record Successfully...!!!',
+          'bottom',
+          'center'
+        );
+      }
+    });
+
+  }
+
+  generatePDF() {
     const myData = this.dataSource.filteredData;
 
 // Create the PDF content dynamically
     const docDefinition = {
       content: [
-        { text: 'My presctiption Data', style: 'header' }, // Header
+        {text: 'My presctiption Data', style: 'header'}, // Header
         {
           table: {
             body: [
@@ -109,45 +218,13 @@ export class PrescriptionsComponent {
     pdfMake.createPdf(docDefinition).download('prescription_data.pdf');
 
   }
+
   refresh() {
     this.loadData();
   }
 
-  addNew() {
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: {
-        itemStockList: this.itemStockList,
-        action: 'add',
-        //doctor_id : this.comp.doctor_id ,
 
-
-      },
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
-        this.exampleDatabase?.dataChange.value.unshift(
-          this.itemStockListService.getDialogData()
-        );
-        this.refreshTable();
-        this.showNotification(
-          'snackbar-success',
-          'Add Record Successfully...!!!',
-          'bottom',
-          'center'
-        );
-      }
-    });
-  }
-  editCall(row: Prescription) {
+/*  editCall(row: Prescription) {
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -171,7 +248,7 @@ export class PrescriptionsComponent {
         );
         // Then you update that record using data from dialogData (values you enetered)
 
-        if (foundIndex != null && this.exampleDatabase ) {
+        if (foundIndex != null && this.exampleDatabase) {
 
           this.exampleDatabase.dataChange.value[foundIndex] =
             this.itemStockListService.getDialogData();
@@ -186,17 +263,39 @@ export class PrescriptionsComponent {
         }
       }
     });
-  }
+  }*/
 
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
+
+
+  public loadData() {
+    this.exampleDatabase = new PrescriptionService(this.httpClient, this.auth);
+    this.dataSource = new ExampleDataSource(
+      this.exampleDatabase,
+      this.paginator,
+      this.sort
+    );
+    this.subs.sink = fromEvent(this.filter?.nativeElement, 'keyup').subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter?.nativeElement.value;
+
+      }
+    );
+  }
+
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.renderedData.length;
     return numSelected === numRows;
   }
 
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
@@ -204,6 +303,7 @@ export class PrescriptionsComponent {
         this.selection.select(row)
       );
   }
+
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
     this.selection.selected.forEach((item) => {
@@ -222,25 +322,6 @@ export class PrescriptionsComponent {
       'center'
     );
   }
-  public loadData() {
-    this.exampleDatabase = new PrescriptionService(this.httpClient);
-    this.dataSource = new ExampleDataSource(
-      this.exampleDatabase,
-      this.paginator,
-      this.sort
-    );
-    this.subs.sink = fromEvent(this.filter?.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter?.nativeElement.value;
-
-      }
-    );
-  }
-
-
 
   exportExcel() {
     // key name with space add in brackets
@@ -250,7 +331,6 @@ export class PrescriptionsComponent {
         Diseases: x.diseases,
         // med: x.medicamentList,
         'Purchase Date': formatDate(new Date(x.createdDate), 'yyyy-MM-dd', 'en') || '',
-
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
@@ -303,22 +383,20 @@ export class ExampleDataSource extends DataSource<Prescription> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllItemStockLists();
+    this.exampleDatabase.getPrescriptionsByPatientId();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
         this.filteredData = this.exampleDatabase.data
-          .slice()
+        /*  .slice()
           .filter((itemStockList: Prescription) => {
             const searchStr = (
               itemStockList.title +
-              itemStockList.createdDate +
-              itemStockList.diseases +
-              itemStockList.prescPhoto
+              itemStockList.symptoms
 
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
+          });*/
         // Sort filtered data
         const sortedData = this.sortData(this.filteredData.slice());
         // Grab the page's slice of the filtered sorted data.
@@ -347,17 +425,9 @@ export class ExampleDataSource extends DataSource<Prescription> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'title':
-          [propertyA, propertyB] = [a.title, b.title];
-          break;
+
         case 'createdDate':
           [propertyA, propertyB] = [a.createdDate, b.createdDate];
-          break;
-        case 'diseases':
-          [propertyA, propertyB] = [a.diseases, b.diseases];
-          break;
-        case 'prescPhoto':
-          [propertyA, propertyB] = [a.prescPhoto, b.prescPhoto];
           break;
 
       }
@@ -370,7 +440,9 @@ export class ExampleDataSource extends DataSource<Prescription> {
   }
 
 
+
+
+
+
 }
-**/
-}constructor()
 

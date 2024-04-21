@@ -38,6 +38,7 @@ import {Chart, registerables} from "chart.js";
 import {PrescriptionService} from "./prescription.service";
 import {Prescription} from "./prescription.model";
 import{SigninComponent} from "../../authentication/signin/signin.component";
+import {AuthService} from "@core";
 
 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
@@ -95,6 +96,8 @@ export class PrescriptionsComponent
     public dialog: MatDialog,
     public itemStockListService: PrescriptionService,
     private snackBar: MatSnackBar,
+    private auth : AuthService
+
   ) {
     super();
   }
@@ -156,6 +159,7 @@ export class PrescriptionsComponent
     } else {
       tempDirection = 'ltr';
     }
+
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
         itemStockList: this.itemStockList,
@@ -292,7 +296,7 @@ export class PrescriptionsComponent
     );
   }
   public loadData() {
-    this.exampleDatabase = new PrescriptionService(this.httpClient);
+    this.exampleDatabase = new PrescriptionService(this.httpClient , this.auth);
     this.dataSource = new ExampleDataSource(
       this.exampleDatabase,
       this.paginator,
@@ -368,7 +372,7 @@ export class ExampleDataSource extends DataSource<Prescription> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllItemStockLists();
+    this.exampleDatabase.getPrescriptionsByDoctorId();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

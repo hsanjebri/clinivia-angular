@@ -151,7 +151,9 @@ ngOnInit() {
         doctor_id : this.id_doctor,
         medicines: [], // Empty for now, will be populated after prescription creation
         approved: true,
-        //symptoms : ''
+        symptoms : "",
+        patient_id : -1,
+        suggestedMedicines : "",
       };
       prescription.doctor_id = this.id_doctor
       if (this.action === 'edit') {
