@@ -32,7 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
+import {NgxEchartsDirective, NgxEchartsModule, provideEcharts} from "ngx-echarts";
 import { EChartsOption , } from "echarts";
 import {Chart, registerables} from "chart.js";
 import {PrescriptionService} from "./prescription.service";
@@ -64,7 +64,7 @@ Chart.register(...registerables);
     MatPaginatorModule,
     DatePipe,
     NgxEchartsDirective,
-
+    NgxEchartsModule
 
   ],
   providers: [
@@ -91,6 +91,13 @@ export class PrescriptionsComponent
   id?: number;
   itemStockList?: Prescription;
 statistics :number []  = [];
+
+  // @ts-ignore
+  area_line_chart: EChartsOption;
+  // @ts-ignore
+
+  pieChartOptions: EChartsOption;
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -111,82 +118,118 @@ statistics :number []  = [];
 
   ngOnInit() {
     this.loadData();
-   /* this.itemStockListService.stat().subscribe({
-      next: (statistic: number[]) => {
-        this.statistics = statistic;
-        pie_chart: // @ts-ignore
-          EChartsOption = {
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)',
-          },
-          legend: {
-            data: ['Data 1', 'Data 2', 'Data 3', 'Data 4', 'Data 5'],
-            textStyle: {
-              color: '#9aa0ac',
-              padding: [0, 5, 0, 5],
-            },
-          },
 
-          series: [
-            {
-              name: 'Chart Data',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '48%'],
-              data: [
-                { value: 1, name: 'Written Prescriptions' },
-                { value:15, name: 'Approved Prescriptions' },
-                { value: 12, name: 'Rest Prescriptions' },
-                { value:1, name: 'Total Prescriptions' },
-              ]
-              ,
-            },
-          ],
-          color: ['#575B7A', '#DE725C', '#DFC126', '#72BE81', '#50A5D8'],
-        };
-        pie_chart2:  EChartsOption = {
-          legend: {
-            top: 'bottom',
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              mark: { show: true },
-              dataView: { show: true, readOnly: false },
-              restore: { show: true },
-              saveAsImage: { show: true },
-            },
-          },
-          series: [
-            {
-              name: 'Chart equipment',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '48%'],
-              roseType: 'area',
-              itemStyle: {
-                borderRadius: 8,
-              },
-              data: [
-                { value: this.statistics[0], name: 'Written Prescriptions' },
-                { value: this.statistics[1], name: 'Approved Prescriptions' },
-                { value: this.statistics[2], name: 'Rest Prescriptions' },
-                { value: this.statistics[3], name: 'Total Prescriptions' },
+    this.itemStockListService.calculatePrescriptionStatisticsForDoctor(this.auth.currentUserValue.id)
+      .subscribe((statistics: number[]) => {
+        this.statistics = statistics;
+        this.generateChart();
+        this.updatePieChart();
+      });
 
 
-
-
-
-              ],
-            },
-          ],
-        };
-        // You can perform any further operations with localStatistics here
-      }
-    });*/
 
   }
+  updatePieChart(): void {
+    this.pieChartOptions = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)',
+      },
+      legend: {
+        data: ['Written', 'Approved', 'Rest', 'Total'],
+        textStyle: {
+          color: '#9aa0ac',
+          padding: [0, 5, 0, 5],
+        },
+      },
+      series: [
+        {
+          name: 'Chart Data',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '48%'],
+          data: [
+            { value: this.statistics[0], name: 'Written' },
+            { value: this.statistics[1], name: 'Approved' },
+            { value: this.statistics[2], name: 'Rest' },
+            { value: this.statistics[3], name: 'Total' },
+          ],
+        },
+      ],
+      color: ['#575B7A', '#DE725C', '#DFC126', '#72BE81', '#50A5D8'],
+    };
+  }
+
+  generateChart(): void {
+    this.area_line_chart = {
+      tooltip: {
+        trigger: 'axis',
+      },
+      legend: {
+        data: ['Written Prescriptions', 'Approved Prescriptions', 'Rest Prescriptions', 'Total Prescriptions'],
+        textStyle: {
+          color: '#9aa0ac',
+          padding: [0, 5, 0, 5],
+        },
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          magicType: {
+            show: true,
+            title: {
+              line: 'Line',
+              bar: 'Bar',
+              stack: 'Stack',
+            },
+            type: ['line', 'bar', 'stack'],
+          },
+          restore: {
+            show: true,
+            title: 'Restore',
+          },
+          saveAsImage: {
+            show: true,
+            title: 'Save Image',
+          },
+        },
+      },
+      xAxis: [
+        {
+          type: 'category',
+          boundaryGap: false,
+          data: ['Written', 'Approved', 'Rest'],
+          axisLabel: {
+            fontSize: 10,
+            color: '#9aa0ac',
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          axisLabel: {
+            fontSize: 10,
+            color: '#9aa0ac',
+          },
+        },
+      ],
+      series: [
+        {
+          name: 'my Prescriptions Statistics',
+          type: 'line',
+          smooth: true,
+          areaStyle: {},
+          emphasis: {
+            focus: 'series',
+          },
+          data: this.statistics, // Assign prescription statistics data here
+        },
+      ],
+      color: ['#9f78ff', '#fa626b', '#32cafe'],
+    };
+  }
+
 
   generatePDF() {
     const prescriptions = this.dataSource.filteredData;

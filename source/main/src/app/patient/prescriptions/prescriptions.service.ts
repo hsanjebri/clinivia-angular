@@ -22,6 +22,8 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   private    baseUrlGetMed ="http://localhost:8085/Examen/Prescriptions/GetMedicines";
   private baseUrlGet = 'http://localhost:8085/Examen/Prescriptions/GetPrescriptionsByPatient/'; // Adjust URL based on your backend endpoint
 private urlgenerate = 'http://localhost:8085/Examen/Prescriptions/generateprescription/';
+  private url = 'http://localhost:8085/Examen/Prescriptions/stat/';
+
   webSocketUrl = 'http://your-backend-url/ws';
 
   patient_id ! : number | undefined;

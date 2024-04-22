@@ -23,7 +23,7 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   private    baseUrlAddMed ="http://localhost:8085/Examen/Prescriptions/Addmedicines/";
   private    baseUrlGetMed ="http://localhost:8085/Examen/Prescriptions/GetMedicines";
   private baseUrlGet = 'http://localhost:8085/Examen/Prescriptions/GetPrescriptionsByDoctor/'; // Adjust URL based on your backend endpoint
-  private urlstat = 'http://localhost:8085/Examen/Prescriptions/stat'; // Adjust URL based on your backend endpoint
+  private urlstat = 'http://localhost:8085/Examen/Prescriptions/stat/'; // Adjust URL based on your backend endpoint
 
 
   webSocketUrl = 'http://your-backend-url/ws';
@@ -138,4 +138,9 @@ stat (doctorId: number): Observable<number[]> {
   return this.httpClient.get<number[]>(this.urlstat ,doctorId);
 }
 */
+
+  calculatePrescriptionStatisticsForDoctor(doctorId: number): Observable<number[]> {
+    const url = `${this.urlstat}${doctorId}`; // Replace with your backend URL
+    return this.httpClient.get<number[]>(url);
+  }
 }
