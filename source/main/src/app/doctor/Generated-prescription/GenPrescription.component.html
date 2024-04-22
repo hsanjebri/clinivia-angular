@@ -22,6 +22,11 @@
                   <input placeholder="Search" type="text" #filter class="browser-default search-field"
                          aria-label="Search box">
                 </li>
+                <li class="tbl-search-box">
+                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                  <input placeholder="Search" type="text" #filter2 class="browser-default search-field"
+                         aria-label="Search box">
+                </li>
 
               </ul>
             </div>
@@ -67,7 +72,19 @@
             <div class="responsive_table">
               <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
                 <!-- Checkbox Column -->
-
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef [ngClass]="'tbl-col-width-per-6'">
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()" [ngClass]="'tbl-checkbox'">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
@@ -79,19 +96,27 @@
                 <ng-container matColumnDef="title">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Prescription title
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.title?.toString() || 'No Title'}}</mat-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.title}}</mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="prescPhoto">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>prescPhoto
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="table-img tbl-col-width-per-7">
 
+                  </span>
+                    <img [src]="row.prescPhoto" />
+                  </mat-cell>
+                </ng-container>
                 <!--  <ng-container matColumnDef="patient">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>patient Name
                     </mat-header-cell>
                     <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.patient.address}}</mat-cell>
                   </ng-container>  -->
-                <ng-container matColumnDef="doctor_name">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>doctor name
+                <ng-container matColumnDef="patient email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>patient email
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.doctor_name}}</mat-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.emailPatient}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="diseases">
@@ -102,15 +127,6 @@
                 </ng-container>
 
 
-                <ng-container matColumnDef="symptoms">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">symptoms
-                  </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span   [ngClass]="'tbl-col-width-per-80'"><span
-                  ></span>{{row.symptoms}}</span></mat-cell>
-                </ng-container>
-
-
-
 
 
                 <ng-container matColumnDef="createdDate">
@@ -119,35 +135,23 @@
                       Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="approved">
-                  <mat-header-cell *matHeaderCellDef>Approved</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <span class="mobile-label">Approved:</span>
-                    <span [ngClass]="{'col-green': row.approved, 'col-red': !row.approved}">
-                          {{ row.approved ? 'Yes' : 'No' }}
-                  </span>
-                  </mat-cell>
 
-                </ng-container>
                 <!-- actions -->
-         <!--       <ng-container matColumnDef="actions">
+                <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
-                    <button mat-icon-button
-                            (click)="$event.stopPropagation()"
-                            (click)="editCall(row)"
-                            class="tbl-action-btn"
-                            [disabled]="row.approved">
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(row)"
+                            class="tbl-action-btn">
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                  </mat-cell>
-                </ng-container>   -->
 
+                  </mat-cell>
+                </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-              <!--  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row)"
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row)"
                          [style.cursor]="'pointer'" matRipple>
-                </mat-row> -->
+                </mat-row>
               </table>
               <!-- Loading spinner -->
               @if (exampleDatabase?.isTblLoading) {
@@ -161,8 +165,8 @@
                 No results
               </div>
               }
-              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="50"
-                             [pageSizeOptions]="[50, 10, 25, 100]">
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                             [pageSizeOptions]="[5, 10, 25, 100]">
               </mat-paginator>
             </div>
           </div>

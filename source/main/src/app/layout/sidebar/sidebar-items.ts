@@ -617,6 +617,18 @@ export const ROUTES: RouteInfo[] = [
   submenu: [],
 },
   {
+    path: '/doctor/Generatedprescription',
+    title: ' Generated Prescription',
+    iconType: 'material-icons-outlined',
+    icon: 'assignment',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['DOCTOR'],
+    submenu: [],
+  },
+  {
     path: '/doctor/appointments',
     title: 'MENUITEMS.DOCTOR.APPOINTMENTS',
     iconType: 'material-icons-outlined',

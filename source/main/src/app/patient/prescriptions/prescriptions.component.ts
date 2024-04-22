@@ -106,12 +106,12 @@ export class PrescriptionsComponent extends UnsubscribeOnDestroyAdapter
     'title',
     'createdDate',
     'diseases',
+    'doctor_name',
     'approved',
-      'suggestedmed',
+
       'symptoms',
 
     //'medicamentList',
-    'actions',
   ];
   exampleDatabase?: PrescriptionService;
   dataSource!: ExampleDataSource;
@@ -193,7 +193,7 @@ export class PrescriptionsComponent extends UnsubscribeOnDestroyAdapter
         {
           table: {
             body: [
-              ['TITLE', 'MEDLIST', 'createddate'], // Table header
+              ['TITLE',  'createddate'], // Table header
               ...myData.map(item => [
                 item.title,
                 // item.medicamentList,
@@ -224,7 +224,7 @@ export class PrescriptionsComponent extends UnsubscribeOnDestroyAdapter
   }
 
 
-/*  editCall(row: Prescription) {
+  editCall(row: Prescription) {
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -263,7 +263,7 @@ export class PrescriptionsComponent extends UnsubscribeOnDestroyAdapter
         }
       }
     });
-  }*/
+  }
 
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);

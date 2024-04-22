@@ -6,6 +6,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { Page404Component } from '../authentication/page404/page404.component';
 import { SettingsComponent } from './settings/settings.component';
 import { PrescriptionsComponent } from './prescription/prescription.component';
+import {GenPrescriptionComponent} from "./Generated-prescription/GenPrescription.component";
 
 export const DOCTOR_ROUTE: Route[] = [
   {
@@ -19,6 +20,10 @@ export const DOCTOR_ROUTE: Route[] = [
   {
     path: 'prescription',
     component: PrescriptionsComponent,
+  },
+  {
+    path: 'Generatedprescription',
+    component: GenPrescriptionComponent,
   },
   {
     path: 'doctors',

@@ -124,16 +124,17 @@ symptoms : this.prescription.symptoms,
                 medicines: [],
                 approved: true,
                 symptoms: this.prescriptionForm.value.symptoms,
-                patient_id: this.id_patient,
-                suggestedMedicines : ""
+                ppatient_id: this.id_patient,
+                suggestedMedicines : "",
+              doctor_name : ""
             };
 
             if (this.action === 'edit') {
                 // Handle updating the prescription if needed
                 // Uncomment and fill in the logic if required
-                // this.prescriptionService.updateItemStockList(prescription).subscribe(() => {
-                //     this.dialogRef.close(1); // Close the dialog with a success flag
-                // });
+                 this.prescriptionService.updateItemStockList(prescription).subscribe(() => {
+                   this.dialogRef.close(1); // Close the dialog with a success flag
+                 });
             } else {
                 // Create a new prescription
                 this.prescriptionService.generatePrescription(prescription).subscribe(

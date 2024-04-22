@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, filter, Observable} from 'rxjs';
+import {BehaviorSubject, filter, Observable, throwError} from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import {WebSocketSubject} from "rxjs/internal/observable/dom/WebSocketSubject";
@@ -8,6 +8,7 @@ import {Prescription} from "../../doctor/prescription/prescription.model";
 import {Patient} from "../../admin/patients/allpatients/patient.model";
 import {MedicineList} from "../../admin/pharmacy/medicine-list/medicine-list.model";
 import {AuthService} from "@core";
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -66,8 +67,14 @@ auth : AuthService | undefined
 
   }
   updateItemStockList(itemStockList: Prescription): Observable<Object> {
-    return   this.httpClient.put(this.baseUrlUpt , itemStockList) ;
-
+    return this.httpClient.put(this.baseUrlUpt, itemStockList).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Handle errors here, e.g., log the error or show a user-friendly message
+        console.error('An error occurred:', error);
+        // Return an observable with the error message
+        return throwError('Something went wrong, please try again later.');
+      })
+    );
   }
 
   // WebSocket connection subject

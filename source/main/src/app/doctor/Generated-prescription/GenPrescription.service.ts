@@ -23,8 +23,8 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   private    baseUrlAddMed ="http://localhost:8085/Examen/Prescriptions/Addmedicines/";
   private    baseUrlGetMed ="http://localhost:8085/Examen/Prescriptions/GetMedicines";
   private baseUrlGet = 'http://localhost:8085/Examen/Prescriptions/GetPrescriptionsByDoctor/'; // Adjust URL based on your backend endpoint
-  private urlstat = 'http://localhost:8085/Examen/Prescriptions/stat'; // Adjust URL based on your backend endpoint
 
+  private Urlunapproved = 'http://localhost:8085/Examen/Prescriptions/unApproved'; // Adjust URL based on your backend endpoint
 
   webSocketUrl = 'http://your-backend-url/ws';
 
@@ -48,6 +48,21 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   }
   /** CRUD METHODS */
 
+ public  getAllUnapproved(): void {
+
+    this.subs.sink = this.httpClient
+      .get<Prescription[]>(`${this.Urlunapproved}`)
+      .subscribe({
+        next: (data) => {
+          this.isTblLoading = false;
+          this.dataChange.next(data);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isTblLoading = false;
+          console.log(error.name + ' ' + error.message);
+        },
+      });
+  }
   public getPrescriptionsByDoctorId(): void {
     this.doctorId = this.authService.currentUserValue.id; // Retrieve doctorId from AuthService
 
@@ -81,8 +96,6 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
     return  this.httpClient.post<Prescription>(this.baseUrl1, itemStockList  );
 
   }
-
-
   updateItemStockList(itemStockList: Prescription): Observable<Object> {
     return this.httpClient.put(this.baseUrlUpt, itemStockList).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -133,9 +146,7 @@ export class PrescriptionService extends UnsubscribeOnDestroyAdapter {
   }
   getMedicinesByPrescriptionId(PrescriptionId: number): Observable<MedicineList[]> {
     return this.httpClient.get<MedicineList[]>(this.baseUrlGetMed +PrescriptionId);
-  }/**
-stat (doctorId: number): Observable<number[]> {
-  return this.httpClient.get<number[]>(this.urlstat ,doctorId);
-}
-*/
+  }
+
+
 }

@@ -14,9 +14,9 @@ export class Prescription {
   approved : boolean;
   symptoms : string;
   doctor_id: number;
-  patient_id: number;
+  ppatient_id: number;
   suggestedMedicines : string;
-
+  doctor_name : string
   constructor(prescription: Prescription) {
     {
       this.id = prescription.id ;
@@ -30,8 +30,10 @@ export class Prescription {
       this.prescPhoto = prescription.prescPhoto || '';
       this.createdDate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
      this.doctor_id = prescription.doctor_id ;
-      this.patient_id = prescription.patient_id ;
+      this.ppatient_id = prescription.ppatient_id ;
       this.diseases = prescription.diseases || '';
+      this.doctor_name = prescription.doctor_name || '';
+
 
 
     }

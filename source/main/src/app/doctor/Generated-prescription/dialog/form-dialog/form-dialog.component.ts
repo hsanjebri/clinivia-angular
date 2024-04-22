@@ -1,8 +1,8 @@
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
 import {Component, Inject, OnInit} from '@angular/core';
-import { PrescriptionService } from '../../prescription.service';
+import { PrescriptionService } from '../../GenPrescription.service';
 import {FormGroup, FormBuilder, Validators, AbstractControl, FormArray, ReactiveFormsModule} from '@angular/forms';
-import { Prescription } from '../../prescription.model';
+import { Prescription } from '../../../prescription/prescription.model';
 import { formatDate } from '@angular/common';
 import { MedicineList } from "../../../../admin/pharmacy/medicine-list/medicine-list.model";
 import { MedicineListService } from "../../../../admin/pharmacy/medicine-list/medicine-list.service";
@@ -96,26 +96,26 @@ export class FormDialogComponent implements OnInit{
     }
     this.itemStockListForm = this.creerFormulaire();
   }
-ngOnInit() {
-     this.id_doctor =this.AuthService.currentUserValue.id;
-  this.itemStockListForm = this.formBuilder.group({
-    id: [this.itemStockList.id],
-    title: [this.itemStockList.title, [Validators.required]],
-    diseases: [this.itemStockList.diseases, [Validators.required]],
-    prescPhoto: [this.itemStockList.prescPhoto],
-    createdDate: [
-      formatDate(this.itemStockList.createdDate, 'yyyy-MM-dd', 'en'),
-      [Validators.required, validateurDate(0)]
-    ],
-    emailPatient: [this.itemStockList.emailPatient, [Validators.required]],
-    description: [this.itemStockList.description, [Validators.required]],
-    medicines: this.formBuilder.array([], [Validators.required])
+  ngOnInit() {
+    this.id_doctor =this.AuthService.currentUserValue.id;
+    this.itemStockListForm = this.formBuilder.group({
+      id: [this.itemStockList.id],
+      title: [this.itemStockList.title, [Validators.required]],
+      diseases: [this.itemStockList.diseases, [Validators.required]],
+      prescPhoto: [this.itemStockList.prescPhoto],
+      createdDate: [
+        formatDate(this.itemStockList.createdDate, 'yyyy-MM-dd', 'en'),
+        [Validators.required, validateurDate(0)]
+      ],
+      emailPatient: [this.itemStockList.emailPatient, [Validators.required]],
+      description: [this.itemStockList.description, [Validators.required]],
+      medicines: this.formBuilder.array([], [Validators.required])
 
-  });
+    });
 
 
     this.chargerMedicaments()
-}
+  }
   creerFormulaire(): FormGroup {
     return this.formBuilder.group({
       id: [this.itemStockList.id],
@@ -136,13 +136,13 @@ ngOnInit() {
     if (this.itemStockListForm.valid) {
       // Extract selected medicines
       const selectedMedicines = this.itemStockListForm.value.medicines
-          .map((checked: boolean, index: number) => checked ? this.listMedicaments[index].id : null)
-          .filter((medicine: MedicineList | null) => medicine !== null);
+        .map((checked: boolean, index: number) => checked ? this.listMedicaments[index].id : null)
+        .filter((medicine: MedicineList | null) => medicine !== null);
 
 
       const prescription: Prescription = {
         id: this.action === 'edit' ? this.data.itemStockList.id : 0, // Set ID if editing, otherwise 0
-        title: this.itemStockListForm.value.title,
+        title: this.itemStockListForm.value.title ,
         diseases: this.itemStockListForm.value.diseases,
         prescPhoto: this.itemStockListForm.value.prescPhoto,
         createdDate: this.itemStockListForm.value.createdDate,
@@ -151,9 +151,9 @@ ngOnInit() {
         doctor_id : this.id_doctor,
         medicines: [], // Empty for now, will be populated after prescription creation
         approved: true,
-        symptoms : "",
-        ppatient_id : -1,
-        suggestedMedicines : "",
+        symptoms : this.itemStockList.symptoms,
+        ppatient_id : this.itemStockList.ppatient_id,
+        suggestedMedicines : this.itemStockList.suggestedMedicines,
         doctor_name : ""
       };
       prescription.doctor_id = this.id_doctor
@@ -208,8 +208,8 @@ ngOnInit() {
     this.listMedicaments.forEach(() =>
       this.medicin.push(this.formBuilder.control(false))); // Créez un FormControl pour chaque médicament
 
-    }
-    get medicin (){
+  }
+  get medicin (){
     return this.itemStockListForm.get('medicines')as FormArray;
-    }
+  }
 }

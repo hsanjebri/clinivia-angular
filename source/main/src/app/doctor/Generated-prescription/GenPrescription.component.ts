@@ -5,7 +5,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { DataSource } from '@angular/cdk/collections';
 import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component';
-import { DeleteDialogComponent } from './dialog/delete/delete.component';
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -35,8 +34,8 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
 import { EChartsOption , } from "echarts";
 import {Chart, registerables} from "chart.js";
-import {PrescriptionService} from "./prescription.service";
-import {Prescription} from "./prescription.model";
+import {PrescriptionService} from "./GenPrescription.service";
+import {Prescription} from "../prescription/prescription.model";
 import{SigninComponent} from "../../authentication/signin/signin.component";
 import {AuthService} from "@core";
 
@@ -46,8 +45,8 @@ Chart.register(...registerables);
 
 @Component({
   selector: 'app-prescription',
-  templateUrl: './prescription.component.html',
-  styleUrls: ['./prescription.component.scss'],
+  templateUrl: './GenPrescription.component.html',
+  styleUrls: ['./GenPrescription.component.scss'],
   standalone: true,
   imports: [
     BreadcrumbComponent,
@@ -71,11 +70,10 @@ Chart.register(...registerables);
     provideEcharts(),
   ]
 })
-export class PrescriptionsComponent
+export class GenPrescriptionComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit {
   displayedColumns = [
-    'select',
     'title',
     'createdDate',
     'prescPhoto',
@@ -90,7 +88,7 @@ export class PrescriptionsComponent
   index?: number;
   id?: number;
   itemStockList?: Prescription;
-statistics :number []  = [];
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -111,80 +109,6 @@ statistics :number []  = [];
 
   ngOnInit() {
     this.loadData();
-   /* this.itemStockListService.stat().subscribe({
-      next: (statistic: number[]) => {
-        this.statistics = statistic;
-        pie_chart: // @ts-ignore
-          EChartsOption = {
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)',
-          },
-          legend: {
-            data: ['Data 1', 'Data 2', 'Data 3', 'Data 4', 'Data 5'],
-            textStyle: {
-              color: '#9aa0ac',
-              padding: [0, 5, 0, 5],
-            },
-          },
-
-          series: [
-            {
-              name: 'Chart Data',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '48%'],
-              data: [
-                { value: 1, name: 'Written Prescriptions' },
-                { value:15, name: 'Approved Prescriptions' },
-                { value: 12, name: 'Rest Prescriptions' },
-                { value:1, name: 'Total Prescriptions' },
-              ]
-              ,
-            },
-          ],
-          color: ['#575B7A', '#DE725C', '#DFC126', '#72BE81', '#50A5D8'],
-        };
-        pie_chart2:  EChartsOption = {
-          legend: {
-            top: 'bottom',
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              mark: { show: true },
-              dataView: { show: true, readOnly: false },
-              restore: { show: true },
-              saveAsImage: { show: true },
-            },
-          },
-          series: [
-            {
-              name: 'Chart equipment',
-              type: 'pie',
-              radius: '55%',
-              center: ['50%', '48%'],
-              roseType: 'area',
-              itemStyle: {
-                borderRadius: 8,
-              },
-              data: [
-                { value: this.statistics[0], name: 'Written Prescriptions' },
-                { value: this.statistics[1], name: 'Approved Prescriptions' },
-                { value: this.statistics[2], name: 'Rest Prescriptions' },
-                { value: this.statistics[3], name: 'Total Prescriptions' },
-
-
-
-
-
-              ],
-            },
-          ],
-        };
-        // You can perform any further operations with localStatistics here
-      }
-    });*/
 
   }
 
@@ -300,38 +224,6 @@ statistics :number []  = [];
           this.showNotification(
             'black',
             'Edit  Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
-      }
-    });
-  }
-  deleteItem(row: Prescription) {
-    this.id = row.id;
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: row,
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex != null && this.exampleDatabase) {
-          this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
             'bottom',
             'center'
           );
@@ -478,7 +370,7 @@ export class ExampleDataSource extends DataSource<Prescription> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getPrescriptionsByDoctorId();
+    this.exampleDatabase.getAllUnapproved();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
