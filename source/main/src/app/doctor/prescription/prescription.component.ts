@@ -107,27 +107,33 @@ export class PrescriptionsComponent
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
+  @ViewChild('filter2', { static: true }) filter2?: ElementRef;
 
   ngOnInit() {
     this.loadData();
 
   }
 
-  generatePDF(){
-    const myData = this.dataSource.filteredData;
+  generatePDF() {
+    const prescriptions = this.dataSource.filteredData;
 
-// Create the PDF content dynamically
+    // Create the PDF content dynamically
     const docDefinition = {
       content: [
-        { text: 'My presctiption Data', style: 'header' }, // Header
+        { text: 'Prescription Data', style: 'header' }, // Header
+
         {
           table: {
             body: [
-              ['TITLE', 'MEDLIST', 'createddate'], // Table header
-              ...myData.map(item => [
-                item.title,
-               // item.medicamentList,
-                formatDate(new Date(item.createdDate), 'yyyy-MM-dd', 'en') || '',
+              ['Title', 'Prescription Photo', 'Patient Email' , 'Created Date', 'Diseases', 'Description'], // Table header
+              ...prescriptions.map(prescription => [
+                prescription.title,
+                prescription.emailPatient,
+                prescription.prescPhoto,
+                formatDate(new Date(prescription.createdDate), 'yyyy-MM-dd', 'en') || '',
+                prescription.diseases,
+                prescription.description,
+
 
               ]),
             ],
@@ -143,11 +149,11 @@ export class PrescriptionsComponent
       },
     };
 
-// Generate and download the PDF
+    // Generate and download the PDF
     // @ts-ignore
     pdfMake.createPdf(docDefinition).download('prescription_data.pdf');
-
   }
+
   refresh() {
     this.loadData();
   }
@@ -309,25 +315,41 @@ export class PrescriptionsComponent
         }
         this.dataSource.filter = this.filter?.nativeElement.value;
 
+
       }
     );
+    this.subs.sink = fromEvent(this.filter2?.nativeElement, 'keyup').subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter2 = this.filter2?.nativeElement.value;
+
+
+      }
+    );
+
   }
+
+
 
 
 
   exportExcel() {
-    // key name with space add in brackets
+    // Key names with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        title: x.title,
+        Title: x.title,
         Diseases: x.diseases,
-       // med: x.medicamentList,
-        'Purchase Date': formatDate(new Date(x.createdDate), 'yyyy-MM-dd', 'en') || '',
-
+        'Created Date': formatDate(new Date(x.createdDate), 'yyyy-MM-dd', 'en') || '',
+        'Prescription Photo': x.prescPhoto,
+        'Description': x.description,
+        'Patient Email': x.emailPatient,
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
   }
+
 
   showNotification(
     colorName: string,
@@ -346,11 +368,19 @@ export class PrescriptionsComponent
 }
 export class ExampleDataSource extends DataSource<Prescription> {
   filterChange = new BehaviorSubject('');
+  filterChange2 = new BehaviorSubject('');
+
   get filter(): string {
     return this.filterChange.value;
   }
   set filter(filter: string) {
     this.filterChange.next(filter);
+  }
+  get filter2(): string {
+    return this.filterChange2.value;
+  }
+  set filter2(filter: string) {
+    this.filterChange2.next(filter);
   }
   filteredData: Prescription[] = [];
   renderedData: Prescription[] = [];
@@ -362,6 +392,8 @@ export class ExampleDataSource extends DataSource<Prescription> {
     super();
     // Reset to the first page when the user changes the filter.
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.filterChange2.subscribe(() => (this.paginator.pageIndex = 0));
+
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Prescription[]> {
@@ -376,6 +408,8 @@ export class ExampleDataSource extends DataSource<Prescription> {
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
+        // Inside connect() method of ExampleDataSource class
+
         this.filteredData = this.exampleDatabase.data
           .slice()
           .filter((itemStockList: Prescription) => {
@@ -383,11 +417,14 @@ export class ExampleDataSource extends DataSource<Prescription> {
               itemStockList.title +
               itemStockList.createdDate +
               itemStockList.diseases +
-              itemStockList.prescPhoto
-
+              itemStockList.prescPhoto+
+              itemStockList.emailPatient
+              // Add any other fields you want to search here
             ).toLowerCase();
-            return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+            return (searchStr.indexOf(this.filter.toLowerCase()) !== -1 &&
+              searchStr.indexOf(this.filter2.toLowerCase()) !== -1);
           });
+
         // Sort filtered data
         const sortedData = this.sortData(this.filteredData.slice());
         // Grab the page's slice of the filtered sorted data.
