@@ -78,8 +78,8 @@ export class PrescriptionsComponent
     'select',
     'title',
     'createdDate',
-    'prescPhoto',
     'diseases',
+    'description',
     'patient email',
     //'medicamentList',
     'actions',
@@ -114,7 +114,6 @@ statistics :number []  = [];
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
-  @ViewChild('filter2', { static: true }) filter2?: ElementRef;
 
   ngOnInit() {
     this.loadData();
@@ -435,16 +434,7 @@ statistics :number []  = [];
 
       }
     );
-    this.subs.sink = fromEvent(this.filter2?.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter2 = this.filter2?.nativeElement.value;
 
-
-      }
-    );
 
   }
 
@@ -453,19 +443,23 @@ statistics :number []  = [];
 
 
   exportExcel() {
-    // Key names with space add in brackets
+    // Map data to export format with clear column titles
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        Title: x.title,
-        Diseases: x.diseases,
+        'Prescription Title': x.title,
+        'Diseases': x.diseases,
         'Created Date': formatDate(new Date(x.createdDate), 'yyyy-MM-dd', 'en') || '',
         'Prescription Photo': x.prescPhoto,
         'Description': x.description,
         'Patient Email': x.emailPatient,
       }));
 
+    // Export data to Excel
     TableExportUtil.exportToExcel(exportData, 'excel');
   }
+
+
+
 
 
   showNotification(
@@ -493,12 +487,7 @@ export class ExampleDataSource extends DataSource<Prescription> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  get filter2(): string {
-    return this.filterChange2.value;
-  }
-  set filter2(filter: string) {
-    this.filterChange2.next(filter);
-  }
+
   filteredData: Prescription[] = [];
   renderedData: Prescription[] = [];
   constructor(
@@ -539,7 +528,7 @@ export class ExampleDataSource extends DataSource<Prescription> {
               // Add any other fields you want to search here
             ).toLowerCase();
             return (searchStr.indexOf(this.filter.toLowerCase()) !== -1 &&
-              searchStr.indexOf(this.filter2.toLowerCase()) !== -1);
+              searchStr.indexOf(this.filter.toLowerCase()) !== -1);
           });
 
         // Sort filtered data

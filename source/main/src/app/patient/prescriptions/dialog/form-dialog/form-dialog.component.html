@@ -19,7 +19,7 @@
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Symptoms</mat-label>
           <input matInput formControlName="symptoms" required>
-          <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>attach_money</mat-icon>
+          <mat-icon class="fas fa-capsules pill-style col-red" matSuffix></mat-icon>
           <mat-error *ngIf="prescriptionForm.get('symptoms')?.hasError('required')">Symptoms are required</mat-error>
         </mat-form-field>
       </div>

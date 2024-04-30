@@ -76,8 +76,7 @@ export class GenPrescriptionComponent
   displayedColumns = [
     'title',
     'createdDate',
-    'prescPhoto',
-    'diseases',
+    'symptoms',
     'patient email',
     //'medicamentList',
     'actions',

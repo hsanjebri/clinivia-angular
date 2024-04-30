@@ -130,7 +130,14 @@ ngOnInit() {
       description: [this.itemStockList.description, [Validators.required]],
       medicines: this.formBuilder.array([], [Validators.required])
     });
-  }
+ /*   this.listMedicaments.forEach(medicament => {
+      this.medicin.push(this.formBuilder.group({
+        dosage: [medicament.medDosage], // Ajouter le dosage du médicament
+        medForm: [medicament.medForm],
+        medDescription: [medicament.medDescription], // Ajouter d'autres champs au besoin
+      }));
+    });*/
+}
 
   submit() {
     if (this.itemStockListForm.valid) {

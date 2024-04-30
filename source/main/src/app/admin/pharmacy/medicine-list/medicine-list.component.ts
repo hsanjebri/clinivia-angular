@@ -302,7 +302,7 @@ export class ExampleDataSource extends DataSource<MedicineList> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllMedicineLists();
+    this.exampleDatabase.getAllItemStockLists();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

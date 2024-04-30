@@ -48,6 +48,7 @@
     "chart.js": "^4.4.2",
     "core-js": "^3.33.3",
     "echarts": "^5.5.0",
+    "exceljs": "^4.4.0",
     "moment": "^2.29.4",
     "ng-apexcharts": "^1.8.0",
     "ng2-charts": "^5.0.4",

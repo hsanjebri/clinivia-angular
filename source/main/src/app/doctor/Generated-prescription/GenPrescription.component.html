@@ -22,11 +22,7 @@
                   <input placeholder="Search" type="text" #filter class="browser-default search-field"
                          aria-label="Search box">
                 </li>
-                <li class="tbl-search-box">
-                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" #filter2 class="browser-default search-field"
-                         aria-label="Search box">
-                </li>
+
 
               </ul>
             </div>
@@ -119,18 +115,18 @@
                   <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.emailPatient}}</mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="diseases">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">diseases
+                <ng-container matColumnDef="symptoms">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">symptoms
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span     class="badge col-green" [ngClass]="'tbl-col-width-per-80'"><span
-                  ></span>{{row.diseases}}</span></mat-cell>
+                  ></span>{{row.symptoms}}</span></mat-cell>
                 </ng-container>
 
 
 
 
                 <ng-container matColumnDef="createdDate">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Purchase Date</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>generated  Date</mat-header-cell>
                   <mat-cell  *matCellDef="let row"> <span class="mobile-label">Purchase
                       Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
@@ -138,7 +134,7 @@
 
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
-                  <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>Aprove ? </mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
                     <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(row)"
                             class="tbl-action-btn">

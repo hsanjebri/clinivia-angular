@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import { MedicineList } from './medicine-list.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import {Prescription} from "../../../doctor/prescription/prescription.model";
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +34,25 @@ export class MedicineListService extends UnsubscribeOnDestroyAdapter {
   }
   /** CRUD METHODS */
   getAllMedicineLists(): Observable<MedicineList[]> {
-   return  this.httpClient
-      .get<MedicineList[]>(this.baseUrl);
+
+    return  this.httpClient.get<MedicineList[]>(this.baseUrl)
+  }
+
+  getAllItemStockLists(): void {
+    this.subs.sink = this.httpClient
+      .get<MedicineList[]>(this.baseUrl)
+      .subscribe({
+        next: (data) => {
+          this.isTblLoading = false;
+          this.dataChange.next(data);
+          console.log(data)
+          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isTblLoading = false;
+          console.log(error.name + ' ' + error.message);
+        },
+      });
   }
   addMedicineList(medicineList: MedicineList): void {
     this.dialogData = medicineList;

@@ -23,11 +23,6 @@
                   <input placeholder="Search" type="text" #filter class="browser-default search-field"
                     aria-label="Search box">
                 </li>
-                <li class="tbl-search-box">
-                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" #filter2 class="browser-default search-field"
-                         aria-label="Search box">
-                </li>
 
               </ul>
             </div>
@@ -109,15 +104,16 @@
                     <img [src]="row.prescPhoto" />
                   </mat-cell>
                 </ng-container>
-              <!--  <ng-container matColumnDef="patient">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>patient Name
-                  </mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.patient.address}}</mat-cell>
-                </ng-container>  -->
                 <ng-container matColumnDef="patient email">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>patient email
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"><span class="mobile-label">title:</span> {{row.emailPatient}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>description
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label"> description
+:</span> {{row.description}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="diseases">
@@ -135,6 +131,9 @@
                   <mat-cell  *matCellDef="let row"> <span class="mobile-label">Purchase
                       Date:</span>{{row.createdDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
+
+
+
 
 
                 <!-- actions -->
@@ -184,27 +183,26 @@
 </section>
 
 <div class="row clearfix">
-  <!-- Pie Chart -->
-  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-    <div class="card">
-      <div class="header">
-        <h2>Pie Chart</h2>
-      </div>
-      <div class="body">
-        <div echarts [options]="pieChartOptions" class="echart-height"></div>
-      </div>
+
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+  <div class="card">
+    <div class="header">
+      <h2>Pie Chart</h2>
+    </div>
+    <div class="body">
+      <div echarts [options]="pieChartOptions" class="echart-height"></div>
     </div>
   </div>
-  <!-- Line Graph Chart -->
-  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-    <div class="card">
-      <div class="header">
-        <h2>Aria Line Chart</h2>
-      </div>
-      <div class="body">
-        <div echarts [options]="area_line_chart" class="echart-height"></div>
-      </div>
+</div>
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+  <div class="card">
+    <div class="header">
+      <h2>Aria Line Chart</h2>
+    </div>
+    <div class="body">
+      <div echarts [options]="area_line_chart" class="echart-height"></div>
     </div>
   </div>
+</div>
 </div>
 
