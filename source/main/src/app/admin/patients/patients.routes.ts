@@ -4,6 +4,8 @@ import { AddPatientComponent } from "./add-patient/add-patient.component";
 import { AllpatientsComponent } from "./allpatients/allpatients.component";
 import { Page404Component } from "../../authentication/page404/page404.component";
 import { Route } from "@angular/router";
+import {NutritionComponent} from "./nutrition/nutrition.component";
+import {ShowprogressComponent} from "./showprogress/showprogress.component";
 
 export const PATIENT_ROUTE: Route[] = [
   {
@@ -17,6 +19,14 @@ export const PATIENT_ROUTE: Route[] = [
   {
     path: "edit-patient",
     component: EditPatientComponent,
+  },
+  {
+    path: "nutrition/:patientId",
+    component: NutritionComponent,
+  },
+  {
+    path: "showprogress/:patientId",
+    component: ShowprogressComponent,
   },
   {
     path: "patient-profile",

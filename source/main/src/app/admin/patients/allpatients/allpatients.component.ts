@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { Patient } from './patient.model';
+import { Patient} from './patient.model';
 import { DataSource } from '@angular/cdk/collections';
 import {
   MatSnackBar,
@@ -22,7 +22,7 @@ import {
   TableElement,
   UnsubscribeOnDestroyAdapter,
 } from '@shared';
-import { formatDate, NgClass, DatePipe } from '@angular/common';
+import {formatDate, NgClass, DatePipe, CommonModule} from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
@@ -32,6 +32,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import {Router} from "@angular/router";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-allpatients',
@@ -52,6 +54,8 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
     MatProgressSpinnerModule,
     MatPaginatorModule,
     DatePipe,
+    CommonModule,
+    MatProgressBar,
   ],
 })
 export class AllpatientsComponent
@@ -59,15 +63,21 @@ export class AllpatientsComponent
   implements OnInit {
   displayedColumns = [
     'select',
-    'img',
-    'name',
-    'gender',
-    'address',
-    'mobile',
-    'date',
-    'bGroup',
-    'treatment',
+   //  'img',
+     'email',
+   //  'name',
+   'gender',
+   // 'address',
+   //  'mobile',
+   // 'date',
+     'bgroupe',
+   //  'treatment',
+    'Progress',
+   // 'patientContactEmergencies',
+     'medicalHistory',
+     'patientAlergies',
     'actions',
+
   ];
   exampleDatabase?: PatientService;
   dataSource!: ExampleDataSource;
@@ -75,13 +85,20 @@ export class AllpatientsComponent
   index?: number;
   id?: number;
   patient?: Patient;
+  patients: Patient[] = [];
+  taskCompletionPercentages: { [key: number]: number } = {};
+  private router: Router // Inject Router
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public patientService: PatientService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route:Router
   ) {
     super();
+    this.router = route; // Assign route to router
+
   }
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
@@ -89,8 +106,14 @@ export class AllpatientsComponent
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
   ngOnInit() {
-    this.loadData();
+    this.loadData(); // Make sure dataChange emits values
+    this.exampleDatabase?.dataChange.subscribe(data => {
+      if (data.length > 0) {
+        this.loadTaskCompletionPercentages(); // Call loadTaskCompletionPercentages() after dataChange emits values
+      }
+    });
   }
+
   refresh() {
     this.loadData();
   }
@@ -110,8 +133,8 @@ export class AllpatientsComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
+
+
         this.exampleDatabase?.dataChange.value.unshift(
           this.patientService.getDialogData()
         );
@@ -124,9 +147,10 @@ export class AllpatientsComponent
         );
       }
     });
+    //this.route.navigate(["/","admin","patients","add-patient"]);
   }
   editCall(row: Patient) {
-    this.id = row.id;
+    this.id = row.idPatient;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -142,11 +166,11 @@ export class AllpatientsComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
+        //const dialogData = this.patientService.getDialogData();
+        //this.patientService.updatePatient(dialogData);
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.idPatient === this.id
         );
-        // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
           this.exampleDatabase.dataChange.value[foundIndex] =
             this.patientService.getDialogData();
@@ -163,7 +187,7 @@ export class AllpatientsComponent
     });
   }
   deleteItem(row: Patient) {
-    this.id = row.id;
+    this.id = row.idPatient;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -177,11 +201,12 @@ export class AllpatientsComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.idPatient === this.id
         );
         // for delete we use splice in order to remove single object from DataService
         if (foundIndex != null && this.exampleDatabase) {
           this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
+          this.patientService.deletePatient(row.idPatient);
 
           this.refreshTable();
           this.showNotification(
@@ -215,14 +240,25 @@ export class AllpatientsComponent
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
     this.selection.selected.forEach((item) => {
-      const index: number = this.dataSource.renderedData.findIndex(
+      const index: number = this.dataSource.filteredData.findIndex(
         (d) => d === item
       );
-      // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
-      this.exampleDatabase?.dataChange.value.splice(index, 1);
-      this.refreshTable();
-      this.selection = new SelectionModel<Patient>(true, []);
+      if (index !== -1) {
+        this.dataSource.filteredData.splice(index, 1);
+      }
+      const dataIndex: number | undefined = this.exampleDatabase?.dataChange.value.findIndex(
+        (d) => d === item
+      );
+      if (dataIndex !== undefined && dataIndex !== -1) {
+        const patientId = this.exampleDatabase?.dataChange.value[dataIndex].idPatient;
+        if (patientId !== undefined) {
+          this.exampleDatabase?.dataChange.value.splice(dataIndex, 1);
+          this.exampleDatabase?.deletePatient(patientId); // Call deletePatient with the ID
+        }
+      }
     });
+    this.refreshTable();
+    this.selection.clear();
     this.showNotification(
       'snackbar-danger',
       totalSelect + ' Record Delete Successfully...!!!',
@@ -230,6 +266,7 @@ export class AllpatientsComponent
       'center'
     );
   }
+
   public loadData() {
     this.exampleDatabase = new PatientService(this.httpClient);
     this.dataSource = new ExampleDataSource(
@@ -246,6 +283,19 @@ export class AllpatientsComponent
       }
     );
   }
+  loadTaskCompletionPercentages() {
+    this.exampleDatabase?.dataChange.value.forEach(patient => {
+      this.subs.sink = this.patientService.getTaskCompletionPercentage(patient.idPatient).subscribe(
+        (percentage: number) => {
+          this.taskCompletionPercentages[patient.idPatient] = percentage; // Store the percentage for the patient
+        },
+        (error) => {
+          console.error('Error fetching task completion percentage:', error);
+        }
+      );
+    });
+  }
+
   // export table data in excel file
   exportExcel() {
     // key name with space add in brackets
@@ -255,7 +305,7 @@ export class AllpatientsComponent
         Gender: x.gender,
         Address: x.address,
         'Birth Date': formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
-        'Blood Group': x.bGroup,
+        'Blood Group': x.bgroupe,
         Mobile: x.mobile,
         Treatment: x.treatment,
       }));
@@ -275,6 +325,48 @@ export class AllpatientsComponent
       panelClass: colorName,
     });
   }
+
+
+  // assessNutritionalIntake(patientId: number): void {
+  //   this.patientService.assessNutritionalIntake(patientId).subscribe(
+  //     (assessmentResults: Map<Date, string>) => {
+  //       // Handle assessment results, such as displaying them in a dialog or toast
+  //       console.log(assessmentResults);
+  //       this.snackBar.open('Nutritional intake assessed successfully!', 'Close', {
+  //         duration: 3000
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error('Error assessing nutritional intake:', error);
+  //       this.snackBar.open('Error assessing nutritional intake!', 'Close', {
+  //         duration: 3000
+  //       });
+  //     }
+  //   );
+  // }
+
+  // assessNutritionalIntake(patientId: number): void {
+  //   this.patientService.assessNutritionalIntake(patientId).subscribe(
+  //     (assessmentResults: Map<Date, string>) => {
+  //       // Navigate to NutritionComponent with assessment results as route data
+  //       this.router.navigate(['/admin/patients/nutrition'], { state: { assessmentResults } });
+  //     },
+  //     (error) => {
+  //       console.error('Error assessing nutritional intake:', error);
+  //       this.snackBar.open('Error assessing nutritional intake!', 'Close', {
+  //         duration: 3000,
+  //       });
+  //     }
+  //   );
+  // }
+  redirectToNutrition(patientId: number) {
+    this.router.navigate(['/admin/patients/nutrition', patientId]);
+  }
+
+  progressItem(patientId: number) {
+    this.router.navigate(['/admin/patients/showprogress', patientId]);
+  }
+
 }
 export class ExampleDataSource extends DataSource<Patient> {
   filterChange = new BehaviorSubject('');
@@ -316,7 +408,7 @@ export class ExampleDataSource extends DataSource<Patient> {
               patient.gender +
               patient.address +
               patient.date +
-              patient.bGroup +
+              patient.bgroupe +
               patient.treatment +
               patient.mobile
             ).toLowerCase();
@@ -346,16 +438,13 @@ export class ExampleDataSource extends DataSource<Patient> {
       let propertyB: number | string = '';
       switch (this._sort.active) {
         case 'id':
-          [propertyA, propertyB] = [a.id, b.id];
+          [propertyA, propertyB] = [a.idPatient, b.idPatient];
           break;
         case 'name':
           [propertyA, propertyB] = [a.name, b.name];
           break;
         case 'gender':
           [propertyA, propertyB] = [a.gender, b.gender];
-          break;
-        case 'date':
-          [propertyA, propertyB] = [a.date, b.date];
           break;
         case 'address':
           [propertyA, propertyB] = [a.address, b.address];

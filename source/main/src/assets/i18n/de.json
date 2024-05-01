@@ -63,6 +63,14 @@
         "INVOICE": "Rechnung"
       }
     },
+    "MEAL": {
+      "TEXT": "Abrechnung",
+      "LIST": {
+        "MEAL-LIST": "Rechnungsliste",
+        "ADD-MEAL": "Rechnung hinzufügen",
+        "INVOICE": "Rechnung"
+      }
+    },
     "RECORDS": {
       "TEXT": "Aufzeichnungen",
       "LIST": {
@@ -98,7 +106,7 @@
         "ISSUED-ITEMS": "Ausgegebene Artikel"
       }
     },
-    "DOCTOR": {    
+    "DOCTOR": {
         "DASHBOARD": "Dashboard",
         "APPOINTMENTS": "Termine",
         "DOCTORS": "Ärztinnen",
@@ -106,7 +114,7 @@
         "SETTINGS": "die Einstellungen",
         "CHAT": "Plaudern"
     },
-    "PATIENT": {    
+    "PATIENT": {
       "TEXT": "Geduldig",
       "DASHBOARD": "Dashboard",
       "APPOINTMENTS": {

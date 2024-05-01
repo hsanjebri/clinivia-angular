@@ -34,6 +34,11 @@ export const ADMIN_ROUTE: Route[] = [
       import('./billing/billing.routes').then((m) => m.BILLING_ROUTE),
   },
   {
+    path: 'meal',
+    loadChildren: () =>
+      import('./meal/meal.routes').then((m) => m.MEAL_ROUTE),
+  },
+  {
     path: 'room',
     loadChildren: () => import('./room/room.routes').then((m) => m.ROOMS_ROUTE),
   },
