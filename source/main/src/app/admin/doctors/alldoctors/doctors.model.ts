@@ -9,6 +9,9 @@ export class Doctors {
   mobile: string;
   department: string;
   degree: string;
+  role: string;
+  password: string;
+  token!: string;
   constructor(doctors: Doctors) {
     {
       this.id = doctors.id || this.getRandomID();
@@ -20,6 +23,8 @@ export class Doctors {
       this.mobile = doctors.mobile || '';
       this.department = doctors.department || '';
       this.degree = doctors.degree || '';
+      this.role = doctors.role || '';
+      this.password = doctors.password || '';
     }
   }
   public getRandomID(): number {

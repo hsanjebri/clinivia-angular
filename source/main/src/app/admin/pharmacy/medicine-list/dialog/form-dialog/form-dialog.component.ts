@@ -73,20 +73,12 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.medicineList.id],
-      m_no: [this.medicineList.m_no],
+      medForm: [this.medicineList.medForm],
       m_name: [this.medicineList.m_name],
-      category: [this.medicineList.category],
-      company: [this.medicineList.company],
-      p_date: [
-        formatDate(this.medicineList.p_date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
-      price: [this.medicineList.price],
-      e_date: [
-        formatDate(this.medicineList.e_date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
-      stock: [this.medicineList.stock],
+      medDosage: [this.medicineList.medDosage],
+      medDescription: [this.medicineList.medDescription],
+      medPhoto: [this.medicineList.medPhoto],
+
     });
   }
   submit() {

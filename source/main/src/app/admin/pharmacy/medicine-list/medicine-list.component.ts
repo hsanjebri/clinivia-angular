@@ -59,14 +59,11 @@ export class MedicineListComponent
   implements OnInit {
   displayedColumns = [
     'select',
-    'm_no',
-    'm_name',
-    'category',
-    'company',
-    'p_date',
-    'price',
-    'e_date',
-    'stock',
+   'm_name',
+    'medDescription',
+    'medDosage',
+    'medForm',
+    'medPhoto',
     'actions',
   ];
   exampleDatabase?: MedicineListService;
@@ -251,16 +248,13 @@ export class MedicineListComponent
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        No: x.m_no,
         'Medicine Name': x.m_name,
-        Category: x.category,
-        'Purchase Date':
-          formatDate(new Date(x.p_date), 'yyyy-MM-dd', 'en') || '',
-        'Company Name': x.company,
-        Price: x.price,
-        'Expired Date':
-          formatDate(new Date(x.e_date), 'yyyy-MM-dd', 'en') || '',
-        Stock: x.stock,
+        Description: x.medDescription,
+
+        Dosage: x.medDosage,
+        Form: x.medForm,
+
+        Photo: x.medPhoto,
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
@@ -308,7 +302,7 @@ export class ExampleDataSource extends DataSource<MedicineList> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllMedicineLists();
+    this.exampleDatabase.getAllItemStockLists();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
@@ -316,14 +310,11 @@ export class ExampleDataSource extends DataSource<MedicineList> {
           .slice()
           .filter((medicineList: MedicineList) => {
             const searchStr = (
-              medicineList.m_no +
+              medicineList.medPhoto +
               medicineList.m_name +
-              medicineList.category +
-              medicineList.company +
-              medicineList.p_date +
-              medicineList.price +
-              medicineList.e_date +
-              medicineList.stock
+              medicineList.medDescription +
+              medicineList.medDosage
+
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -353,30 +344,17 @@ export class ExampleDataSource extends DataSource<MedicineList> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'm_no':
-          [propertyA, propertyB] = [a.m_no, b.m_no];
+        case 'medDescription':
+          [propertyA, propertyB] = [a.medDescription, b.medDescription];
           break;
         case 'm_name':
           [propertyA, propertyB] = [a.m_name, b.m_name];
           break;
-        case 'category':
-          [propertyA, propertyB] = [a.category, b.category];
-          break;
+
         case 'company':
-          [propertyA, propertyB] = [a.company, b.company];
+          [propertyA, propertyB] = [a.medDosage, b.medDosage];
           break;
-        case 'p_date':
-          [propertyA, propertyB] = [a.p_date, b.p_date];
-          break;
-        case 'price':
-          [propertyA, propertyB] = [a.price, b.price];
-          break;
-        case 'e_date':
-          [propertyA, propertyB] = [a.e_date, b.e_date];
-          break;
-        case 'stock':
-          [propertyA, propertyB] = [a.stock, b.stock];
-          break;
+
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+
+import {BehaviorSubject, filter, Observable, of, throwError} from 'rxjs';
 import { Patient } from './patient.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -20,15 +22,20 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);
   // Temporarily stores data from dialogs
   dialogData!: Patient;
+
+
   constructor(private httpClient: HttpClient) {
     super();
   }
+
   get data(): Patient[] {
     return this.dataChange.value;
   }
+
   getDialogData() {
     return this.dialogData;
   }
+
   /** CRUD METHODS */
   getAllPatients(): void {
     this.subs.sink = this.httpClient.get<Patient[]>(this.API_URL).subscribe({
@@ -56,6 +63,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   //       },
   //     });
   // }
+
   addPatient(patient: Patient): void {
     this.httpClient.post<Patient>(this.API_URLADD, patient)
       .subscribe({
@@ -110,6 +118,8 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
     const url = `${this.API_ASSESS_INTAKE}${patientId}`;
     return this.httpClient.get<Map<Date, string>>(url);
   }
+
+
+
 }
-/**********************************************/
 

@@ -23,6 +23,40 @@
                   }
                 </mat-form-field>
               </div>
+              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <mat-label>Gender</mat-label>
+                  <mat-select formControlName="gender" required>
+                    <mat-option [value]="'Male'">
+                      Male
+                    </mat-option>
+                    <mat-option [value]="'Female'">
+                      Female
+                    </mat-option>
+                  </mat-select>
+                  @if (authForm.get('gender')?.hasError('required')) {
+                  <mat-error>
+                    Gender is required
+                  </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <mat-label>Mobile</mat-label>
+                  <input matInput formControlName="mobile" type="number" required>
+                </mat-form-field>
+                @if (authForm.get('mobile')?.hasError('invalidMobile') && authForm.get('mobile')?.touched){
+                  <mat-error>
+                    phone number invalid
+                  </mat-error>
+                }
+                @if (authForm.get('mobile')?.hasError('Required') && authForm.get('mobile')?.touched){
+                  <mat-error>
+                    phone number Required
+                  </mat-error>
+                }
+              </div>
             </div>
             <div class="row">
               <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
@@ -35,22 +69,32 @@
                     Please enter a valid email address
                   </mat-error>
                   }
+                  @else if (authForm.get('email')!.hasError('emailNotUnique') || authForm.get('email')!.touched) {
+                    <mat-error>
+                      nnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+                    </mat-error>
+                    }
                 </mat-form-field>
               </div>
             </div>
             <div class="row">
               <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Password</mat-label>
-                  <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
-                  <mat-icon class="material-icons-outlined pwd-toggle p-3" matSuffix (click)="hide = !hide">
-                    {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  @if (authForm.get('password')!.hasError('required')) {
-                  <mat-error>
-                    Password is required
-                  </mat-error>
-                  }
-                </mat-form-field>
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName="password" type="password" required>
+                    <mat-icon class="material-icons-outlined pwd-toggle p-3" matSuffix (click)="chide = !chide">
+                      {{chide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    @if (authForm.get('password')?.hasError('required')) {
+                    <mat-error>
+                      password is required
+                    </mat-error>
+                    }
+                    @if (authForm.get('password')?.hasError('passwordRequirements')){
+                      <mat-error>
+                        password must contain at least 1 uppercase , 1 lowercase , 1 number and a symbol also it must be at least 8 characters long
+                      </mat-error>
+                    }
+                  </mat-form-field>
               </div>
             </div>
             <div class="row">
@@ -65,7 +109,115 @@
                     Confirm Password is required
                   </mat-error>
                   }
+                  @if (authForm.get('cpassword')?.hasError('passwordMismatch')){
+                    <mat-error>
+                      password Mismatch
+                    </mat-error>
+                  }
                 </mat-form-field>
+              </div>
+              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <mat-label>Date Of Birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="date" required>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  @if (authForm.get('date')?.hasError('required')) {
+                  <mat-error>
+                    Please select date
+                  </mat-error>
+                  }
+                  @if (authForm.get('date')?.hasError('minimumAge')){
+                    <mat-error>
+                      You must be at least 18 years old to register.                    
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <mat-label>Address</mat-label>
+                  <textarea matInput formControlName="address"></textarea>
+                  <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>home</mat-icon>
+                </mat-form-field>
+              </div>
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                <label>Upload</label>
+                <app-file-upload formControlName="uploadFile"></app-file-upload>
+              </div>
+              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <mat-label>Role</mat-label>
+                  <mat-select formControlName="role" required>
+                    <mat-option [value]="'DOCTOR'">
+                      Doctor
+                    </mat-option>
+                    <mat-option [value]="'Patient'">
+                      Patient
+                    </mat-option>
+                    <mat-option [value]="'HealthcareStaff'">
+                      Healthcare Staff
+                    </mat-option>
+                    <mat-option [value]="'Admin'">
+                      Admin
+                    </mat-option>
+                  </mat-select>
+                  @if (authForm.get('role')?.hasError('required')) {
+                  <mat-error>
+                    Role is required
+                  </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div>
+                @if(authForm.get('role')!.value === 'DOCTOR'){
+                  <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Spetialization</mat-label>
+                      <input matInput formControlName="specialization">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Degree</mat-label>
+                      <textarea matInput formControlName="degree"></textarea>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Select Department</mat-label>
+                      <mat-select formControlName="department" required>
+                        <mat-option [value]="'Neurology'">
+                          Neurology
+                        </mat-option>
+                        <mat-option [value]="'Orthopedics'">
+                          Orthopedics
+                        </mat-option>
+                        <mat-option [value]="'Gynaecology'">
+                          Gynaecology
+                        </mat-option>
+                        <mat-option [value]="'Microbiology'">
+                          Microbiology
+                        </mat-option>
+                      </mat-select>
+                      @if (authForm.get('department')?.hasError('required')) {
+                      <mat-error>
+                        Select Any Department
+                      </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                }
+              </div>
+              <div>
+                @if(authForm.get('role')?.value == 'HealthcareStaff'){
+                  <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Designation</mat-label>
+                      <textarea matInput formControlName="designation"></textarea>
+                    </mat-form-field>
+                  </div>
+                }
               </div>
             </div>
             <div class="flex-sb-m w-full  p-b-20">
@@ -76,7 +228,7 @@
               </div>
             </div>
             <div class="container-auth-form-btn">
-              <button mat-raised-button color="primary" class="auth-form-btn" [disabled]="!authForm.valid "
+              <button mat-raised-button color="primary" (click)="onSubmit" class="auth-form-btn" [disabled]="!authForm.valid "
                 type="submit">
                 Register
               </button>
@@ -100,6 +252,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
