@@ -40,14 +40,16 @@ export class SigninComponent
   }
 
   ngOnInit() {
+    console.log(this.authService.alld)
     this.authForm = this.formBuilder.group({
-      username: ['admin@hospital.org', Validators.required],
-      password: ['admin@123', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
   get f() {
     return this.authForm.controls;
   }
+  
   onSubmit() {
     this.submitted = true;
     this.loading = true;

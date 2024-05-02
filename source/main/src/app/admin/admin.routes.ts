@@ -64,5 +64,10 @@ export const ADMIN_ROUTE: Route[] = [
     loadChildren: () =>
       import('./pharmacy/pharmacy.routes').then((m) => m.PHARMACY_ROUTE),
   },
+  {
+    path: 'subscription',
+    loadChildren: () =>
+      import('./subscription/subscription.routes').then((m) => m.SUBSCRIPTION_ROUTE),
+  },
 
 ];

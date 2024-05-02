@@ -17,9 +17,10 @@ import { Doctors } from 'app/admin/doctors/alldoctors/doctors.model';
 import { PatientService } from 'app/admin/patients/allpatients/patient.service';
 import { Patient } from 'app/admin/patients/allpatients/patient.model';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '@core';
 import { BrowserModule } from '@angular/platform-browser';
 import * as LR from "@uploadcare/blocks";
-import { AuthService } from '@core';
+
 LR.registerBlocks(LR);
 //import { UploaderComponent } from './uploader.component';
 
@@ -149,7 +150,6 @@ export class SignupComponent implements OnInit {
     private ds:DoctorsService,
     private ps:PatientService,
     private aut:AuthService,
-    //private up:FileUploadComponent,
     private http: HttpClient
   ) { }
   ngOnInit() {

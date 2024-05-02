@@ -112,7 +112,8 @@
                   >
                   @if (authForm.get('password')?.hasError('required')) {
                   <mat-error> password is required </mat-error>
-                  } @if
+                  }
+                  @if
                   (authForm.get('password')?.hasError('passwordRequirements')){
                   <mat-error>
                     password must contain at least 1 uppercase , 1 lowercase , 1

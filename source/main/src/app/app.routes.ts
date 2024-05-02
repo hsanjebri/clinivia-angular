@@ -119,6 +119,14 @@ export const APP_ROUTE: Route[] = [
                         (m) => m.MULTILEVEL_ROUTE
                     ),
             },
+            {
+                path: 'subscription',
+                loadChildren: () =>
+                    import('./admin/subscription/subscription.routes').then(
+                        (m) => m.SUBSCRIPTION_ROUTE
+                    ),
+            },
+            
         ],
     },
     {
