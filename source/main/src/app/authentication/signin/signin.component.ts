@@ -40,7 +40,7 @@ export class SigninComponent
   }
 
   ngOnInit() {
-    console.log(this.authService.alld)
+
     this.authForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],

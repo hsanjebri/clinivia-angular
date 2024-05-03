@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { ROUTES } from './sidebar-items';
 import { RouteInfo } from './sidebar.metadata';
-import { AuthService, Role } from '@core';
+import { AuthService, Role, User } from '@core';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
@@ -40,6 +40,7 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
   userType?: string;
   headerHeight = 60;
   currentRoute?: string;
+  user: User = this.authService.currentUserValue;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -82,6 +83,7 @@ export class SidebarComponent extends UnsubscribeOnDestroyAdapter implements OnI
     }
   }
   ngOnInit() {
+    
     if (this.authService.currentUserValue) {
       const userRole = this.authService.currentUserValue.role;
       this.userFullName =

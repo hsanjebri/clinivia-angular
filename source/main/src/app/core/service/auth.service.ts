@@ -7,6 +7,8 @@ import { Doctors } from 'app/admin/doctors/alldoctors/doctors.model';
 import { DoctorsService } from 'app/admin/doctors/doctors.service';
 import { number } from 'echarts';
 import { AlldoctorsComponent } from 'app/admin/doctors/alldoctors/alldoctors.component';
+import { Patient } from 'app/admin/patients/allpatients/patient.model';
+import { PatientService } from 'app/admin/patients/allpatients/patient.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
   public doctors1: Doctors[] = [];
+  public patients1: Patient[] = [];
   public listusers: User[]=[];
   public alld? : AlldoctorsComponent;
   private users: User[] = //this.listusers;
@@ -52,7 +55,7 @@ export class AuthService {
     },
   ];
 
-  constructor(private http: HttpClient, private ds : DoctorsService) {
+  constructor(private http: HttpClient, private ds : DoctorsService , private ps: PatientService) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser') || '{}')
     );
@@ -66,6 +69,12 @@ export class AuthService {
     complete:()=>console.log('done')
   }
   )
+  public listusers2 =this.ps.getUs().subscribe({
+    next:(data)=>this.patients1=data,
+    error:(error)=> console.log(error),
+    complete:()=>console.log('done')
+  }
+  )
 
 
   public get currentUserValue(): User {
@@ -73,11 +82,12 @@ export class AuthService {
   }
 
   docToUser(doc: Doctors): User {
+    console.log(doc)
     const newuser: User = {
       firstName: doc.name,
       lastName: doc.name,
       id: doc.id,
-      img: 'assets/images/user/admin.jpg',
+      img: doc.img,
       password: doc.password,
       username: doc.email,
       token: "doctor-token",
@@ -94,10 +104,29 @@ export class AuthService {
     return newuser;
   }
 
-  getallusers(){
+  patToUser(doc: Patient): User {
+    const newuser: User = {
+      firstName: doc.name,
+      lastName: doc.name,
+      id: doc.id,
+      img: doc.img,
+      password: doc.password,
+      username: doc.email,
+      token: "patient-token",
     
+      role: Role.Patient
+    };
+    return newuser;
+  }
+
+  getallusers(){
+    let j = 0
     for(let i = 0; i < this.doctors1.length; i++){
       this.listusers[i] = this.docToUser(this.doctors1[i])
+      j++
+    }
+    for(let i = 0; i < this.patients1.length; i++){
+      this.listusers[j] = this.patToUser(this.patients1[i])
     }
     console.log(this.listusers)
     
@@ -108,6 +137,7 @@ export class AuthService {
   login(username: string, password: string) {
 
     this.getallusers();
+    console.log(this.listusers)
     //console.log(this.doctors1)
     const user = this.listusers.find((u) => u.username === username && u.password === password);
     this.alld?.dataSource.connect();
@@ -151,7 +181,7 @@ export class AuthService {
 
 
   ngOnInit(){
-   // this.listProduct=this.ps.listProduct
+    console.log(this.listusers)
     this.ds.getUs().subscribe({
       next:(data)=>this.doctors1=data,
       error:(error)=> console.log(error),
