@@ -111,6 +111,16 @@ export const APP_ROUTE: Route[] = [
                 loadChildren: () =>
                     import('./maps/maps.routes').then((m) => m.MAPS_ROUTE),
             },
+          {
+            path: 'home',
+            loadComponent: () =>
+              import('../app/home/home.component').then((m) => m.HomeComponent),
+          },
+          {
+            path: 'room/:roomId',
+            loadComponent: () =>
+              import('../app/room/room.component').then((m) => m.RoomComponent),
+          },
             {
                 path: 'multilevel',
                 loadChildren: () =>

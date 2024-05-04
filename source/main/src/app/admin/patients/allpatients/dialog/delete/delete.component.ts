@@ -7,7 +7,7 @@ export interface DialogData {
   id: number;
   name: string;
   gender: string;
-  bGroup: string;
+  bgroupe: string;
   mobile: string;
 }
 

@@ -2,7 +2,6 @@
   <div class="modalHeader">
     <div class="editRowModal">
       <div class="modalHeader clearfix">
-        <img [src]='room.img' alt="avatar">
         <div class="modal-about">
           {{dialogTitle}}
         </div>
@@ -15,14 +14,15 @@
   <div mat-dialog-content>
     <form class="register-form m-4" [formGroup]="roomForm" (ngSubmit)="submit">
       <div class="row">
+
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Room No</mat-label>
-            <input matInput formControlName="rNo" required>
-            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>assignment</mat-icon>
-            @if (roomForm.get('rNo')?.hasError('required')) {
+            <mat-label>plan Description</mat-label>
+            <input matInput formControlName="planDescription" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+            @if (roomForm.get('planDescription')?.hasError('required')) {
             <mat-error>
-              Room no is required
+              plan Description is required
             </mat-error>
             }
           </mat-form-field>
@@ -30,54 +30,26 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Patient Name</mat-label>
-            <input matInput formControlName="pName" required>
+            <input matInput formControlName="patientName" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
-            @if (roomForm.get('pName')?.hasError('required')) {
-            <mat-error>
-              Patient Name is required
-            </mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Room Type</mat-label>
-            <input matInput formControlName="rType" required>
-            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>store</mat-icon>
-            @if (roomForm.get('rType')?.hasError('required')) {
-            <mat-error>
-              Room type is required
-            </mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <div class="m-b-20">
-            <mat-label class="msr-3">Gender:</mat-label>
-            <mat-radio-group aria-label="Select gender" formControlName="gender" required>
-              <mat-radio-button value="Male">Male</mat-radio-button>
-              <mat-radio-button value="Female">Female</mat-radio-button>
-              @if (roomForm.get('gender')?.hasError('required')) {
+            @if (roomForm.get('patientName')?.hasError('required')) {
               <mat-error>
-                Select gender
+                Patient Name is required
               </mat-error>
-              }
-            </mat-radio-group>
-          </div>
+            }
+          </mat-form-field>
         </div>
       </div>
+
+
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Admit date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="admitDate">
+            <input matInput [matDatepicker]="picker" formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            @if (roomForm.get('admitDate')?.hasError('required')) {
+            @if (roomForm.get('startDate')?.hasError('required')) {
             <mat-error>
               Please select Admit date
             </mat-error>
@@ -87,10 +59,10 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Discharge date</mat-label>
-            <input matInput [matDatepicker]="pickerTo" formControlName="dischargeDate">
+            <input matInput [matDatepicker]="pickerTo" formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
             <mat-datepicker #pickerTo></mat-datepicker>
-            @if (roomForm.get('dischargeDate')?.hasError('required')) {
+            @if (roomForm.get('endDate')?.hasError('required')) {
             <mat-error>
               Please select Discharge date
             </mat-error>

@@ -13,7 +13,6 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
 
-  // Admin Modules
   {
     path: '',
     title: 'MENUITEMS.DASHBOARD.TEXT',
@@ -38,7 +37,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: '/admin/dashboard/dashboard2',
+          path: '/admin/dashboard/dashboard2',
         title: 'MENUITEMS.DASHBOARD.LIST.DASHBOARD2',
         iconType: '',
         icon: '',
@@ -407,6 +406,55 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
+    title: 'MEAL',
+    iconType: 'material-icons-outlined',
+    icon: 'restaurant_menu',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin'],
+    submenu: [
+      {
+        path: '/admin/meal/bill-list',
+        title: 'meal list',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+      {
+        path: '/admin/meal/add-meal',
+        title: 'add meal',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+      {
+        path: '/admin/meal/invoice',
+        title: 'MENUITEMS.BILLING.LIST.INVOICE',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
     title: 'MENUITEMS.RECORDS.TEXT',
     iconType: 'material-icons-outlined',
     icon: 'list_alt',
@@ -592,6 +640,7 @@ export const ROUTES: RouteInfo[] = [
   },
 
   // Doctor Modules
+
   {
     path: '/doctor/dashboard',
     title: 'MENUITEMS.DOCTOR.DASHBOARD',
@@ -601,7 +650,30 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
+    submenu: [],
+  },{
+  path: '/doctor/prescription',
+  title: 'Prescription',
+  iconType: 'material-icons-outlined',
+  icon: 'space_dashboard',
+  class: '',
+  groupTitle: false,
+  badge: '',
+  badgeClass: '',
+  role: ['DOCTOR'],
+  submenu: [],
+},
+  {
+    path: '/doctor/Generatedprescription',
+    title: ' Generated Prescription',
+    iconType: 'material-icons-outlined',
+    icon: 'assignment',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['DOCTOR'],
     submenu: [],
   },
   {
@@ -613,9 +685,10 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
     submenu: [],
   },
+
   {
     path: '/doctor/doctors',
     title: 'MENUITEMS.DOCTOR.DOCTORS',
@@ -625,7 +698,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
     submenu: [],
   },
   {
@@ -637,7 +710,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
     submenu: [],
   },
   {
@@ -649,7 +722,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
     submenu: [],
   },
   {
@@ -661,7 +734,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Doctor'],
+    role: ['DOCTOR'],
     submenu: [],
   },
   // Patient Modules
@@ -810,7 +883,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: true,
     badge: '',
     badgeClass: '',
-    role: ['Admin', 'Doctor'],
+    role: ['Admin', 'DOCTOR'],
     submenu: [],
   },
   {
@@ -822,7 +895,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: 'New',
     badgeClass: 'badge bg-blue sidebar-badge float-end',
-    role: ['Admin', 'Doctor'],
+    role: ['Admin', 'DOCTOR'],
     submenu: [],
   },
   {
@@ -834,7 +907,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Admin', 'Doctor'],
+    role: ['Admin', 'DOCTOR'],
     submenu: [],
   },
   {
@@ -846,7 +919,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Admin', 'Doctor'],
+    role: ['Admin', 'DOCTOR'],
     submenu: [],
   },
   {
@@ -858,7 +931,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Admin', 'Doctor'],
+    role: ['Admin', 'DOCTOR'],
     submenu: [
       {
         path: '/email/inbox',

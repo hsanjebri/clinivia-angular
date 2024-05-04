@@ -85,33 +85,6 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                            <mat-form-field class="example-full-width" appearance="outline">
-                              <mat-label>Assigned Name</mat-label>
-                              <mat-select formControlName="name">
-                                <mat-option [value]="'Sarah Smith'">
-                                  Sarah Smith
-                                </mat-option>
-                                <mat-option [value]="'John Deo'">
-                                  John Deo
-                                </mat-option>
-                                <mat-option [value]="'Jens Brincker'">
-                                  Jens Brincker
-                                </mat-option>
-                                <mat-option [value]="'Mark Hay'">
-                                  Mark Hay
-                                </mat-option>
-                                <mat-option [value]="'Anthony Davie'">
-                                  Anthony Davie
-                                </mat-option>
-                                <mat-option [value]="'Sue Woodger'">
-                                  Sue Woodger
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row">
                           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                             <mat-form-field class="example-full-width" appearance="outline">
                               <mat-label>Priority</mat-label>
@@ -134,7 +107,11 @@
                               <input matInput formControlName="due_date" [matDatepicker]="picker1">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                               <mat-datepicker #picker1></mat-datepicker>
+                              <mat-error *ngIf="taskForm.get('due_date')?.invalid && (taskForm.get('due_date')?.dirty || taskForm.get('due_date')?.touched)">
+                                Due date is required and must be after today.
+                              </mat-error>
                             </mat-form-field>
+
                           </div>
                         </div>
                         <div class="row">
@@ -183,7 +160,6 @@
                               }
                               {{task.priority}}
                             </div>
-                            <img src='{{ task.img }}' class="task-user-img" matTooltip='{{ task.name }}'>
                             <div class="task-date" matTooltip="Due Date">{{ task.due_date | date }}</div>
                           </div>
                           }
