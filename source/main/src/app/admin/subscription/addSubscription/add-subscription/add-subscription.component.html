@@ -1,0 +1,157 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb
+        [title]="'Subscription'"
+        [items]="['Doctors']"
+        [active_item]="'Add Doctor'"
+      ></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Add Subscription</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="subForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>subscription Type</mat-label>
+                    <mat-select formControlName="subscriptionType" required>
+                      <mat-option [value]="'FREE'" [disabled]="isFreeTierSelected"> FREE </mat-option>
+                      <mat-option [value]="'BASIC'" [disabled]="isBASICTierSelected"> BASIC </mat-option>
+                      <mat-option [value]="'PREMIUM'" [disabled]="isPREMIUMTierSelected"> PREMIUM </mat-option>
+                    </mat-select>
+                    <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >subscriptions</mat-icon
+                  >
+                    @if (subForm.get('subscriptionType')?.hasError('required'))
+                    {
+                    <mat-error> Select a subscription Type </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                  <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >contentpaste</mat-icon
+                  >
+                    <mat-label>Content</mat-label>
+                    <input matInput formControlName="contents" />
+                    @if (subForm.get('contents')!.hasError('required')) {
+                    <mat-error> Content is required </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>subscription Fee</mat-label>
+                    <input
+                      matInput
+                      formControlName="subscriptionFee"
+                      type="number"
+                      required
+                    />
+                    <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >attach_money</mat-icon
+                  >
+                  </mat-form-field>
+                  @if (subForm.get('subscriptionFee')?.hasError('required') &&
+                  subForm.get('subscriptionFee')?.touched){
+                  <mat-error> subscription Fee required </mat-error>
+                  } @if (subForm.get("subscriptionFee")?.hasError('pattern') &&
+                  subForm.get('subscriptionFee')?.touched){
+                  <mat-error>
+                    subscription Fee must be positive number
+                  </mat-error>
+                  }
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                  <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >timelapse</mat-icon
+                  >
+                    <mat-label>subscription Duration (in months)</mat-label>
+                    <input matInput formControlName="subscriptionDuration" type="number" />
+                  </mat-form-field>
+                  @if (subForm.get("subscriptionDuration")?.hasError('pattern')
+                  && subForm.get('subscriptionFee')?.touched){
+                  <mat-error> duration must be positive number </mat-error>
+                  } @if (subForm.get("subscriptionDuration")?.hasError('required') &&
+                  subForm.get('subscriptionFee')?.touched)
+                  {
+                  <mat-error> duration required </mat-error>
+                  }
+                </div>
+              </div>
+              <ul class="list-unstyled social-icon mb-0 mt-3">
+                <li class="list-inline-item">
+                    <div>
+                        <lr-config
+                          ctx-name="my-uploader"
+                          pubkey="7cf1931b8c3914347aa3"
+                          multiple="false"
+                          removeCopyright="true"
+                          sourceList="local, url, camera, dropbox, gdrive"
+                          use-cloud-image-editor="true"
+                        ></lr-config>
+                        <lr-file-uploader-regular
+                          ctx-name="my-uploader"
+                          class="parentContainer"
+                          css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.30.0/web/lr-file-uploader-regular.min.css"
+                        ></lr-file-uploader-regular>
+                        <lr-upload-ctx-provider
+                          ctx-name="my-uploader"
+                          #ctxProvider
+                        ></lr-upload-ctx-provider>
+                        <div *ngFor="let uploadedFile of uploadedFiles">
+                          <img
+                            src="{{
+                              uploadedFile.cdnUrl + '/-/preview/-/resize/x200/'
+                            }}"
+                            *ngIf="uploadedFile.cdnUrl"
+                          />
+                        </div>
+                      </div>
+                </li>
+              </ul>
+              <ul class="list-unstyled social-icon mb-0 mt-3">
+                <li class="list-inline-item">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <button class="btn-space" [disabled]="!subForm.valid " mat-raised-button
+                          color="primary" (click)="onSubmit">add new tier</button>
+                      </div>
+                </li>
+            </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

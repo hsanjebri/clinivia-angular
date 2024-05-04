@@ -46,27 +46,16 @@ export class SigninComponent
   }
 
   ngOnInit() {
+
     this.authForm = this.formBuilder.group({
-      username: ['admin@hospital.org', Validators.required],
-      password: ['admin@123', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
   get f() {
     return this.authForm.controls;
   }
-  adminSet() {
-    this.authForm.get('username')?.setValue('admin@hospital.org');
-    this.authForm.get('password')?.setValue('admin@123');
-
-  }
-  doctorSet() {
-    this.authForm.get('username')?.setValue('doctor@hospital.org');
-    this.authForm.get('password')?.setValue('doctor@123');
-  }
-  patientSet() {
-    this.authForm.get('username')?.setValue('patient@hospital.org');
-    this.authForm.get('password')?.setValue('patient@123');
-  }
+  
   onSubmit() {
     this.submitted = true;
     this.loading = true;

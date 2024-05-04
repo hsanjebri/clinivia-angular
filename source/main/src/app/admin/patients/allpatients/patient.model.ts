@@ -80,7 +80,7 @@ export class Patient {
     this.events = patient.events || [];
     this.services = patient.services || [];
     this.vitalSignList = patient.vitalSignList || [];
-
+  }
 
   private getRandomID(): number {
     const S4 = () => {

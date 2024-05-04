@@ -15,7 +15,7 @@ export class Doctors {
   constructor(doctors: Doctors) {
     {
       this.id = doctors.id || this.getRandomID();
-      this.img = doctors.img || 'assets/images/user/user1.jpg';
+      this.img = doctors.img || '';
       this.name = doctors.name || '';
       this.email = doctors.email || '';
       this.date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
