@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import {PatientService} from "../allpatients/patient.service";
 
 @Component({
   selector: 'app-add-patient',
@@ -29,28 +30,27 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 })
 export class AddPatientComponent {
   patientForm: UntypedFormGroup;
-  constructor(private fb: UntypedFormBuilder) {
+
+  constructor(private fb: UntypedFormBuilder,private patientService: PatientService) {
     this.patientForm = this.fb.group({
-      first: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
-      last: [''],
+      name: ['', [Validators.required]],
+      patientPassword: ['', [Validators.required]],
+      date: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      bgroupe: ['', [Validators.required]],
       gender: ['', [Validators.required]],
-      mobile: [''],
-      dob: ['', [Validators.required]],
-      age: [''],
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
-      maritalStatus: [''],
-      address: [''],
-      bGroup: [''],
-      bPresure: [''],
-      sugger: [''],
-      injury: [''],
-      uploadFile: [''],
+      mobile: ['', [Validators.required]],
+      patientContactEmergencies: ['', [Validators.required]],
+      medicalHistory: ['', [Validators.required]],
+      patientAlergies: ['', [Validators.required]],
+      treatment: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      image: [''],
     });
   }
   onSubmit() {
     console.log('Form Value', this.patientForm.value);
+    this.patientService.addPatient(this.patientForm.getRawValue());
+
   }
 }

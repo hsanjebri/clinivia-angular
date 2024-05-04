@@ -32,6 +32,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 
+import { PrescriptionsComponent } from '../prescription/prescription.component';
+import {FeatherIconsComponent} from "@shared/components/feather-icons/feather-icons.component";
+
 @Component({
   selector: 'app-appointments',
   templateUrl: './appointments.component.html',
@@ -51,6 +54,7 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
     MatProgressSpinnerModule,
     MatPaginatorModule,
     DatePipe,
+    FeatherIconsComponent,
   ],
 })
 export class AppointmentsComponent
@@ -66,12 +70,14 @@ export class AppointmentsComponent
     'mobile',
     'disease',
     'actions',
+
   ];
   exampleDatabase?: AppointmentsService;
   dataSource!: ExampleDataSource;
   selection = new SelectionModel<Appointments>(true, []);
   id?: number;
   appointments?: Appointments;
+  PrescriptionsComponent : PrescriptionsComponent | undefined;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -94,6 +100,9 @@ export class AppointmentsComponent
   }
   refresh() {
     this.loadData();
+  }
+  addNewPrescription(){
+   this.PrescriptionsComponent?.addNew();
   }
   addNew() {
     let tempDirection: Direction;

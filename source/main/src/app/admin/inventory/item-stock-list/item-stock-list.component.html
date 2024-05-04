@@ -1,4 +1,7 @@
+
+
 <section class="content">
+
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
@@ -19,6 +22,7 @@
                   <input placeholder="Search" type="text" #filter class="browser-default search-field"
                     aria-label="Search box">
                 </li>
+
               </ul>
             </div>
             <div class="right">
@@ -50,9 +54,15 @@
                     <img src="assets/images/icons/xlsx.png" alt="" (click)="exportExcel()" />
                   </div>
                 </li>
+                <li>
+                  <div class="export-button m-l-10" matTooltip="pdf">
+                    <img src="assets/images/icons/pdf.jpg" alt="" (click)="generatePDF()" />
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
+
           <div class="body overflow-auto">
             <div class="responsive_table">
               <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
@@ -106,6 +116,8 @@
                     <span class="truncate-text"><span class="mobile-label">Details:</span>{{row.details}}</span>
                   </mat-cell>
                 </ng-container>
+
+
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
@@ -146,5 +158,33 @@
         </div>
       </div>
     </div>
-  </div>
+    <section>
+    <div class="row clearfix">
+      <!-- Pie Chart -->
+      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Pie Chart</h2>
+          </div>
+          <div class="body">
+            <div echarts [options]="pie_chart2" class="echart-height"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Line Graph Chart -->
+      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Aria Line Chart</h2>
+          </div>
+          <div class="body">
+            <div echarts [options]="area_line_chart" class="echart-height"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </section>
+
+
+

@@ -1,31 +1,21 @@
 import { formatDate } from '@angular/common';
 export class MedicineList {
   id: number;
-  m_no: string;
   m_name: string;
-  category: string;
-  company: string;
-  p_date: string;
-  price: string;
-  e_date: string;
-  stock: string;
+  medDescription: string;
+  medDosage: string;
+  medForm: string;
+  medPhoto: string;
+
   constructor(medicineList: MedicineList) {
     {
-      this.id = medicineList.id || this.getRandomID();
-      this.m_no = medicineList.m_no || '';
+      this.id = medicineList.id ;
       this.m_name = medicineList.m_name || '';
-      this.category = medicineList.category || '';
-      this.company = medicineList.company || '';
-      this.p_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.price = medicineList.price || '';
-      this.e_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.stock = medicineList.stock || '';
+      this.medDescription = medicineList.medDescription || '';
+      this.medPhoto = medicineList.medPhoto || '';
+      this.medDosage = medicineList.medDosage || '';
+      this.medForm = medicineList.medForm || '';
     }
   }
-  public getRandomID(): number {
-    const S4 = () => {
-      return ((1 + Math.random()) * 0x10000) | 0;
-    };
-    return S4() + S4();
-  }
+
 }

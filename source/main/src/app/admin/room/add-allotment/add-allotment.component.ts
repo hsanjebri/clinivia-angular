@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import {RoomService} from "../allroom/room.service";
 @Component({
   selector: 'app-add-allotment',
   templateUrl: './add-allotment.component.html',
@@ -26,16 +27,18 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
 })
 export class AddAllotmentComponent {
   roomForm: UntypedFormGroup;
-  constructor(private fb: UntypedFormBuilder) {
+
+  constructor(private fb: UntypedFormBuilder, private roomService: RoomService) {
     this.roomForm = this.fb.group({
-      rNo: ['', [Validators.required]],
-      rType: ['', [Validators.required]],
-      pName: ['', [Validators.required]],
-      aDate: ['', [Validators.required]],
-      dDate: ['', [Validators.required]],
+      planDescription: ['', [Validators.required]],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
     });
+
   }
   onSubmit() {
+    this.roomService.addRoom(this.roomForm.getRawValue());
     console.log('Form Value', this.roomForm.value);
+
   }
 }

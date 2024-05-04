@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ConfigService } from '@config';
-import {
+import { 
   AuthService,
   InConfiguration,
   LanguageService,
@@ -47,6 +47,7 @@ export class HeaderComponent
   implements OnInit {
   public config!: InConfiguration;
   userImg?: string;
+  username?: string;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -130,14 +131,14 @@ export class HeaderComponent
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
     this.userImg = this.authService.currentUserValue.img;
-
+    this.username = this.authService.currentUserValue.firstName;
     this.docElement = document.documentElement;
 
     if (userRole === 'Admin') {
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Patient') {
       this.homePage = 'patient/dashboard';
-    } else if (userRole === 'Doctor') {
+    } else if (userRole === 'DOCTOR') {
       this.homePage = 'doctor/dashboard';
     } else {
       this.homePage = 'admin/dashboard/main';

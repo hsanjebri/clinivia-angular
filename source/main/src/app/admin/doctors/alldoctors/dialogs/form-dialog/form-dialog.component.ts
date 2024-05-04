@@ -1,6 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { DoctorsService } from '../../doctors.service';
+import { DoctorsService } from '../../../doctors.service';
 import { UntypedFormControl, Validators, UntypedFormGroup, UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Doctors } from '../../doctors.model';
 import { formatDate } from '@angular/common';
@@ -84,7 +84,7 @@ export class FormDialogComponent {
     });
   }
   submit() {
-    // emppty stuff
+    
   }
   onNoClick(): void {
     this.dialogRef.close();

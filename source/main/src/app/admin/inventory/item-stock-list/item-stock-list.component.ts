@@ -32,6 +32,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
+import { EChartsOption , } from "echarts";
+import {Chart, registerables} from "chart.js";
+
+
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-item-stock-list',
@@ -52,7 +61,11 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
     MatProgressSpinnerModule,
     MatPaginatorModule,
     DatePipe,
+    NgxEchartsDirective,
   ],
+  providers: [
+    provideEcharts(),
+  ]
 })
 export class ItemStockListComponent
   extends UnsubscribeOnDestroyAdapter
@@ -73,6 +86,16 @@ export class ItemStockListComponent
   index?: number;
   id?: number;
   itemStockList?: ItemStockList;
+
+
+  pieChartData: EChartsOption = {};
+  categories : string[] =[];
+  items_by_category : number[]=[];
+
+
+  chartdata:any[]=[];
+  categorydata :any[]=[];
+  countdata :any[]=[];
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -81,14 +104,71 @@ export class ItemStockListComponent
   ) {
     super();
   }
+
+
+
+
+
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
+
   ngOnInit() {
     this.loadData();
+   /* this.itemStockListService.Items().subscribe(result => {this.categorydata =result;
+if(this.categorydata!=null){
+  for(let i=0 ; i<this.categorydata.length ; i++){
+    console.log(this.chartdata[i]);
   }
+}
+
+  });*/
+
+
+  }
+
+
+
+
+  generatePDF(){
+     const myData = this.dataSource.filteredData;
+
+// Create the PDF content dynamically
+     const docDefinition = {
+       content: [
+         { text: 'My inventory Data', style: 'header' }, // Header
+         {
+           table: {
+             body: [
+               ['Item Name', 'Category', 'Quantity', 'Purchase Date', 'Price', 'Details'], // Table header
+               ...myData.map(item => [
+                 item.i_name,
+                 item.category,
+                 item.qty,
+                 formatDate(new Date(item.date), 'yyyy-MM-dd', 'en') || '',
+                 item.price,
+                 item.details,
+               ]),
+             ],
+           },
+         },
+       ],
+       styles: {
+         header: {
+           fontSize: 18,
+           bold: true,
+           margin: [0, 10, 0, 10], // Adjusted margin format (top, right, bottom, left)
+         },
+       },
+     };
+
+// Generate and download the PDF
+     // @ts-ignore
+     pdfMake.createPdf(docDefinition).download('invenotry_data.pdf');
+
+   }
   refresh() {
     this.loadData();
   }
@@ -145,14 +225,17 @@ export class ItemStockListComponent
           (x) => x.id === this.id
         );
         // Then you update that record using data from dialogData (values you enetered)
-        if (foundIndex != null && this.exampleDatabase) {
+
+        if (foundIndex != null && this.exampleDatabase ) {
+        // if ( this.exampleDatabase.dataChange.value[foundIndex].qty <3 )
+
           this.exampleDatabase.dataChange.value[foundIndex] =
             this.itemStockListService.getDialogData();
           // And lastly refresh table
           this.refreshTable();
           this.showNotification(
             'black',
-            'Edit Record Successfully...!!!',
+            'Edit  Successfully...!!!',
             'bottom',
             'center'
           );
@@ -241,10 +324,141 @@ export class ItemStockListComponent
           return;
         }
         this.dataSource.filter = this.filter?.nativeElement.value;
+
       }
     );
   }
+
+  // area line chart
+  area_line_chart: EChartsOption = {
+    tooltip: {
+      trigger: 'axis',
+    },
+    legend: {
+      data: ['owned', 'Pre-order', 'out-off-service'],
+      textStyle: {
+        color: '#9aa0ac',
+        padding: [0, 5, 0, 5],
+      },
+    },
+    toolbox: {
+      show: !0,
+      feature: {
+        magicType: {
+          show: !0,
+          title: {
+            line: 'Line',
+            bar: 'Bar',
+            stack: 'Stack',
+          },
+          type: ['line', 'bar', 'stack'],
+        },
+        restore: {
+          show: !0,
+          title: 'Restore',
+        },
+        saveAsImage: {
+          show: !0,
+          title: 'Save Image',
+        },
+      },
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: !1,
+        data: ['oiijoij', 'string', 'aa', 'Diagnostic Tools','Protective Gear'],
+        axisLabel: {
+          fontSize: 10,
+          color: '#9aa0ac',
+        },
+      },
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        axisLabel: {
+          fontSize: 10,
+          color: '#9aa0ac',
+        },
+      },
+    ],
+    series: [
+      {
+        name: 'number',
+        type: 'line',
+        smooth: !0,
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [77, 96, 79, 21, 73],
+      },
+      {
+        name: 'price',
+        type: 'line',
+        smooth: !0,
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [78, 50, 130, 100, 20],
+      },
+      {
+        name: 'category',
+        type: 'line',
+        smooth: !0,
+        areaStyle: {},
+        emphasis: {
+          focus: 'series',
+        },
+        data: [10, 20, 50, 10, 20,],
+      },
+    ],
+    color: ['#9f78ff', '#fa626b', '#32cafe'],
+  };
   // export table data in excel file
+  pie_chart2:  EChartsOption = {
+    legend: {
+      top: 'bottom',
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        restore: { show: true },
+        saveAsImage: { show: true },
+      },
+    },
+    series: [
+      {
+        name: 'Chart equipment',
+        type: 'pie',
+        radius: '55%',
+        center: ['50%', '48%'],
+        roseType: 'area',
+        itemStyle: {
+          borderRadius: 8,
+        },
+        data: [
+          { value: 24, name: 'noionuio' },
+          { value: 18, name: 'aaa' },
+          { value: 35, name: 'string' },
+          { value: 16, name: 'Stethoscope' },
+          { value: 12, name: 'blood presure monitor' },
+          { value: 34, name: 'Gloves' },
+          { value: 39, name: 'Mask surgical' },
+
+
+
+
+
+        ],
+      },
+    ],
+  };
+
   exportExcel() {
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
@@ -273,6 +487,7 @@ export class ItemStockListComponent
       panelClass: colorName,
     });
   }
+
 }
 export class ExampleDataSource extends DataSource<ItemStockList> {
   filterChange = new BehaviorSubject('');
@@ -371,4 +586,11 @@ export class ExampleDataSource extends DataSource<ItemStockList> {
       );
     });
   }
+
+
+
+
+
+
+
 }

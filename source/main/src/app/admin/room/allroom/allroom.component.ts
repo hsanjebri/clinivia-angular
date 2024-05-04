@@ -32,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-allroom',
@@ -59,13 +60,11 @@ export class AllroomComponent
   implements OnInit {
   displayedColumns = [
     'select',
-    'img',
+    // 'img',
     'rNo',
-    'pName',
-    'rType',
-    'gender',
     'admitDate',
     'dischargeDate',
+    'patientName',
     'actions',
   ];
   exampleDatabase?: RoomService;
@@ -74,11 +73,16 @@ export class AllroomComponent
   index?: number;
   id?: number;
   room?: Room;
+  nutritionalIntakeResult: Map<Date, string> | undefined; // Define the property here
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public roomService: RoomService,
+    private router: Router,
+
     private snackBar: MatSnackBar
+
   ) {
     super();
   }
@@ -125,7 +129,7 @@ export class AllroomComponent
     });
   }
   editCall(row: Room) {
-    this.id = row.id;
+    this.id = row.idDiet;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -143,7 +147,7 @@ export class AllroomComponent
       if (result === 1) {
         // When using an edit things are little different, firstly we find record inside DataService by id
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.idDiet === this.id
         );
         // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
@@ -161,8 +165,23 @@ export class AllroomComponent
       }
     });
   }
+  // getNutritionalIntake(dietPlanId: number): void {
+  //   this.roomService.assessNutritionalIntake(dietPlanId)
+  //     .subscribe((result: Map<Date, string>) => {
+  //       // Handle the result here
+  //       console.log('Nutritional Intake:', result);
+  //       // Display the results however you want
+  //       // For example, assign the result to a variable to display in the template
+  //       this.nutritionalIntakeResult = result;
+  //     }, (error) => {
+  //       // Handle errors here
+  //       console.error('Error assessing nutritional intake:', error);
+  //     });
+  // }
+
+
   deleteItem(row: Room) {
-    this.id = row.id;
+    this.id = row.idDiet; // Assuming idDiet is the correct property name for the ID
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -170,29 +189,18 @@ export class AllroomComponent
       tempDirection = 'ltr';
     }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: row,
+      data: row, // Pass the entire row data to the dialog
       direction: tempDirection,
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex != null && this.exampleDatabase) {
-          this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
+        // Here, ensure that you're passing the correct ID to deleteRoom
+        this.roomService.deleteRoom(row.idDiet); // Pass the correct ID
+        this.refreshTable();
       }
     });
   }
+
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
@@ -250,14 +258,11 @@ export class AllroomComponent
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        'Room No': x.rNo,
-        'Patient Name': x.pName,
-        'Room Type': x.rType,
-        'Admit Date':
-          formatDate(new Date(x.admitDate), 'yyyy-MM-dd', 'en') || '',
-        Gender: x.gender,
-        'Discharge Date':
-          formatDate(new Date(x.dischargeDate), 'yyyy-MM-dd', 'en') || '',
+        'id No': x.idDiet,
+        'description ': x.planDescription,
+        'Room Type': x.patient ? x.patient.name : '', // Assuming 'name' is a property of Patient
+        'start Date': formatDate(new Date(x.startDate), 'yyyy-MM-dd', 'en') || '',
+        'end Date': formatDate(new Date(x.endDate), 'yyyy-MM-dd', 'en') || '',
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
@@ -276,6 +281,16 @@ export class AllroomComponent
       panelClass: colorName,
     });
   }
+
+  goToMealPreparation(): void {
+    this.router.navigate(['/admin/billing/add-bill']);
+  }
+
+
+
+
+
+
 }
 export class ExampleDataSource extends DataSource<Room> {
   filterChange = new BehaviorSubject('');
@@ -313,12 +328,12 @@ export class ExampleDataSource extends DataSource<Room> {
           .slice()
           .filter((room: Room) => {
             const searchStr = (
-              room.rNo +
-              room.pName +
-              room.rType +
-              room.gender +
-              room.admitDate +
-              room.dischargeDate
+              room.planDescription +
+              room.planDescription +
+              room.startDate +
+              room.patientName+
+              room.endDate
+
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -346,23 +361,22 @@ export class ExampleDataSource extends DataSource<Room> {
       let propertyB: number | string = '';
       switch (this._sort.active) {
         case 'id':
-          [propertyA, propertyB] = [a.id, b.id];
+          [propertyA, propertyB] = [a.idDiet, b.idDiet];
           break;
-        case 'pName':
-          [propertyA, propertyB] = [a.pName, b.pName];
+        case 'pdescription':
+          [propertyA, propertyB] = [a.planDescription, b.planDescription];
           break;
-        case 'rType':
-          [propertyA, propertyB] = [a.rType, b.rType];
+        case 'patientName':
+          [propertyA, propertyB] = [a.patientName, b.patientName];
           break;
-        case 'admitDate':
-          [propertyA, propertyB] = [a.admitDate, b.admitDate];
+
+        case 'startDate':
+          [propertyA, propertyB] = [a.startDate.getTime(), b.startDate.getTime()];
           break;
-        case 'dischargeDate':
-          [propertyA, propertyB] = [a.dischargeDate, b.dischargeDate];
+        case 'endDate':
+          [propertyA, propertyB] = [a.endDate.getTime(), b.endDate.getTime()];
           break;
-        case 'rNo':
-          [propertyA, propertyB] = [a.rNo, b.rNo];
-          break;
+
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
@@ -371,4 +385,5 @@ export class ExampleDataSource extends DataSource<Room> {
       );
     });
   }
+
 }

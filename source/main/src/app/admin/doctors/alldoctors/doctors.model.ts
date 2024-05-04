@@ -9,10 +9,13 @@ export class Doctors {
   mobile: string;
   department: string;
   degree: string;
+  role: string;
+  password: string;
+  token!: string;
   constructor(doctors: Doctors) {
     {
       this.id = doctors.id || this.getRandomID();
-      this.img = doctors.img || 'assets/images/user/user1.jpg';
+      this.img = doctors.img || '';
       this.name = doctors.name || '';
       this.email = doctors.email || '';
       this.date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
@@ -20,6 +23,8 @@ export class Doctors {
       this.mobile = doctors.mobile || '';
       this.department = doctors.department || '';
       this.degree = doctors.degree || '';
+      this.role = doctors.role || '';
+      this.password = doctors.password || '';
     }
   }
   public getRandomID(): number {

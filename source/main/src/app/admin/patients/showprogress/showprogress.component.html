@@ -1,0 +1,22 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Nutrition Assessment'" [items]="['Patients', 'Nutrition Assessment']" [active_item]="'Nutrition Assessment'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Nutrition Assessment</h2>
+          </div>
+          <div class="body">
+            <ng-container *ngIf="progressPercentage !== undefined">
+              <mat-progress-bar mode="determinate" [value]="progressPercentage" class="full-width-progress-bar"></mat-progress-bar>
+            </ng-container>
+            <div *ngIf="progressPercentage === undefined">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
