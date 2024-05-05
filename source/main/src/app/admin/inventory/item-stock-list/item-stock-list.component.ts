@@ -32,15 +32,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+//import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfMake from 'pdfmake/build/pdfmake';
+//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
 import { EChartsOption , } from "echarts";
 import {Chart, registerables} from "chart.js";
-
-
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
-Chart.register(...registerables);
+//(pdfMake as any).vfs = pdfFonts.pdfMake.vfs ;
+//Chart.register(...registerables);
+(pdfMake as any).vfs =pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-item-stock-list',

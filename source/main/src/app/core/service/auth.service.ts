@@ -110,7 +110,7 @@ export class AuthService {
       lastName: doc.name,
       id: doc.idPatient,
       img: doc.image,
-      password: doc.patientPassword,
+      password: doc.password,
       username: doc.email,
       token: "patient-token",
 
