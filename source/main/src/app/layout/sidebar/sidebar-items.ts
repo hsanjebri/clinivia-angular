@@ -1,4 +1,5 @@
 import { RouteInfo } from './sidebar.metadata';
+import {Patient} from "../../admin/patients/allpatients/patient.model";
 export const ROUTES: RouteInfo[] = [
   {
     path: '',
@@ -1049,6 +1050,31 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '/skeleton',
         title: 'Inbox',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Call',
+    iconType: 'material-icons-outlined',
+    icon: 'phone',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin', 'Doctor','Patient'],
+    submenu: [
+      {
+        path: '/home',
+        title: 'start exercices',
         iconType: '',
         icon: '',
         class: 'ml-menu',
