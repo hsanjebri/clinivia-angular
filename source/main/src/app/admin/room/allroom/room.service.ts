@@ -9,11 +9,11 @@
   })
 
   export class RoomService extends UnsubscribeOnDestroyAdapter {
-    private readonly API_URL = 'http://localhost:8081/Examen/dietplan/getall';
-    private readonly API_URLADD = 'http://localhost:8081/Examen/dietplan/add'; // Remove {id} placeholder
-    private readonly API_URLdelete = 'http://localhost:8081/Examen/dietplan/delete/'; // Remove {id} placeholder
-    private readonly API_UPDATE = 'http://localhost:8081/Examen/dietplan/update';
-    private readonly API_ASSESS_INTAKE = 'http://localhost:8081/Examen/dietplan/assess/'; // Replace with your actual URL
+    private readonly API_URL = 'http://localhost:8085/Examen/dietplan/getall';
+    private readonly API_URLADD = 'http://localhost:8085/Examen/dietplan/add'; // Remove {id} placeholder
+    private readonly API_URLdelete = 'http://localhost:8085/Examen/dietplan/delete/'; // Remove {id} placeholder
+    private readonly API_UPDATE = 'http://localhost:8085/Examen/dietplan/update';
+    private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/'; // Replace with your actual URL
 
     isTblLoading = true;
     dataChange: BehaviorSubject<Room[]> = new BehaviorSubject<Room[]>([]);

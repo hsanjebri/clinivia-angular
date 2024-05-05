@@ -15,7 +15,7 @@ import { BreadcrumbComponent } from "@shared/components/breadcrumb/breadcrumb.co
   styleUrls: ['./nutrition.component.scss']
 })
 export class NutritionComponent implements OnInit {
-  private readonly API_ASSESS_INTAKE = 'http://localhost:8081/Examen/dietplan/assess/';
+  private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/';
   assessmentResults: string = ''; // Change to string type
 
   constructor(

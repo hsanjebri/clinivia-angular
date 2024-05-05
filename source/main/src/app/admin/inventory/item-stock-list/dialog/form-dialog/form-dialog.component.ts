@@ -38,7 +38,9 @@ export class FormDialogComponent {
   dialogTitle: string;
   itemStockListForm: UntypedFormGroup;
   itemStockList: ItemStockList;
-  constructor(
+    minDate = new Date(); // Today's date for minimum date selection
+
+    constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public itemStockListService: ItemStockListService,
@@ -69,18 +71,24 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.itemStockList.id],
-      i_name: [this.itemStockList.i_name],
-      category: [this.itemStockList.category],
-      qty: [this.itemStockList.qty],
-      date: [
-        formatDate(this.itemStockList.date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
-      price: [this.itemStockList.price],
-      details: [this.itemStockList.details],
+        id: [this.itemStockList.id],
+        i_name: [this.itemStockList.i_name, [Validators.required]],
+        category: [this.itemStockList.category, [Validators.required]],
+        qty: [this.itemStockList.qty, [Validators.required, Validators.min(1)]],
+        date: [
+            formatDate(this.itemStockList.date, 'yyyy-MM-dd', 'en'),
+            [Validators.required ],
+        ],
+        price: [this.itemStockList.price, [Validators.required, Validators.min(0.01)]], // Minimum price of 0.01
+        details: [this.itemStockList.details],
     });
   }
+    dateValidator(control: UntypedFormControl): { [key: string]: boolean } | null {
+        const forbiddenDate = new Date(control.value.date);
+        return forbiddenDate.getTime() > this.minDate.getTime()
+            ? { futureDate: true }
+            : null;
+    }
   submit() {
     // emppty stuff
   }

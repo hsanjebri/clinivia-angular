@@ -1,0 +1,60 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb
+        [title]="'Cards'"
+        [items]="['UI']"
+        [active_item]="'Cards'"
+      ></app-breadcrumb>
+    </div>
+    <div class="row">
+      
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+          <div class="header">
+            <h2>Material Card</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngFor="let subscription of listSubscriptions" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <mat-card>
+                  <img mat-card-image [src]="subscription.img" />
+                  <mat-card-content>
+                    <div>
+                      <h4>Includes</h4>
+                      {{ subscription.contents }}
+                    </div>
+                    <div>
+                      <h4>Price</h4>
+                      {{ subscription.subscriptionFee }}
+                    </div>
+                  </mat-card-content>
+                  <mat-divider></mat-divider>
+                  <mat-card-actions>
+                    <div fxLayout="row">
+                      <button
+                      mat-icon-button
+                      (click)="$event.stopPropagation()"
+                      (click)="editCall(subscription)"
+                      class="tbl-action-btn"
+                    >Edit</button>
+                    </div>
+                  </mat-card-actions>
+                </mat-card>
+                
+              </div>
+
+            </div>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  
+</section>

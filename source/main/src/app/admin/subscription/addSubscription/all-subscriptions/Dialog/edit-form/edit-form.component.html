@@ -1,0 +1,92 @@
+<div class="addContainer">
+    <div class="modalHeader">
+      <div class="editRowModal">
+        <div class="modalHeader clearfix">
+          <img [src]='sub?.img' alt="avatar" style="width: 100px; height: auto;">
+          <div class="modal-about">
+            Update subscription tier
+          </div>
+        </div>
+      </div>
+      <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div mat-dialog-content>
+      <form class="register-form m-4" [formGroup]="subForm" (ngSubmit)="submit">
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>contents</mat-label>
+              <input matInput formControlName="contents" required>
+              <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >contentpaste</mat-icon
+                  >
+              @if (subForm.get('contents')?.hasError('required')) {
+              <mat-error>
+                contents are required
+              </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>fee</mat-label>
+              <input matInput formControlName="subscriptionFee" type="number">
+              <mat-icon
+                    class="material-icons-outlined color-icon p-3"
+                    matSuffix
+                    >attach_money</mat-icon
+                  >
+              @if (subForm.get('subscriptionFee')?.hasError('required')) {
+              <mat-error>
+                subscription Fee is required
+              </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+            <div>
+                <lr-config
+                  ctx-name="my-uploader"
+                  pubkey="7cf1931b8c3914347aa3"
+                  multiple="false"
+                  removeCopyright="true"
+                  sourceList="local, url, camera, dropbox, gdrive"
+                  use-cloud-image-editor="true"
+                ></lr-config>
+                <lr-file-uploader-regular
+                  ctx-name="my-uploader"
+                  class="parentContainer"
+                  css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.30.0/web/lr-file-uploader-regular.min.css"
+                ></lr-file-uploader-regular>
+                <lr-upload-ctx-provider
+                  ctx-name="my-uploader"
+                  #ctxProvider
+                ></lr-upload-ctx-provider>
+                <div *ngFor="let uploadedFile of uploadedFiles">
+                  <img
+                    src="{{
+                      uploadedFile.cdnUrl + '/-/preview/-/resize/x200/'
+                    }}"
+                    *ngIf="uploadedFile.cdnUrl"
+                  />
+                </div>
+              </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="example-button-row">
+              <button mat-raised-button color="primary" [disabled]="!subForm.valid" [mat-dialog-close]="1"
+                (click)="confirmAdd()">Save</button>
+              <button mat-raised-button color="warn" (click)="submit()" tabindex="-1">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+

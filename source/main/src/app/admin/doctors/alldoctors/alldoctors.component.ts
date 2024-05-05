@@ -1,6 +1,6 @@
 import { Direction } from '@angular/cdk/bidi';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DoctorsService } from './doctors.service';
+import { DoctorsService } from '../doctors.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -162,6 +162,7 @@ export class AlldoctorsComponent
     });
   }
   deleteItem(row: Doctors) {
+    console.log(this.dataSource.renderedData);
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -194,7 +195,9 @@ export class AlldoctorsComponent
     });
   }
   private refreshTable() {
+    
     this.paginator?._changePageSize(this.paginator?.pageSize);
+    
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -245,6 +248,7 @@ export class AlldoctorsComponent
         this.dataSource.filter = this.filter?.nativeElement.value;
       }
     );
+    
   }
   // export table data in excel file
   exportExcel() {
@@ -330,9 +334,11 @@ export class ExampleDataSource extends DataSource<Doctors> {
           startIndex,
           this.paginator.pageSize
         );
+        
         return this.renderedData;
       })
     );
+    
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() { }

@@ -213,6 +213,7 @@ export class ApexchartComponent {
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
+
         },
       },
       yaxis: {

@@ -100,24 +100,17 @@
                     <span class="truncate-text"><span class="mobile-label">Disease:</span>{{row.disease}}</span>
                   </mat-cell>
                 </ng-container>
+
+
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
-                  <mat-header-cell class="psl-3 tbl-col-width-per-10" *matHeaderCellDef>Actions
-                  </mat-header-cell>
-                  <mat-cell *matCellDef="let row; let i=index;" class="psl-3 tbl-col-width-per-10">
-                    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
-                      <mat-icon>more_vert</mat-icon>
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="addNewPrescription()"
+                            class="tbl-action-btn">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                    <mat-menu #menu="matMenu">
-                      <button mat-menu-item>
-                        <i class="material-icons-outlined align-middle msr-2">done</i>
-                        <span>Approve</span>
-                      </button>
-                      <button mat-menu-item>
-                        <i class="material-icons-outlined align-middle msr-2">highlight_off</i>
-                        <span>Cancel</span>
-                      </button>
-                    </mat-menu>
+
                   </mat-cell>
                 </ng-container>
 
