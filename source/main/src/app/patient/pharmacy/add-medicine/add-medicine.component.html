@@ -1,0 +1,153 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Add Complaint'" [items]="['Complaint']" [active_item]="'Add Complaint'">
+      </app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2><strong> Add Medicine</strong></h2>
+          </div>
+          <div class="body">
+            <form class="register-form m-4" [formGroup]="medecForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>No</mat-label>
+                    <input matInput formControlName="mno" type="number" required>
+                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+                    @if (medecForm.get('mno')?.hasError('required')) {
+                    <mat-error>
+                      No is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Patient Name</mat-label>
+                    <input matInput formControlName="mname" required>
+                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>medication</mat-icon>
+                    @if (medecForm.get('mname')?.hasError('required')) {
+                    <mat-error>
+                      Medicine Name is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width " appearance="outline">
+                    <mat-label>Type de reclamation</mat-label>
+                    <mat-select formControlName="category" required>
+                      <mat-option [value]="'Service'">
+                        Service
+                      </mat-option>
+                      <mat-option [value]="' Prix'">
+                        Prix
+                      </mat-option>
+                      <mat-option [value]="'Service et Prix'">
+                        Service et Prix
+                      </mat-option>
+                    </mat-select>
+                    @if (medecForm.get('category')?.hasError('required')) {
+                    <mat-error>
+                      Status is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="company" required>
+                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>store</mat-icon>
+                    @if (medecForm.get('company')?.hasError('required')) {
+                    <mat-error>
+                      Description is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Purchase date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="pdate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    @if (medecForm.get('pdate')?.hasError('required')) {
+                    <mat-error>
+                      Please select date
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Price</mat-label>
+                    <input matInput formControlName="price" required>
+                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>monetization_on</mat-icon>
+                    @if (medecForm.get('price')?.hasError('required')) {
+                    <mat-error>
+                      Price is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Expired date</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="edate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    @if (medecForm.get('edate')?.hasError('required')) {
+                    <mat-error>
+                      Please select date
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Nombre de reclamation</mat-label>
+                    <input matInput formControlName="stock" type="number" required>
+                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>inventory_2</mat-icon>
+                    @if (medecForm.get('stock')?.hasError('required')) {
+                    <mat-error>
+                      Nombre de reclamation is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row">
+                    <button mat-raised-button color="primary" [disabled]="!medecForm.valid">Save</button>
+                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

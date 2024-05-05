@@ -46,7 +46,7 @@ function uniqueEmailValidator(userService:DoctorsService) {
   return (control: AbstractControl) => {
     return new Promise(resolve => {
       if (!control.value) {
-        resolve(null); 
+        resolve(null);
       } else {
         userService.checkEmailUnique(control.value).subscribe(isUnique => {
           resolve(isUnique ? null : { emailNotUnique: true });
@@ -69,19 +69,19 @@ function mobileValidator(control: FormControl) {
 function passwordMatchValidator(control: FormControl) {
   const password = control.root.get('password');
   const confirmPassword = control.root.get('cpassword');
-  
+
   if (!password || !confirmPassword) {
     return null;
   }
-  
+
   if (confirmPassword.value === '') {
     return null;
   }
 
   if (password.value !== confirmPassword.value) {
     return { passwordMismatch: true };
-  } 
-  
+  }
+
   else {
     return null;
   }
@@ -98,7 +98,7 @@ function passwordform(control: FormControl){
   return null;
 }
 
-export function rolevalid(control: FormControl): 
+export function rolevalid(control: FormControl):
   Observable<ValidationErrors | null> {
     const role = control.root.get('role')
     const rolevalue = role?.value;
@@ -202,13 +202,13 @@ export class SignupComponent implements OnInit {
     return this.authForm.controls;
   }
   onSubmit() {
-    
+
     this.submitted = true;
     this.doc = this.authForm.value as Doctors
     this.doc.img = this.uploadedFiles[0].cdnUrl || "j"
     this.doc.name = this.authForm.controls["username"].value
     this.pat = this.authForm.value as Patient
-    this.pat.img = this.uploadedFiles[0].cdnUrl || "j"
+    this.pat.image = this.uploadedFiles[0].cdnUrl || "j"
     if (this.authForm.invalid) {
       console.log("iiiiiiinvalid")
       return;
@@ -221,5 +221,5 @@ export class SignupComponent implements OnInit {
       this.router.navigate(['/authentication/signin']);
     }
   }
-  
+
 }

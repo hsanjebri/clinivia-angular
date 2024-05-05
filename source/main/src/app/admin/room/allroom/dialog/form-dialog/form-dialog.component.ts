@@ -48,7 +48,7 @@ export class FormDialogComponent {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.room.pName;
+      this.dialogTitle = data.room.planDescription;
       this.room = data.room;
     } else {
       this.dialogTitle = 'New Room';
@@ -70,14 +70,13 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.room.id],
-      img: [this.room.img],
-      pName: [this.room.pName],
-      rType: [this.room.rType],
-      admitDate: [this.room.admitDate],
-      dischargeDate: [this.room.dischargeDate],
-      rNo: [this.room.rNo],
-      gender: [this.room.gender],
+      id: [this.room.idDiet],
+      planDescription: [this.room.planDescription],
+      startDate: [this.room.startDate],
+      endDate: [this.room.endDate],
+      patientName: [this.room.patientName],
+
+      //  rNo: [this.room.planDescription],
     });
   }
   submit() {

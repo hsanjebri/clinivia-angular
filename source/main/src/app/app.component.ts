@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { Event, Router, NavigationStart, NavigationEnd, RouterModule } from '@angular/router';
 import { PageLoaderComponent } from './layout/page-loader/page-loader.component';
+import {Component, OnInit} from "@angular/core";
+import {getMessaging,getToken} from 'firebase/messaging'
+import {environment} from "../environments/environment";
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,8 +18,9 @@ import { PageLoaderComponent } from './layout/page-loader/page-loader.component'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent  implements  OnInit {
   currentUrl!: string;
+
   constructor(public _router: Router) {
     this._router.events.subscribe((routerEvent: Event) => {
       if (routerEvent instanceof NavigationStart) {
@@ -29,4 +34,26 @@ export class AppComponent {
       window.scrollTo(0, 0);
     });
   }
+
+  ngOnInit(): void {
+    this.requestPermission();
+  }
+
+  title = 'notification-web ';
+
+  requestPermission() {
+    const messaging = getMessaging();
+    getToken(messaging, {vapidKey: environment.firebase.vapidKey}).then(
+      (currentToken) => {
+        if (currentToken) {
+          console.log("yeah boy");
+          console.log(currentToken);
+        } else
+          console.log("no boy");
+      }
+    )
+  }
+
+
+
 }

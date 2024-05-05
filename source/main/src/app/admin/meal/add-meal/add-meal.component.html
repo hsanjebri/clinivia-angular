@@ -1,0 +1,148 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Add Bill'" [items]="['Billing']" [active_item]="'Add Bill'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2><strong>Add Bill</strong></h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="billForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>recommendedMeal</mat-label>
+                    <input matInput formControlName="recommendedMeal" required>
+                    @if (billForm.get('recommendedMeal')?.hasError('required')) {
+                    <mat-error>
+                      recommended Meal is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>ingredients</mat-label>
+                    <input matInput formControlName="ingredients" required>
+                    @if (billForm.get('ingredients')?.hasError('required')) {
+                    <mat-error>
+                      Admission ID is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>calories</mat-label>
+                    <input matInput formControlName="calories" required>
+                    @if (billForm.get('calories')?.hasError('required')) {
+                    <mat-error>
+                      calories is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>protein</mat-label>
+                    <mat-select formControlName="protein" required>
+                      <mat-option [value]="'1'">
+                        1
+                      </mat-option>
+                      <mat-option [value]="'2'">
+                        2
+                      </mat-option>
+                      <mat-option [value]="'3'">
+                        3
+                      </mat-option>
+                      <mat-option [value]="'4'">
+                        4
+                      </mat-option>
+                    </mat-select>
+                    @if (billForm.get('protein')?.hasError('required')) {
+                    <mat-error>
+                      protein Dose is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>recommendation Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="recommendationDate" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    @if (billForm.get('recommendationDate')?.hasError('required')) {
+                    <mat-error>
+                      Please select date
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>fat</mat-label>
+                    <input matInput formControlName="fat" required>
+                    @if (billForm.get('fat')?.hasError('required')) {
+                      <mat-error>
+                        fat is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>carbohydrates</mat-label>
+                    <input matInput formControlName="carbohydrates" required>
+                    @if (billForm.get('carbohydrates')?.hasError('required')) {
+                      <mat-error>
+                        carbohydrates  is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>cholesterol</mat-label>
+                    <input matInput formControlName="cholesterol" required>
+                    @if (billForm.get('cholesterol')?.hasError('required')) {
+                      <mat-error>
+                        cholesterol  is required
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button class="btn-space" mat-raised-button color="primary"
+                    [disabled]="!billForm.valid">Submit</button>
+                  <button type="button" mat-raised-button color="warn">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

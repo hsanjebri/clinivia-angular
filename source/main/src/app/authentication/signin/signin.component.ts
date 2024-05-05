@@ -30,13 +30,19 @@ export class SigninComponent
   loading = false;
   error = '';
   hide = true;
-  constructor(
+
+  //
+  doctor_id :number= -1;
+  patient_id :number= -1;
+
+    constructor(
     private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) {
     super();
+
   }
 
   ngOnInit() {
@@ -49,7 +55,7 @@ export class SigninComponent
   get f() {
     return this.authForm.controls;
   }
-  
+
   onSubmit() {
     this.submitted = true;
     this.loading = true;
@@ -68,8 +74,10 @@ export class SigninComponent
                 if (role === Role.All || role === Role.Admin) {
                   this.router.navigate(['/admin/dashboard/main']);
                 } else if (role === Role.Doctor) {
+                    this.doctor_id = this.authService.currentUserValue.id
                   this.router.navigate(['/doctor/dashboard']);
                 } else if (role === Role.Patient) {
+                    this.patient_id = this.authService.currentUserValue.id
                   this.router.navigate(['/patient/dashboard']);
                 } else {
                   this.router.navigate(['/authentication/signin']);

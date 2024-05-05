@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
+import {AuthService} from "@core";
 export class Task {
-  id: string;
+  idTask: string;
   img: string;
-  name: string;
   title: string;
   done: boolean;
   note: string;
@@ -10,9 +10,8 @@ export class Task {
   due_date: string;
   constructor(appointment: Task) {
     {
-      this.id = appointment.id || this.getRandomID();
+      this.idTask = appointment.idTask ;
       this.img = appointment.img || 'assets/images/user/user1.jpg';
-      this.name = appointment.name || '';
       this.title = appointment.title || '';
       this.done = appointment.done || true;
       this.due_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';

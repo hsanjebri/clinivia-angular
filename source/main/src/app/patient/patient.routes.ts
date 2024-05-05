@@ -1,10 +1,10 @@
 import { Page404Component } from "../authentication/page404/page404.component";
 import { Route } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { PrescriptionsComponent } from "./prescriptions/prescriptions.component";
+import { PrescriptionsComponent } from "../patient/prescriptions/prescriptions.component";
 import { MedicalRecordsComponent } from "./medical-records/medical-records.component";
 import { BillingComponent } from "./billing/billing.component";
-import { SettingsComponent } from "./settings/settings.component";
+import { SettingsComponent } from "../patient/settings/settings.component";
 export const PATIENT_ROUTE: Route[] = [
   {
     path: "dashboard",
@@ -32,6 +32,11 @@ export const PATIENT_ROUTE: Route[] = [
   {
     path: "settings",
     component: SettingsComponent,
+  },
+  {
+    path: 'pharmacy',
+    loadChildren: () =>
+      import('./pharmacy/pharmacy.routes').then((m) => m.PHARMACY_ROUTE),
   },
   { path: "**", component: Page404Component },
 ];

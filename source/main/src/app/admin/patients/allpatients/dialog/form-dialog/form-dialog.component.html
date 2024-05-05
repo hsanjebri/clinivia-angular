@@ -2,9 +2,9 @@
   <div class="modalHeader">
     <div class="editRowModal">
       <div class="modalHeader clearfix">
-        <img [src]='patient.img' alt="avatar">
+        <img [src]="patient.image" alt="avatar" style="width: 5%; height: 5%; aspect-ratio: 1/1;">
         <div class="modal-about">
-          {{dialogTitle}}
+          {{ dialogTitle }}
         </div>
       </div>
     </div>
@@ -13,18 +13,16 @@
     </button>
   </div>
   <div mat-dialog-content>
-    <form class="register-form m-4" [formGroup]="patientForm" (ngSubmit)="submit">
+    <form class="register-form m-4" [formGroup]="patientForm" (ngSubmit)="submit()">
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
-            @if (patientForm.get('name')?.hasError('required')) {
-            <mat-error>
+            <mat-error *ngIf="patientForm.get('name')?.hasError('required')">
               Name is required
             </mat-error>
-            }
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
@@ -32,11 +30,9 @@
             <mat-label>Mobile</mat-label>
             <input matInput formControlName="mobile" type="number">
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>phone</mat-icon>
-            @if (patientForm.get('mobile')?.hasError('required')) {
-            <mat-error>
+            <mat-error *ngIf="patientForm.get('mobile')?.hasError('required')">
               Mobile is required
             </mat-error>
-            }
           </mat-form-field>
         </div>
       </div>
@@ -45,13 +41,11 @@
           <div class="m-b-20">
             <mat-label class="msr-3">Gender:</mat-label>
             <mat-radio-group aria-label="Select gender" formControlName="gender" required>
-              <mat-radio-button value="male">Male</mat-radio-button>
-              <mat-radio-button value="female">Female</mat-radio-button>
-              @if (patientForm.get('gender')?.hasError('required')) {
-              <mat-error>
+              <mat-radio-button value="Male">Male</mat-radio-button>
+              <mat-radio-button value="Female">Female</mat-radio-button>
+              <mat-error *ngIf="patientForm.get('gender')?.hasError('required')">
                 Select gender
               </mat-error>
-              }
             </mat-radio-group>
           </div>
         </div>
@@ -61,6 +55,57 @@
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Address</mat-label>
             <textarea matInput formControlName="address"></textarea>
+            <mat-error *ngIf="patientForm.get('address')?.hasError('maxlength')">
+              Address cannot exceed 20 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="patientPassword" [type]="hidePassword ? 'password' : 'text'" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix (click)="togglePasswordVisibility()">
+              {{ hidePassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+            <mat-error *ngIf="patientForm.get('patientPassword')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Contact Emergencies</mat-label>
+            <input matInput formControlName="patientContactEmergencies">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Medical History</mat-label>
+            <textarea matInput formControlName="medicalHistory"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Allergies</mat-label>
+            <mat-select formControlName="patientAlergies">
+              <mat-option [value]="'PEANUTS'">Peanuts</mat-option>
+              <!-- Add more options as needed -->
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="patientForm.get('email')?.hasError('email')">
+              Not a valid email
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -71,35 +116,23 @@
             <input matInput [matDatepicker]="picker" formControlName="date">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            @if (patientForm.get('date')?.hasError('required')) {
-            <mat-error>
+            <mat-error *ngIf="patientForm.get('date')?.hasError('required')">
               Please select date
             </mat-error>
-            }
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width " appearance="outline">
+          <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Blood Group</mat-label>
-            <mat-select formControlName="bGroup" required>
-              <mat-option [value]="'A+'">
-                A+
-              </mat-option>
-              <mat-option [value]="'B+'">
-                B+
-              </mat-option>
-              <mat-option [value]="'O+'">
-                O+
-              </mat-option>
-              <mat-option [value]="'AB+'">
-                AB+
-              </mat-option>
+            <mat-select formControlName="bgroupe" required>
+              <mat-option [value]="'A+'">A+</mat-option>
+              <mat-option [value]="'B+'">B+</mat-option>
+              <mat-option [value]="'O+'">O+</mat-option>
+              <mat-option [value]="'AB+'">AB+</mat-option>
             </mat-select>
-            @if (patientForm.get('bGroup')?.hasError('required')) {
-            <mat-error>
+            <mat-error *ngIf="patientForm.get('bgroupe')?.hasError('required')">
               Blood Group is required
             </mat-error>
-            }
           </mat-form-field>
         </div>
       </div>
@@ -109,19 +142,18 @@
             <mat-label>Treatment</mat-label>
             <input matInput formControlName="treatment" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>healing</mat-icon>
-            @if (patientForm.get('treatment')?.hasError('required')) {
-            <mat-error>
+            <mat-error *ngIf="patientForm.get('treatment')?.hasError('required')">
               Treatment is required
             </mat-error>
-            }
           </mat-form-field>
         </div>
+
       </div>
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <div class="example-button-row">
             <button mat-raised-button color="primary" [disabled]="!patientForm.valid" [mat-dialog-close]="1"
-              (click)="confirmAdd()">Save</button>
+                    (click)="confirmAdd()">Save</button>
             <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
           </div>
         </div>

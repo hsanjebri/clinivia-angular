@@ -1,0 +1,142 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          {{dialogTitle}}
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="medicineListForm" (ngSubmit)="submit">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>No</mat-label>
+            <input matInput formControlName="mno" type="number" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (medicineListForm.get('mno')?.hasError('required')) {
+            <mat-error>
+              No is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Patient Name</mat-label>
+            <input matInput formControlName="mname" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>medication</mat-icon>
+            @if (medicineListForm.get('mname')?.hasError('required')) {
+            <mat-error>
+              Patient Name is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width " appearance="outline">
+            <mat-label>Type de reclamation</mat-label>
+            <mat-select formControlName="category" required>
+              <mat-option [value]="'Service'">
+                Service
+              </mat-option>
+              <mat-option [value]="'Prix'">
+                Prix
+              </mat-option>
+              <mat-option [value]="'Service et Prix'">
+                Service et Prix
+              </mat-option>
+            </mat-select>
+            @if (medicineListForm.get('category')?.hasError('required')) {
+            <mat-error>
+              Status is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="company" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>store</mat-icon>
+            @if (medicineListForm.get('company')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Date de reclamation</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="pdate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (medicineListForm.get('pdate')?.hasError('required')) {
+            <mat-error>
+              Please select date
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput formControlName="price" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>monetization_on</mat-icon>
+            @if (medicineListForm.get('price')?.hasError('required')) {
+            <mat-error>
+              Price is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Date de traitement</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="edate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            @if (medicineListForm.get('edate')?.hasError('required')) {
+            <mat-error>
+              Please select date
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Nombre de reclamation</mat-label>
+            <input matInput formControlName="stock" type="number" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>inventory_2</mat-icon>
+            @if (medicineListForm.get('stock')?.hasError('required')) {
+            <mat-error>
+              Nombre de reclamation is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-raised-button color="primary" [disabled]="!medicineListForm.valid" [mat-dialog-close]="1"
+              (click)="confirmAdd()">Save</button>
+            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

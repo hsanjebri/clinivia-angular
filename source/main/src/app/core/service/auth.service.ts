@@ -108,12 +108,12 @@ export class AuthService {
     const newuser: User = {
       firstName: doc.name,
       lastName: doc.name,
-      id: doc.id,
-      img: doc.img,
-      password: doc.password,
+      id: doc.idPatient,
+      img: doc.image,
+      password: doc.patientPassword,
       username: doc.email,
       token: "patient-token",
-    
+
       role: Role.Patient
     };
     return newuser;
@@ -129,7 +129,7 @@ export class AuthService {
       this.listusers[j] = this.patToUser(this.patients1[i])
     }
     console.log(this.listusers)
-    
+
     return this.listusers;
   }
 
@@ -188,9 +188,9 @@ export class AuthService {
       complete:()=>console.log('done')
     }
     )
-    
+
   }
-  
+
 }
 
 

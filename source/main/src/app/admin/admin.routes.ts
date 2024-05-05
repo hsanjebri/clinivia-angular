@@ -7,6 +7,13 @@ export const ADMIN_ROUTE: Route[] = [
       import('./dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTE),
   },
   {
+    path: 'departments',
+    loadChildren: () =>
+      import('./departments/departments.routes').then(
+        (m) => m.DEPARTMENT_ROUTE
+      ),
+  },
+  {
     path: 'appointment',
     loadChildren: () =>
       import('./appointment/appointment.routes').then(
@@ -34,15 +41,13 @@ export const ADMIN_ROUTE: Route[] = [
       import('./billing/billing.routes').then((m) => m.BILLING_ROUTE),
   },
   {
-    path: 'room',
-    loadChildren: () => import('./room/room.routes').then((m) => m.ROOMS_ROUTE),
+    path: 'meal',
+    loadChildren: () =>
+      import('./meal/meal.routes').then((m) => m.MEAL_ROUTE),
   },
   {
-    path: 'departments',
-    loadChildren: () =>
-      import('./departments/departments.routes').then(
-        (m) => m.DEPARTMENT_ROUTE
-      ),
+    path: 'room',
+    loadChildren: () => import('./room/room.routes').then((m) => m.ROOMS_ROUTE),
   },
   {
     path: 'inventory',
@@ -69,5 +74,6 @@ export const ADMIN_ROUTE: Route[] = [
     loadChildren: () =>
       import('./subscription/subscription.routes').then((m) => m.SUBSCRIPTION_ROUTE),
   },
+ 
 
 ];

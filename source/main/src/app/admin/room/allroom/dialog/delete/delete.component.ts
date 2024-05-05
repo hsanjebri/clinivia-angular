@@ -4,10 +4,10 @@ import { RoomService } from '../../room.service';
 import { MatButtonModule } from '@angular/material/button';
 
 export interface DialogData {
-  id: number;
-  rNo: string;
-  pName: string;
-  rType: string;
+  idDiet: number;
+  planDescription: string;
+  startDate: string;
+  endDate: string;
 }
 
 @Component({
@@ -33,6 +33,6 @@ export class DeleteDialogComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.roomService.deleteRoom(this.data.id);
+    this.roomService.deleteRoom(this.data.idDiet);
   }
 }

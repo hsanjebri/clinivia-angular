@@ -1,0 +1,133 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          {{dialogTitle}}
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="billListForm" (ngSubmit)="submit">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>recommended Meal </mat-label>
+            <input matInput formControlName="recommendedMeal" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>recommendedMeal</mat-icon>
+            @if (billListForm.get('recommendedMeal')?.hasError('required')) {
+              <mat-error>
+                recommendedMeal is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>ingredients </mat-label>
+            <input matInput formControlName="ingredients" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>tag</mat-icon>
+            @if (billListForm.get('ingredients')?.hasError('required')) {
+              <mat-error>
+                ingredients  is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>calories</mat-label>
+            <input matInput formControlName="calories" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>perm_identity</mat-icon>
+            @if (billListForm.get('calories')?.hasError('required')) {
+              <mat-error>
+                Doctor Name is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width " appearance="outline">
+            <mat-label>protein</mat-label>
+            <mat-select formControlName="protein" required>
+              <mat-option [value]="'3'">
+                3
+              </mat-option>
+              <mat-option [value]="'20'">
+                20
+              </mat-option>
+            </mat-select>
+            @if (billListForm.get('protein')?.hasError('required')) {
+              <mat-error>
+                protein is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="recommendationDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (billListForm.get('recommendationDate')?.hasError('required')) {
+              <mat-error>
+                Please select date
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>carbohydrates</mat-label>
+            <input matInput formControlName="carbohydrates">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>carbohydrates</mat-icon>
+            @if (billListForm.get('tax')?.hasError('required')) {
+              <mat-error>
+                Tax is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>fat</mat-label>
+            <input matInput formControlName="fat">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>local_activity</mat-icon>
+            @if (billListForm.get('fat')?.hasError('required')) {
+              <mat-error>
+                fat is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>cholesterol</mat-label>
+            <input matInput formControlName="cholesterol">
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>cholesterol</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-raised-button color="primary" [disabled]="!billListForm.valid" [mat-dialog-close]="1"
+                    (click)="confirmAdd()">Save</button>
+            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
