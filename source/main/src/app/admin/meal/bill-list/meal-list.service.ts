@@ -9,10 +9,10 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 })
 
 export class MealListService extends UnsubscribeOnDestroyAdapter {
-  private readonly API_URL = 'http://localhost:8081/Examen/mealrecommendation/getall';
-  private readonly API_URLADD = 'http://localhost:8081/Examen/mealrecommendation/add'; // Remove {id} placeholder
-  private readonly API_URLdelete = 'http://localhost:8081/Examen/mealrecommendation/delete/'; // Remove {id} placeholder
-  private readonly API_UPDATE = 'http://localhost:8081/Examen/mealrecommendation/update';
+  private readonly API_URL = 'http://localhost:8085/Examen/mealrecommendation/getall';
+  private readonly API_URLADD = 'http://localhost:8085/Examen/mealrecommendation/add'; // Remove {id} placeholder
+  private readonly API_URLdelete = 'http://localhost:8085/Examen/mealrecommendation/delete/'; // Remove {id} placeholder
+  private readonly API_UPDATE = 'http://localhost:8085/Examen/mealrecommendation/update';
 
   isTblLoading = true;
   dataChange: BehaviorSubject<BillList[]> = new BehaviorSubject<BillList[]>([]);

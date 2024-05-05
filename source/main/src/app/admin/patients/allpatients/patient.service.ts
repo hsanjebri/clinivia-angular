@@ -11,18 +11,15 @@ import {catchError} from "rxjs/operators";
 })
 
 export class PatientService extends UnsubscribeOnDestroyAdapter {
-  private readonly API_URL = 'http://localhost:8081/Examen/patients/getall';
-  private readonly API_URLdelete = 'http://localhost:8081/Examen/patients/delete/'; // Remove {id} placeholder
-  private readonly API_URLADD = 'http://localhost:8081/Examen/patients/add'; // Remove {id} placeholder
-  private readonly API_UPDATE = 'http://localhost:8081/Examen/patients/update';
-  private readonly API_URLL = 'http://localhost:8081/Examen/patients'; // Replace with your actual API base URL
-  private readonly API_ASSESS_INTAKE = 'http://localhost:8081/Examen/dietplan/assess/'; // Replace with your actual URL
+  private readonly API_URL = 'http://localhost:8085/Examen/patients/getall';
+  private readonly API_URLdelete = 'http://localhost:8085/Examen/patients/delete/'; // Remove {id} placeholder
+  private readonly API_URLADD = 'http://localhost:8085/Examen/patients/add'; // Remove {id} placeholder
+  private readonly API_UPDATE = 'http://localhost:8085/Examen/patients/update';
+  private readonly API_URLL = 'http://localhost:8085/Examen/patients'; // Replace with your actual API base URL
+  private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/'; // Replace with your actual URL
 
-  private readonly API_URL = 'assets/data/patient.json';
-  private readonly API_URLdelete = "http://localhost:8085/Examen/patients/delete/";
   isTblLoading = true;
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);
-  // Temporarily stores data from dialogs
   dialogData!: Patient;
 
 
@@ -43,7 +40,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
     return this.httpClient.get<Patient[]>("http://localhost:8085/Examen/patients/getall")
   }
   getAllPatients(): void {
-    this.subs.sink = this.httpClient.get<Patient[]>("http://localhost:8085/Examen/patients/getall").subscribe({
+    this.subs.sink = this.httpClient.get<Patient[]>(this.API_URL).subscribe({
       next: (data) => {
         console.log(data);
         this.isTblLoading = false;
@@ -70,7 +67,6 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   // }
 
   addPatient(patient: Patient): void {
-
     this.httpClient.post<Patient>(this.API_URLADD, patient)
       .subscribe({
         next: (data) => {
@@ -88,6 +84,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   }
 
 
+
   updatePatient(patient:Patient): void {
     this.httpClient.put(this.API_UPDATE,patient)
       .subscribe({
@@ -99,37 +96,9 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
           console.error('Error updating patient:', error);
         },
       });
-
-    this.dialogData = patient;
-
-     this.httpClient.post("http://localhost:8085/Examen/patients/add", patient)
-       .subscribe({
-         next: (data) => {
-           this.dialogData = patient;
-         },
-         error: (error: HttpErrorResponse) => {
-            // error code here
-         },
-       });
   }
-  updatePatient(patient: Patient): void {
-    this.dialogData = patient;
-
-     this.httpClient.put("http://localhost:8085/Examen/patients/update" + patient.id, patient)
-         .subscribe({
-           next: (data) => {
-             this.dialogData = patient;
-           },
-           error: (error: HttpErrorResponse) => {
-              // error code here
-           },
-         });
-
-  }
-
   deletePatient(id: number): void {
     console.log(id);
-
 
     this.httpClient.delete(`${this.API_URLdelete}${id}`)
       .subscribe({
@@ -147,20 +116,13 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
     return this.httpClient.get<number>(url);
   }
 
+
+
   assessNutritionalIntake(patientId: number): Observable<Map<Date, string>> {
     const url = `${this.API_ASSESS_INTAKE}${patientId}`;
     return this.httpClient.get<Map<Date, string>>(url);
-
-     this.httpClient.delete(`${this.API_URLdelete}${id}`)
-         .subscribe({
-           next: (data) => {
-             console.log(id);
-           },
-           error: (error: HttpErrorResponse) => {
-              // error code here
-           },
-         });
   }
+
 
 
 
