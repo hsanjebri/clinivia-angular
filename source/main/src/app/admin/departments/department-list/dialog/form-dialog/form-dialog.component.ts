@@ -49,7 +49,7 @@ export class FormDialogComponent {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.departmentList.d_name;
+      this.dialogTitle = data.departmentList.dname;
       this.departmentList = data.departmentList;
     } else {
       this.dialogTitle = 'New DepartmentList';
@@ -69,6 +69,7 @@ export class FormDialogComponent {
         ? 'Not a valid email'
         : '';
   }
+  /** commrnter par moi pr le 2 proj spronh lie a ang sur un dosssier dans bureau pas l'autre sur bur dierctm
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.departmentList.id],
@@ -82,7 +83,30 @@ export class FormDialogComponent {
       d_head: [this.departmentList.d_head],
       status: [this.departmentList.status],
     });
+  }*/
+  createContactForm(): UntypedFormGroup {
+    const formGroup = this.fb.group({
+      id: [this.departmentList.id],
+      dno: [this.departmentList.dno],
+      dname: [this.departmentList.dname],
+      description: [this.departmentList.description],
+      ddate: [''], // Initialiser avec une chaîne vide pour éviter les erreurs si la date est undefined
+      dhead: [this.departmentList.dhead],
+      status: [this.departmentList.status],
+    });
+  
+    // Vérifiez si this.departmentList.d_date est définie avant de la formater
+    if (this.departmentList.ddate) {
+      formGroup.get('ddate')?.setValue(formatDate(this.departmentList.ddate, 'yyyy-MM-dd', 'en'));
+    }
+  
+    // Ajoutez le validateur requis pour la date si nécessaire
+    formGroup.get('ddate')?.setValidators(Validators.required);
+  
+    return formGroup;
   }
+  
+
   submit() {
     // emppty stuff
   }

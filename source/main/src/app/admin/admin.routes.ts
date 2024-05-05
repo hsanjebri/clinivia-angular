@@ -7,6 +7,13 @@ export const ADMIN_ROUTE: Route[] = [
       import('./dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTE),
   },
   {
+    path: 'departments',
+    loadChildren: () =>
+      import('./departments/departments.routes').then(
+        (m) => m.DEPARTMENT_ROUTE
+      ),
+  },
+  {
     path: 'appointment',
     loadChildren: () =>
       import('./appointment/appointment.routes').then(
@@ -43,13 +50,6 @@ export const ADMIN_ROUTE: Route[] = [
     loadChildren: () => import('./room/room.routes').then((m) => m.ROOMS_ROUTE),
   },
   {
-    path: 'departments',
-    loadChildren: () =>
-      import('./departments/departments.routes').then(
-        (m) => m.DEPARTMENT_ROUTE
-      ),
-  },
-  {
     path: 'inventory',
     loadChildren: () =>
       import('./inventory/inventory.routes').then((m) => m.INVENTORY_ROUTE),
@@ -74,5 +74,6 @@ export const ADMIN_ROUTE: Route[] = [
     loadChildren: () =>
       import('./subscription/subscription.routes').then((m) => m.SUBSCRIPTION_ROUTE),
   },
+ 
 
 ];

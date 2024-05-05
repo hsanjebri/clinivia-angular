@@ -5,8 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 export interface DialogData {
   id: number;
-  d_name: string;
-  d_head: string;
+  dname: string;
+  dhead: string;
   status: string;
 }
 

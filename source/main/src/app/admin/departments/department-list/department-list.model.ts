@@ -1,20 +1,35 @@
 import { formatDate } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+//import { DepartmentListComponent } from './department-list.component';//
+import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';  // Assurez-vous d'importer le composant BreadcrumbComponent
+import { MatIconModule } from '@angular/material/icon';
+import { DepartmentListComponent } from './department-list.component';
+@NgModule({
+//  declarations: [DepartmentListComponent],//
+  imports: [
+    CommonModule,
+    MatIconModule, // Ajoutez MatIconModule dans les imports
+  ],
+})
 export class DepartmentList {
   id: number;
-  d_no: string;
-  d_name: string;
+  dno: string;
+  dname: string;
   description: string;
-  d_date: string;
-  d_head: string;
+ /** d_date: string;*/
+  ddate: Date;
+  dhead: string;
   status: string;
   constructor(departmentList: DepartmentList) {
     {
       this.id = departmentList.id || this.getRandomID();
-      this.d_no = departmentList.d_no || '';
-      this.d_name = departmentList.d_name || '';
+      this.dno = departmentList.dno || '';
+      this.dname = departmentList.dname || '';
       this.description = departmentList.description || '';
-      this.d_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.d_head = departmentList.d_head || '';
+      /**this.d_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';*/
+      this.ddate = departmentList.ddate ? new Date(departmentList.ddate) : new Date();
+      this.dhead = departmentList.dhead || '';
       this.status = departmentList.status || 'Active';
     }
   }
