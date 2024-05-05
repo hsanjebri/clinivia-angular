@@ -9,7 +9,7 @@ export class ItemStockList {
   details: string;
   constructor(itemStockList: ItemStockList) {
     {
-      this.id = itemStockList.id || this.getRandomID();
+      this.id = itemStockList.id ;
       this.i_name = itemStockList.i_name || '';
       this.category = itemStockList.category || '';
       this.qty = itemStockList.qty || '';
@@ -18,10 +18,5 @@ export class ItemStockList {
       this.details = itemStockList.details || '';
     }
   }
-  public getRandomID(): number {
-    const S4 = () => {
-      return ((1 + Math.random()) * 0x10000) | 0;
-    };
-    return S4() + S4();
-  }
+
 }

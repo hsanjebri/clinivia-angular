@@ -1,0 +1,42 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Gemini Assessment'" [items]="['Gemini', 'Gemini Assessment']" [active_item]="'Gemini Assessment'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card genie-card">
+          <div class="header">
+            <h2 class="genie-title">Gemini </h2>
+          </div>
+          <div class="body">
+            <div class="chat-container">
+              <div class="genie-image-container">
+              </div>
+              <main class="chat-history">
+                <i class="fa fa-user-circle"></i>
+                {{ generatedText }}
+
+              </main>
+
+
+
+              <footer class="chat-input">
+                <div class="input-container">
+                  <div class="icon-container">
+                    <input type="text" id="message-input" placeholder="Ask me anything..." [(ngModel)]="prompt" class="chat-input-field">
+                    <i class="fa fa-microphone" (click)="startRecording()"></i>
+                    <i class="fa fa-upload"></i> <!-- Upload image icon -->
+                  </div>
+                  <button id="send-button" (click)="sendData()" class="send-button">Ask</button>
+                </div>
+              </footer>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

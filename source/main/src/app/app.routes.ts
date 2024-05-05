@@ -4,7 +4,10 @@ import { AuthGuard } from '@core/guard/auth.guard';
 import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
 import { Page404Component } from './authentication/page404/page404.component';
 import { Role } from '@core';
+import {SkeletonComponent} from "./skeleton/skeleton.component";
 
+import * as LR from "@uploadcare/blocks";
+LR.registerBlocks(LR);
 export const APP_ROUTE: Route[] = [
     {
         path: '',
@@ -65,6 +68,7 @@ export const APP_ROUTE: Route[] = [
                 loadChildren: () =>
                     import('./apps/apps.routes').then((m) => m.APPS_ROUTE),
             },
+
             {
                 path: 'widget',
                 loadChildren: () =>
@@ -117,6 +121,11 @@ export const APP_ROUTE: Route[] = [
               import('../app/home/home.component').then((m) => m.HomeComponent),
           },
           {
+            path: 'skeleton',
+            loadComponent: () =>
+              import('../app/skeleton/skeleton.component').then((m) => m.SkeletonComponent),
+          },
+          {
             path: 'room/:roomId',
             loadComponent: () =>
               import('../app/room/room.component').then((m) => m.RoomComponent),
@@ -128,6 +137,14 @@ export const APP_ROUTE: Route[] = [
                         (m) => m.MULTILEVEL_ROUTE
                     ),
             },
+            {
+                path: 'subscription',
+                loadChildren: () =>
+                    import('./admin/subscription/subscription.routes').then(
+                        (m) => m.SUBSCRIPTION_ROUTE
+                    ),
+            },
+
         ],
     },
     {

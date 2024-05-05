@@ -1,35 +1,44 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+
+import {BehaviorSubject, filter, Observable, of, throwError} from 'rxjs';
 import { Patient } from './patient.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class PatientService extends UnsubscribeOnDestroyAdapter {
-  private readonly API_URL = 'http://localhost:8081/Examen/patients/getall';
-  private readonly API_URLdelete = 'http://localhost:8081/Examen/patients/delete/'; // Remove {id} placeholder
-  private readonly API_URLADD = 'http://localhost:8081/Examen/patients/add'; // Remove {id} placeholder
-  private readonly API_UPDATE = 'http://localhost:8081/Examen/patients/update';
-  private readonly API_URLL = 'http://localhost:8081/Examen/patients'; // Replace with your actual API base URL
-  private readonly API_ASSESS_INTAKE = 'http://localhost:8081/Examen/dietplan/assess/'; // Replace with your actual URL
+  private readonly API_URL = 'http://localhost:8085/Examen/patients/getall';
+  private readonly API_URLdelete = 'http://localhost:8085/Examen/patients/delete/'; // Remove {id} placeholder
+  private readonly API_URLADD = 'http://localhost:8085/Examen/patients/add'; // Remove {id} placeholder
+  private readonly API_UPDATE = 'http://localhost:8085/Examen/patients/update';
+  private readonly API_URLL = 'http://localhost:8085/Examen/patients'; // Replace with your actual API base URL
+  private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/'; // Replace with your actual URL
 
   isTblLoading = true;
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);
-  // Temporarily stores data from dialogs
   dialogData!: Patient;
+
+
   constructor(private httpClient: HttpClient) {
     super();
   }
+
   get data(): Patient[] {
     return this.dataChange.value;
   }
+
   getDialogData() {
     return this.dialogData;
   }
+
   /** CRUD METHODS */
+  getUs(){
+    return this.httpClient.get<Patient[]>("http://localhost:8085/Examen/patients/getall")
+  }
   getAllPatients(): void {
     this.subs.sink = this.httpClient.get<Patient[]>(this.API_URL).subscribe({
       next: (data) => {
@@ -56,6 +65,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   //       },
   //     });
   // }
+
   addPatient(patient: Patient): void {
     this.httpClient.post<Patient>(this.API_URLADD, patient)
       .subscribe({
@@ -74,6 +84,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   }
 
 
+
   updatePatient(patient:Patient): void {
     this.httpClient.put(this.API_UPDATE,patient)
       .subscribe({
@@ -86,7 +97,6 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
         },
       });
   }
-
   deletePatient(id: number): void {
     console.log(id);
 
@@ -106,10 +116,15 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
     return this.httpClient.get<number>(url);
   }
 
+
+
   assessNutritionalIntake(patientId: number): Observable<Map<Date, string>> {
     const url = `${this.API_ASSESS_INTAKE}${patientId}`;
     return this.httpClient.get<Map<Date, string>>(url);
   }
+
+
+
+
 }
-/**********************************************/
 

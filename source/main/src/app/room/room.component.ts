@@ -25,8 +25,8 @@ export class RoomComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const appID = 646069568;
-    const serverSecret = '49ad0c5678c956e71315182c1d8e5cd9';
+    const appID = 854354614;
+    const serverSecret = '3d062cae7846e32a26ad3efbfe1b78f5';
 
     const token = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,

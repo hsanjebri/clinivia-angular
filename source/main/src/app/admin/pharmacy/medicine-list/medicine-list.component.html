@@ -75,47 +75,43 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="m_no">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">#
-                  </mat-header-cell>
-                  <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"><span class="mobile-label">#:</span>
-                    {{row.m_no}}</mat-cell>
-                </ng-container>
+
                 <ng-container matColumnDef="m_name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Medicine Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="mobile-label">Medicine Name:</span>{{row.m_name}}
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="category">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Category
+                <ng-container matColumnDef="medDescription">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">medDescription
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">Category:</span>{{row.category}}</span></mat-cell>
+                        class="mobile-label">Category:</span>{{row.medDescription}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="company">
+
+
+                <ng-container matColumnDef="medDosage">
                   <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Company Name
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">Company Name:</span>{{row.company}}</span></mat-cell>
+                        class="mobile-label">medDosage :</span>{{row.medDosage}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="p_date">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Purchase Date</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Purchase
-                      Date:</span>{{row.p_date | date: 'MM/dd/yyyy'}}</mat-cell>
+
+                <ng-container matColumnDef="medForm">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Company Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
+                    class="mobile-label">medForm :</span>{{row.medForm}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="price">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Price:</span>{{row.price}}</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="e_date">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Expired Date</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Expired
-                      Date:</span>{{row.e_date | date: 'MM/dd/yyyy'}}</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="stock">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Stock</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Stock:</span>{{row.stock}}</mat-cell>
-                </ng-container>
+                <ng-container matColumnDef="medPhoto">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">medphoto
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
+                  class="mobile-label">medPhoto :</span>{{row.medPhoto}}</span></mat-cell>
+              </ng-container>
+
+
+
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>

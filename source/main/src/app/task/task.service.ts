@@ -8,7 +8,7 @@ import {ToastrService} from "ngx-toastr";
   providedIn: 'root'
 })
 export class TaskService {
-  private readonly API_BASE_URL = 'http://localhost:8081/Examen/tasks';
+  private readonly API_BASE_URL = 'http://localhost:8085/Examen/tasks';
   private readonly API_URL_GET_ALL = `${this.API_BASE_URL}/getAll`;
   private readonly API_URL_ADD = `${this.API_BASE_URL}/add`;
   private readonly API_URL_UPDATE = `${this.API_BASE_URL}/update`;
