@@ -1,4 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+//import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+//import * as PdfFonts from 'pdfmake/build/vfs_fonts';
+import * as PdfFonts from 'pdfmake/build/vfs_fonts';
+import { Content ,TDocumentDefinitions } from 'pdfmake/interfaces';
 import { DepartmentListService } from './department-list.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,6 +37,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+//(pdfMake as any).vfs =PdfFonts.pdfMake.vfs;
+(pdfMake as any).vfs =PdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-department-list',
@@ -59,11 +66,11 @@ export class DepartmentListComponent
   implements OnInit {
   displayedColumns = [
     'select',
-    'd_no',
-    'd_name',
+    'dno',
+    'dname',
     'description',
-    'd_date',
-    'd_head',
+    'ddate',
+    'dhead',
     'status',
     'actions',
   ];
@@ -111,7 +118,7 @@ export class DepartmentListComponent
         // After dialog is closed we're doing frontend updates
         // For add we're just pushing a new row inside DataService
         this.exampleDatabase?.dataChange.value.unshift(
-          this.departmentListService.getDialogData()
+          this.departmentListService.dialogData
         );
         this.refreshTable();
         this.showNotification(
@@ -147,7 +154,7 @@ export class DepartmentListComponent
         // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
           this.exampleDatabase.dataChange.value[foundIndex] =
-            this.departmentListService.getDialogData();
+            this.departmentListService.dialogData
           // And lastly refresh table
           this.refreshTable();
           this.showNotification(
@@ -249,12 +256,12 @@ export class DepartmentListComponent
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        No: x.d_no,
-        'Department Name': x.d_name,
+        No: x.dno,
+        'Department Name': x.dname,
         Description: x.description,
         'Department Date':
-          formatDate(new Date(x.d_date), 'yyyy-MM-dd', 'en') || '',
-        'Department Head': x.d_head,
+          formatDate(new Date(x.ddate), 'yyyy-MM-dd', 'en') || '',
+        'Department Head': x.dhead,
         Status: x.status,
       }));
 
@@ -273,6 +280,41 @@ export class DepartmentListComponent
       horizontalPosition: placementAlign,
       panelClass: colorName,
     });
+  }
+  generatePDF() {
+    const departmentsData = this.exampleDatabase?.data;
+
+    if (departmentsData) {
+      // Créer un tableau de contenu pour le PDF
+      const content: Content[] = departmentsData.flatMap((department) => [
+        { text: 'Description:', style: 'subheader' }, department.description,
+        { text: 'Status:', style: 'subheader' }, department.status,
+        { text: '\n' }, // Ajouter une ligne vide entre chaque département
+      ]);
+
+      // Définir le document PDF
+      const docDefinition: TDocumentDefinitions = {
+        content: [
+          { text: 'Department Information', style: 'header' },
+          { text: new Date().toLocaleDateString(), alignment: 'right' }, // Date du PDF
+          { text: '\n\n' }, // Ajouter des espaces entre le titre et le contenu
+          ...content, // Ajouter le contenu du PDF
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+          },
+          subheader: {
+            fontSize: 14,
+            bold: true,
+          },
+        },
+      };
+
+      // Créer et ouvrir le PDF
+      pdfMake.createPdf(docDefinition).open();
+    }
   }
 }
 export class ExampleDataSource extends DataSource<DepartmentList> {
@@ -307,19 +349,37 @@ export class ExampleDataSource extends DataSource<DepartmentList> {
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
-        this.filteredData = this.exampleDatabase.data
+      /*  this.filteredData = this.exampleDatabase['data'] // commenter par maissa pr lire ldu bd
           .slice()
           .filter((departmentList: DepartmentList) => {
             const searchStr = (
-              departmentList.d_no +
-              departmentList.d_name +
+              departmentList.dno +
+              departmentList.dname +
               departmentList.description +
-              departmentList.d_date +
-              departmentList.d_head +
+              departmentList.ddate +
+              departmentList.dhead +
               departmentList.status
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
+          });*/
+          const data = this.exampleDatabase?.['data'] || []; // Utilisation de l'opérateur de navigation sécurisé pour éviter les erreurs si this.exampleDatabase ou this.exampleDatabase.data est undefined
+          this.filteredData = data
+            .slice()
+            .filter((departmentList: DepartmentList) => {
+              const searchStr = (
+                departmentList.dno +
+                departmentList.dname +
+                departmentList.description +
+                departmentList.ddate +
+                departmentList.dhead +
+                departmentList.status
+              ).toLowerCase();
+              return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+            });
+
+
+
+
         // Sort filtered data
         const sortedData = this.sortData(this.filteredData.slice());
         // Grab the page's slice of the filtered sorted data.
@@ -346,20 +406,25 @@ export class ExampleDataSource extends DataSource<DepartmentList> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'd_no':
-          [propertyA, propertyB] = [a.d_no, b.d_no];
+        case 'dno':
+          [propertyA, propertyB] = [a.dno, b.dno];
           break;
-        case 'd_name':
-          [propertyA, propertyB] = [a.d_name, b.d_name];
+        case 'dname':
+          [propertyA, propertyB] = [a.dname, b.dname];
           break;
         case 'description':
           [propertyA, propertyB] = [a.description, b.description];
           break;
-        case 'd_date':
+        /**case 'd_date': pr le proj 2 spring lie a ang pas le 1 sur bureay direct
           [propertyA, propertyB] = [a.d_date, b.d_date];
           break;
-        case 'd_head':
-          [propertyA, propertyB] = [a.d_head, b.d_head];
+          */
+          case 'ddate':
+            // Convertir les dates en timestamps pour la comparaison
+            [propertyA, propertyB] = [new Date(a.ddate).getTime(), new Date(b.ddate).getTime()];
+            break;
+        case 'dhead':
+          [propertyA, propertyB] = [a.dhead, b.dhead];
           break;
         case 'status':
           [propertyA, propertyB] = [a.status, b.status];

@@ -17,9 +17,9 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Department No</mat-label>
-            <input matInput formControlName="d_no" required>
+            <input matInput formControlName="dno" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
-            @if (departmentListForm.get('d_no')?.hasError('required')) {
+            @if (departmentListForm.get('dno')?.hasError('required')) {
             <mat-error>
               Department no is required
             </mat-error>
@@ -29,9 +29,9 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Department Name</mat-label>
-            <input matInput formControlName="d_name" required>
+            <input matInput formControlName="dname" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
-            @if (departmentListForm.get('d_name')?.hasError('required')) {
+            @if (departmentListForm.get('dname')?.hasError('required')) {
             <mat-error>
               Department Name is required
             </mat-error>
@@ -43,10 +43,10 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Department date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="d_date">
+            <input matInput [matDatepicker]="picker" formControlName="ddate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            @if (departmentListForm.get('d_date')?.hasError('required')) {
+            @if (departmentListForm.get('ddate')?.hasError('required')) {
             <mat-error>
               Please select date
             </mat-error>
@@ -56,9 +56,9 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Department Head</mat-label>
-            <input matInput formControlName="d_head" required>
+            <input matInput formControlName="dhead" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>account_circle</mat-icon>
-            @if (departmentListForm.get('d_head')?.hasError('required')) {
+            @if (departmentListForm.get('dhead')?.hasError('required')) {
             <mat-error>
               Department Head is required
             </mat-error>

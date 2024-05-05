@@ -37,6 +37,11 @@ export const DOCTOR_ROUTE: Route[] = [
     path: 'settings',
     component: SettingsComponent,
   },
+  {
+    path: 'pharmacy',
+    loadChildren: () =>
+      import('./pharmacy/pharmacy.routes').then((m) => m.PHARMACY_ROUTE),
+  },
 
   { path: '**', component: Page404Component },
 ];

@@ -53,6 +53,13 @@
               </ul>
             </div>
           </div>
+          <li class="tbl-header-btn">
+            <div class="m-l-10" matTooltip="GENERATE PDF">
+              <button mat-mini-fab color="primary" (click)="generatePDF()">
+                <mat-icon class="col-white">picture_as_pdf</mat-icon>
+              </button>
+            </div>
+          </li>
           <div class="body overflow-auto">
             <div class="responsive_table">
               <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
@@ -75,15 +82,15 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="d_no">
+                <ng-container matColumnDef="dno">
                   <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">#
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"> <span
-                      class="mobile-label">#:</span>{{row.d_no}}</mat-cell>
+                      class="mobile-label">#:</span>{{row.dno}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="d_name">
+                <ng-container matColumnDef="dname">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Department Name</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Department Name:</span>{{row.d_name}}
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Department Name:</span>{{row.dname}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="description">
@@ -92,14 +99,14 @@
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
                         class="mobile-label">Description:</span>{{row.description}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="d_date">
+                <ng-container matColumnDef="ddate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Department Date</mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="mobile-label">Department
-                      Date:</span>{{row.d_date | date: 'MM/dd/yyyy'}}</mat-cell>
+                      Date:</span>{{row.ddate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="d_head">
+                <ng-container matColumnDef="dhead">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Department Head</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Department Head:</span>{{row.d_head}}
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Department Head:</span>{{row.dhead}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="status">
