@@ -124,7 +124,8 @@ export class Patient {
     public patientAlergies: Allergie,
     public treatment: string,
     public email: string ,
-    public image: string
+    public image: string,
+    public password: string = '',
 
   ) {}
 }
