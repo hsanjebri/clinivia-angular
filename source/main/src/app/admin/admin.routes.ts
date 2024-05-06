@@ -72,6 +72,13 @@ export const ADMIN_ROUTE: Route[] = [
       ),
   },
   {
+    path: 'vitalsigns',
+    loadChildren: () =>
+      import('./vitalsigns/vitalsigns.routes').then(
+        (m) => m.VITALSIGN_ROUTE
+      ),
+  },
+  {
     path: 'pharmacy',
     loadChildren: () =>
       import('./pharmacy/pharmacy.routes').then((m) => m.PHARMACY_ROUTE),

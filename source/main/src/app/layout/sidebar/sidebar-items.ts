@@ -619,6 +619,31 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
+    title: 'VitalSigns',
+    iconType: 'material-icons-outlined',
+    icon: 'group_work',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin'],
+    submenu: [
+      {
+        path: '/admin/vitalsigns/vitalsign-list',
+        title: 'Vital Sign List',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      }
+    ],
+  },
+  {
+    path: '',
     title: 'MENUITEMS.PHARMACY.TEXT',
     iconType: 'material-icons-outlined',
     icon: 'local_pharmacy',

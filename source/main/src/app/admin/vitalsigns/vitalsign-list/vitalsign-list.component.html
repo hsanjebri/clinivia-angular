@@ -2,7 +2,7 @@
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Funerals List'" [items]="['Funerals']" [active_item]="'Funeral List'">
+      <app-breadcrumb [title]="'VitalSign List'" [items]="['VitalSign']" [active_item]="'VitalSign List'">
       </app-breadcrumb>
     </div>
     <div class="row">
@@ -12,7 +12,7 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
-                  <h2>Departments</h2>
+                  <h2>Vital Signs </h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
@@ -71,43 +71,55 @@
                   </mat-cell>
                 </ng-container>
                 <!-- ID Column -->
-                <ng-container matColumnDef="id">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-                  <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+                <ng-container matColumnDef="vitalSignId">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Vital Sign Id</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.vitalSignId}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="idPatient">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">Patient Id
+                <ng-container matColumnDef="bmi">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">bmi
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"> <span
-                      class="mobile-label">Id Patient : </span>{{row.idPatient}}</mat-cell>
+                      class="mobile-label">BMI : </span>{{row.bmi}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="funeralServiceProvider">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">Funeral Service Provider
+                <ng-container matColumnDef="heigh">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">Height 
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"> <span
-                      class="mobile-label">Service Provider : </span>{{row.funeralServiceProvider}}</mat-cell>
+                      class="mobile-label">Height : </span>{{row.heigh}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="contactPersonForArrangement">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Contact Person
+                <ng-container matColumnDef="weight">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Weight
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">Contact Person :</span>{{row.contactPersonForArrangement}}</span></mat-cell>
+                        class="mobile-label">Weight :</span>{{row.weight}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="contactPersonRelationshipToPatient">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Relationship To Patient
+                <ng-container matColumnDef="recordingLocation">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Recording Location 
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
-                        class="mobile-label">Relationship To Patient:</span>{{row.contactPersonRelationshipToPatient}}</span></mat-cell>
+                        class="mobile-label">Recording Location : </span>{{row.recordingLocation}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="contactPersonPhoneNumber">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number : </mat-header-cell>
+                <ng-container matColumnDef="heartRate">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Heart Rate: </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <span class="truncate-text"><span class="mobile-label">Phone Number:</span>{{row.contactPersonPhoneNumber}}</span>
+                    <span class="truncate-text"><span class="mobile-label">Heart Rate :</span>{{row.heartRate}}</span>
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="estimatedFuneralExpenses">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estimated Expenses</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Estimated Expenses :</span>{{row.estimatedFuneralExpenses}}</mat-cell>
+                <ng-container matColumnDef="bloodPressure">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Blood Pressure : </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Blood Pressure :</span>{{row.bloodPressure}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="respiratoryRate">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Respiratory Rate :</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Respiratory Rate :</span>{{row.respiratoryRate}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="temperature">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Temparture :  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Temparture :</span>{{row.temperature}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="oxygenSaturation">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Oxygen Saturation :  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Oxygen Saturation :</span>{{row.oxygenSaturation}}</mat-cell>
                 </ng-container>
 
                 <!-- actions -->
