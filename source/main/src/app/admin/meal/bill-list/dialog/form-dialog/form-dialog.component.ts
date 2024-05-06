@@ -72,7 +72,7 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.billList.idRecommendation],
+      idRecommendation: [this.billList.idRecommendation],
       //img: [this.billList.img],
       recommendedMeal: [this.billList.recommendedMeal],
       ingredients: [this.billList.ingredients],

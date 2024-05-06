@@ -70,7 +70,7 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.room.idDiet],
+      idDiet: [this.room.idDiet],
       planDescription: [this.room.planDescription],
       startDate: [this.room.startDate],
       endDate: [this.room.endDate],

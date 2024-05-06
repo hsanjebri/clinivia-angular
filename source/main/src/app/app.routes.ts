@@ -126,6 +126,12 @@ export const APP_ROUTE: Route[] = [
               import('../app/skeleton/skeleton.component').then((m) => m.SkeletonComponent),
           },
           {
+            path: 'hassan',
+            loadComponent: () =>
+              import('../app/hassan/hassan.component').then((m) => m.HassanComponent),
+          },
+
+          {
             path: 'room/:roomId',
             loadComponent: () =>
               import('../app/room/room.component').then((m) => m.RoomComponent),

@@ -374,7 +374,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'MENUITEMS.ROOMS.TEXT',
+    title: 'Diet',
     iconType: 'material-icons-outlined',
     icon: 'hotel',
     class: 'menu-toggle',
@@ -385,7 +385,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: '/admin/room/all-rooms',
-        title: 'MENUITEMS.ROOMS.LIST.ALLOTED-ROOMS',
+        title: 'ALL Diets',
         iconType: '',
         icon: '',
         class: 'ml-menu',
