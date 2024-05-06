@@ -2,7 +2,7 @@
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Ambulance List'" [items]="['Ambulance']" [active_item]="'List'">
+      <app-breadcrumb [title]="'Funerals List'" [items]="['Funerals']" [active_item]="'Funeral List'">
       </app-breadcrumb>
     </div>
     <div class="row">
@@ -12,7 +12,7 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
-                  <h2>Ambulance List</h2>
+                  <h2>Departments</h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
@@ -73,45 +73,43 @@
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-                  <mat-cell *matCellDef="let row ">{{row.id}}</mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="vehicle_no">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle No</mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Vehicle No:</span> {{row.vehicle_no}}
-                  </mat-cell>
+                <ng-container matColumnDef="idPatient">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">Patient Id
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"> <span
+                      class="mobile-label">Id Patient : </span>{{row.idPatient}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="vehicle_name">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle Name</mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Vehicle Name:</span> {{row.vehicle_name}}
-                  </mat-cell>
+                <ng-container matColumnDef="funeralServiceProvider">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-6'">Funeral Service Provider
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'"> <span
+                      class="mobile-label">Service Provider : </span>{{row.funeralServiceProvider}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="year_made">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Year Made</mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Year Made:</span> {{row.year_made}}
-                  </mat-cell>
+                <ng-container matColumnDef="contactPersonForArrangement">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Contact Person
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
+                        class="mobile-label">Contact Person :</span>{{row.contactPersonForArrangement}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="driver_name">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Driver Name</mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Driver Name:</span> {{row.driver_name}}
-                  </mat-cell>
+                <ng-container matColumnDef="contactPersonRelationshipToPatient">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'tbl-col-width-per-100'">Relationship To Patient
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="truncate-text" [ngClass]="'tbl-col-width-per-80'"><span
+                        class="mobile-label">Relationship To Patient:</span>{{row.contactPersonRelationshipToPatient}}</span></mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="driver_license_no">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Driver License No</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Driver License
-                      No:</span>{{row.driver_license_no}}</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="driver_no">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Driver Contact No</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Driver Contact No:</span>{{row.driver_no}}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="vehicle_type">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle Type</mat-header-cell>
+                <ng-container matColumnDef="contactPersonPhoneNumber">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number : </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <span class="truncate-text"><span class="mobile-label">Vehicle
-                        Type:</span>{{row.vehicle_type}}</span>
+                    <span class="truncate-text"><span class="mobile-label">Phone Number:</span>{{row.contactPersonPhoneNumber}}</span>
                   </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="estimatedFuneralExpenses">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estimated Expenses</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label"> Estimated Expenses :</span>{{row.estimatedFuneralExpenses}}</mat-cell>
+                </ng-container>
+
                 <!-- actions -->
                 <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>

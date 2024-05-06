@@ -1,11 +1,11 @@
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { AmbulanceCallListService } from '../../ambulance-call-list.service';
+import { DepartmentListService } from '../../vitalsign-list.service';
 import { UntypedFormControl, Validators, UntypedFormGroup, UntypedFormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AmbulanceCallList } from '../../ambulance-call-list.model';
+import { DepartmentList } from '../../vitalsign-list.model'; 
 import { formatDate } from '@angular/common';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,10 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 export interface DialogData {
   id: number;
   action: string;
-  ambulanceCallList: AmbulanceCallList;
+  departmentList: DepartmentList;
 }
+
 @Component({
-    selector: 'app-form-dialog:not(a)',
+    selector: 'app-form-dialog:not(e)',
     templateUrl: './form-dialog.component.html',
     styleUrls: ['./form-dialog.component.scss'],
     standalone: true,
@@ -29,33 +30,33 @@ export interface DialogData {
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatRadioModule,
         MatDatepickerModule,
+        MatRadioModule,
         MatDialogClose,
     ],
 })
 export class FormDialogComponent {
   action: string;
   dialogTitle: string;
-  ambulanceCallListForm: UntypedFormGroup;
-  ambulanceCallList: AmbulanceCallList;
+  departmentListForm: UntypedFormGroup;
+  departmentList: DepartmentList;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public ambulanceCallListService: AmbulanceCallListService,
-    private fb: UntypedFormBuilder,
+    public departmentListService: DepartmentListService,
+    private fb: UntypedFormBuilder
   ) {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.ambulanceCallList.patient_name;
-      this.ambulanceCallList = data.ambulanceCallList;
+      this.dialogTitle = data.departmentList.recordingLocation;
+      this.departmentList = data.departmentList;
     } else {
-      this.dialogTitle = 'Add Ambulance Call';
-      const blankObject = {} as AmbulanceCallList;
-      this.ambulanceCallList = new AmbulanceCallList(blankObject);
+      this.dialogTitle = 'New DepartmentList';
+      const blankObject = {} as DepartmentList;
+      this.departmentList = new DepartmentList(blankObject);
     }
-    this.ambulanceCallListForm = this.createContactForm();
+    this.departmentListForm = this.createContactForm();
   }
   formControl = new UntypedFormControl('', [
     Validators.required,
@@ -70,19 +71,16 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.ambulanceCallList.id],
-      case_no: [this.ambulanceCallList.case_no],
-      patient_name: [this.ambulanceCallList.patient_name],
-      gender: [this.ambulanceCallList.gender],
-      date: [
-        formatDate(this.ambulanceCallList.date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
-      vehicle_no: [this.ambulanceCallList.vehicle_no],
-      driver_name: [this.ambulanceCallList.driver_name],
-      driver_no: [this.ambulanceCallList.driver_no],
-      patient_address: [this.ambulanceCallList.patient_address],
-      note: [this.ambulanceCallList.note],
+      vitalSignId: [this.departmentList.vitalSignId],
+      bmi:[this.departmentList.bmi],
+      heigh: [this.departmentList.heigh],
+      weight: [this.departmentList.weight],
+      recordingLocation: [this.departmentList.recordingLocation],
+      heartRate: [this.departmentList.heartRate],
+      bloodPressure: [this.departmentList.bloodPressure],
+      respiratoryRate: [this.departmentList.respiratoryRate],
+      temperature: [this.departmentList.temperature],
+      oxygenSaturation: [this.departmentList.oxygenSaturation],
     });
   }
   submit() {
@@ -92,8 +90,8 @@ export class FormDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    this.ambulanceCallListService.addAmbulanceCallList(
-      this.ambulanceCallListForm.getRawValue(),
+    this.departmentListService.addDepartmentList(
+      this.departmentListForm.getRawValue()
     );
   }
 }
