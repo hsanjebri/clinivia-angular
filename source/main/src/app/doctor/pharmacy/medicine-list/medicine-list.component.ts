@@ -317,6 +317,59 @@ export class MedicineListComponent
 
     pdfMake.createPdf(docDefinition).open(); // Open the PDF in a new tab
   }
+  /*getTotalMedicineCount(): number {
+    return this.dataSource.filteredData.length;
+  }*/
+ /* calculateMedicineList() {
+    const medicineList = this.getMedicineList();
+    alert(`Liste de médicaments : ${medicineList}`);
+  }
+  
+  getMedicineList(): string {
+    // Vous pouvez formater la liste de médicaments comme vous le souhaitez
+    // Par exemple, vous pouvez simplement concaténer les noms des médicaments
+    // Ou vous pouvez formater la liste de médicaments d'une manière plus structurée
+    
+    // Ici, je vais simplement récupérer les noms des médicaments pour les afficher dans une alerte
+    const medicineNames = this.dataSource.filteredData.map(medicine => medicine.mname).join(', ');
+    return medicineNames;
+  }*/
+  calculateMedicineList() {
+    const medicineList = this.getMedicineList();
+    const totalMedicineCount = this.getTotalMedicineCount();
+    alert(`Liste de complaints (${totalMedicineCount} au total) : ${medicineList}`);
+  }
+  
+  getMedicineList(): string {
+    const medicineNames = this.dataSource.filteredData.map(medicine => medicine.mname).join(', ');
+    return medicineNames;
+  }
+  
+  getTotalMedicineCount(): number {
+    return this.dataSource.filteredData.length;
+  }
+
+  public loadDataByCategory() {
+    this.exampleDatabase = new MedicineListService(this.httpClient);
+    // Utilisez la méthode mise à jour pour charger les données triées
+    this.exampleDatabase.getAllMedicineListsByCategory();
+    this.dataSource = new ExampleDataSource(
+      this.exampleDatabase,
+      this.paginator,
+      this.sort
+    );
+    this.subs.sink = fromEvent(this.filter?.nativeElement, 'keyup').subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter?.nativeElement.value;
+      }
+    );
+  }
+  
+
+  
 }
  
 

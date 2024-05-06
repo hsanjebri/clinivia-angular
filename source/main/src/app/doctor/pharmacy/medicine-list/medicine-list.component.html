@@ -60,6 +60,8 @@
               </button>
             </div>
           </li>
+          <!--<h2>Complaints ({{ getTotalMedicineCount() }})</h2>-->
+          <button (click)="calculateMedicineList()">Afficher la liste des Complaint</button>
           <div class="body overflow-auto">
             <div class="responsive_table">
               <table mat-table [dataSource]="dataSource" matSort class="mat-cell advance-table">
@@ -89,7 +91,7 @@
                     {{row.mno}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="mname">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Patient Name</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Doctor Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> <span class="mobile-label">Medicine Name:</span>{{row.mname}}
                   </mat-cell>
                 </ng-container>
