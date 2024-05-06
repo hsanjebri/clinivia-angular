@@ -128,6 +128,7 @@
   color: #fff;
   padding: 10px 15px;
   border: none;
+  margin-left: 10px; /* Added margin between buttons */
   border-radius: 5px;
   cursor: pointer;
   transition: 0.2s ease-in-out;
@@ -167,4 +168,25 @@
 .bot-message .fa-user-circle {
   margin-right: 0;
   margin-left: 5px;
+}
+.speak-button {
+  background-color: #007bff; /* Blue */
+  color: white;
+  padding: 12px 12px; /* Adjusted padding to make the button higher */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px; /* Adjusted font size */
+  margin-top: 5px; /* Added margin to create space between buttons */
+  margin-left: 10px; /* Added margin between buttons */
+}
+
+.speak-button:hover {
+  background-color: #0056b3; /* Darker Blue */
+}
+
+.speak-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3); /* Add a subtle focus ring */
 }

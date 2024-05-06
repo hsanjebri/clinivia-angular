@@ -169,8 +169,8 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
-                    <button mat-icon-button (click)="$event.stopPropagation(); progressItem(row.idPatient)" class="tbl-action-btn">
-                      <app-feather-icons [icon]="'trending-up'" [class]="'tbl-progress'"></app-feather-icons>
+                    <button mat-icon-button (click)="makeCall()" class="tbl-action-btn">
+                      <app-feather-icons [icon]="'phone'" [class]="'tbl-call'"></app-feather-icons>
                     </button>
                     <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(row)"
                       class="tbl-action-btn">

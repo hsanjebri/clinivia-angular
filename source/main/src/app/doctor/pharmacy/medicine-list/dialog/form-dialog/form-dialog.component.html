@@ -28,12 +28,12 @@
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Patient Name</mat-label>
+            <mat-label>Doctor Name</mat-label>
             <input matInput formControlName="mname" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>medication</mat-icon>
             @if (medicineListForm.get('mname')?.hasError('required')) {
             <mat-error>
-              Patient Name is required
+              Doctor Name is required
             </mat-error>
             }
           </mat-form-field>

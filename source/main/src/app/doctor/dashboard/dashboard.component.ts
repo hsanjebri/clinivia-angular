@@ -65,6 +65,7 @@ export type radialChartOptions = {
   ],
 })
 export class DashboardComponent implements OnInit {
+
   @ViewChild('chart')
   chart!: ChartComponent;
   public areaChartOptions!: Partial<areaChartOptions>;
@@ -231,9 +232,9 @@ export class DashboardComponent implements OnInit {
             },
             total: {
               show: true,
-              label: 'Total',
+              label: 'Blood',
               formatter: function () {
-                return '249';
+                return '';
               },
             },
           },
@@ -241,7 +242,7 @@ export class DashboardComponent implements OnInit {
       },
       colors: ['#ffc107', '#3f51b5', '#8bc34a'],
 
-      labels: ['Face TO Face', 'E-Consult', 'Available'],
+      labels: ['AB-', 'B+', 'AB+'],
     };
   }
   private chart3() {

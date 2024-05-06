@@ -1,4 +1,5 @@
 import { RouteInfo } from './sidebar.metadata';
+import {Patient} from "../../admin/patients/allpatients/patient.model";
 export const ROUTES: RouteInfo[] = [
   {
     path: '',
@@ -373,7 +374,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'MENUITEMS.ROOMS.TEXT',
+    title: 'Diet',
     iconType: 'material-icons-outlined',
     icon: 'hotel',
     class: 'menu-toggle',
@@ -384,7 +385,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: '/admin/room/all-rooms',
-        title: 'MENUITEMS.ROOMS.LIST.ALLOTED-ROOMS',
+        title: 'ALL Diets',
         iconType: '',
         icon: '',
         class: 'ml-menu',
@@ -1137,6 +1138,31 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '/skeleton',
         title: 'Inbox',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Call',
+    iconType: 'material-icons-outlined',
+    icon: 'phone',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin', 'Doctor','Patient'],
+    submenu: [
+      {
+        path: '/home',
+        title: 'start exercices',
         iconType: '',
         icon: '',
         class: 'ml-menu',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { Task } from './task.model';
 import {ToastrService} from "ngx-toastr";
 
@@ -48,21 +48,8 @@ export class TaskService {
     });
   }
 
-  updateTask(task: Task): void {
-    this.httpClient.put<Task>(this.API_URL_UPDATE, task).subscribe({
-      next: (data) => {
-        const index = this.tasks.findIndex(t => t.idTask === task.idTask);
-        if (index !== -1) {
-          this.tasks[index] = data;
-          this.tasksSubject.next(this.tasks);
-          this.toastr.info('Task updated successfully!', 'Success');
-
-        }
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error updating task:', error);
-      }
-    });
+  updateTask(task: Task): Observable<any> {
+    return this.httpClient.put<Task>(this.API_URL_UPDATE, task);
   }
 
   deleteTask(taskId: string): void {

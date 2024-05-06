@@ -88,6 +88,7 @@ export class AllpatientsComponent
   patients: Patient[] = [];
   taskCompletionPercentages: { [key: number]: number } = {};
   private router: Router // Inject Router
+  private readonly API_CALL = 'http://localhost:8085/Examen/makeCall';
 
   constructor(
     public httpClient: HttpClient,
@@ -166,8 +167,9 @@ export class AllpatientsComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        //const dialogData = this.patientService.getDialogData();
-        //this.patientService.updatePatient(dialogData);
+       const dialogData = this.patientService.getDialogData();
+       console.log(dialogData)
+        this.patientService.updatePatient(dialogData);
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
           (x) => x.idPatient === this.id
         );
@@ -186,6 +188,43 @@ export class AllpatientsComponent
       }
     });
   }
+  // editCall(row: Patient) {
+  //   this.id = row.idPatient;
+  //   let tempDirection: Direction;
+  //   if (localStorage.getItem('isRtl') === 'true') {
+  //     tempDirection = 'rtl';
+  //   } else {
+  //     tempDirection = 'ltr';
+  //   }
+  //   const dialogRef = this.dialog.open(FormDialogComponent, {
+  //     data: {
+  //       departmentList: row,
+  //       action: 'edit',
+  //     },
+  //     direction: tempDirection,
+  //   });
+  //   this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+  //     if (result === 1) {
+  //       // When using an edit things are little different, firstly we find record inside DataService by id
+  //       const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
+  //         (x) => x.idPatient === this.id
+  //       );
+  //       // Then you update that record using data from dialogData (values you enetered)
+  //       if (foundIndex != null && this.exampleDatabase) {
+  //         this.exampleDatabase.dataChange.value[foundIndex] =
+  //           this.patientService.getDialogData();
+  //         // And lastly refresh table
+  //         this.refreshTable();
+  //         this.showNotification(
+  //           'black',
+  //           'Edit Record Successfully...!!!',
+  //           'bottom',
+  //           'center'
+  //         );
+  //       }
+  //     }
+  //   });
+  // }
   deleteItem(row: Patient) {
     this.id = row.idPatient;
     let tempDirection: Direction;
@@ -367,6 +406,27 @@ export class AllpatientsComponent
     this.router.navigate(['/admin/patients/showprogress', patientId]);
   }
 
+  makeCall() {
+    // Make the API call here
+    this.httpClient.get<any>(this.API_CALL).subscribe(
+      (response) => {
+        // Handle the response here, if needed
+        console.log('API call response:', response);
+        // You can perform any further actions here based on the response
+      },
+      (error) => {
+        // Handle errors here
+        console.error('Error making API call:', error);
+        // You can also show a notification to the user about the error
+        this.showNotification(
+          'snackbar-danger',
+          'Error making API call',
+          'bottom',
+          'center'
+        );
+      }
+    );
+  }
 }
 export class ExampleDataSource extends DataSource<Patient> {
   filterChange = new BehaviorSubject('');
