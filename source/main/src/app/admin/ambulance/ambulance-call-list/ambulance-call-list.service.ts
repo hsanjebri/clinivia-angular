@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AmbulanceCallList } from './ambulance-call-list.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import { AmbulanceList } from '../ambulance-list/ambulance-list.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,7 @@ export class AmbulanceCallListService extends UnsubscribeOnDestroyAdapter {
   /** CRUD METHODS */
   getAllAmbulanceCallLists(): void {
     this.subs.sink = this.httpClient
-      .get<AmbulanceCallList[]>(this.API_URL)
+      .get<AmbulanceCallList[]>(this.baseUrl)
       .subscribe({
         next: (data) => {
           this.isTblLoading = false;
@@ -39,42 +40,42 @@ export class AmbulanceCallListService extends UnsubscribeOnDestroyAdapter {
         },
       });
   }
+
   addAmbulanceCallList(ambulanceCallList: AmbulanceCallList): void {
-    this.dialogData = ambulanceCallList;
-
-    // this.httpClient.post(this.API_URL, ambulanceCallList)
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.dialogData = ambulanceCallList;
-    //     },
-    //     error: (error: HttpErrorResponse) => {
-    //        // error code here
-    //     },
-    //   });
+    this.httpClient.post(this.API_URLadd, ambulanceCallList)
+      .subscribe({
+        next: (data) => {
+          this.dialogData = ambulanceCallList;
+          console.log('Response from the server:', data);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error while making the request:', error);
+        },
+      });
   }
-  updateAmbulanceCallList(ambulanceCallList: AmbulanceCallList): void {
+  updateAmbulanceCallList(ambulanceCallList: AmbulanceCallList): Observable<any> {
     this.dialogData = ambulanceCallList;
-
-    // this.httpClient.put(this.API_URL + ambulanceCallList.id, ambulanceCallList)
-    //     .subscribe({
-    //       next: (data) => {
-    //         this.dialogData = ambulanceCallList;
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+    
+    return this.httpClient.put(this.API_URLupdate + ambulanceCallList.id, ambulanceCallList);
   }
   deleteAmbulanceCallList(id: number): void {
     console.log(id);
-    // this.httpClient.delete(this.API_URL + id)
-    //     .subscribe({
-    //       next: (data) => {
-    //         console.log(id);
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+
+    this.httpClient.delete(`${this.API_URLdelete}${id}`)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error: HttpErrorResponse) => {
+          // Handle error
+          console.error('Delete request failed:', error);
+        },
+      });
   }
+
+
+  private baseUrl :string = "http://localhost:8085/Examen/api/Ambulancedispatch/getAll"
+  private  API_URLadd:string  = 'http://localhost:8085/Examen/api/Ambulancedispatch/add';
+  private  API_URLupdate:string = 'http://localhost:8085/Examen/api/Ambulancedispatch/update';
+  private readonly API_URLdelete = 'http://localhost:8085/Examen/api/Ambulancedispatch/delete/';
 }

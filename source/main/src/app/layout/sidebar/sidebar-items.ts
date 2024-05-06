@@ -594,6 +594,31 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
+    title: 'Funerals',
+    iconType: 'material-icons-outlined',
+    icon: 'group_work',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin'],
+    submenu: [
+      {
+        path: '/admin/funerals/funeral-list',
+        title: 'Funeral List',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      }
+    ],
+  },
+  {
+    path: '',
     title: 'MENUITEMS.PHARMACY.TEXT',
     iconType: 'material-icons-outlined',
     icon: 'local_pharmacy',

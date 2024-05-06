@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 export class AmbulanceCallList {
-  id: number;
+  id!: number;
   case_no: string;
   patient_name: string;
   gender: string;
