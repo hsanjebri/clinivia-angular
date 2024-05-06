@@ -1,0 +1,102 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          {{dialogTitle}}
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="departmentListForm" (ngSubmit)="submit">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Patient Id</mat-label>
+            <input matInput formControlName="idPatient" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (departmentListForm.get('idPatient')?.hasError('required')) {
+            <mat-error>
+              Patient Id is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Funeral Service Provider</mat-label>
+            <input matInput formControlName="funeralServiceProvider" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (departmentListForm.get('funeralServiceProvider')?.hasError('required')) {
+            <mat-error>
+              Funeral Service Provider is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Contact Person For Arrangement </mat-label>
+            <input matInput formControlName="contactPersonForArrangement" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (departmentListForm.get('contactPersonForArrangement')?.hasError('required')) {
+            <mat-error>
+              Contact Person For Arrangement is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Contact Person's Relationship To Patient </mat-label>
+            <input matInput formControlName="contactPersonRelationshipToPatient" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (departmentListForm.get('contactPersonRelationshipToPatient')?.hasError('required')) {
+            <mat-error>
+              Contact Person's Relationship To Patient is required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Contact Person's Phone Number </mat-label>
+            <input matInput formControlName="contactPersonPhoneNumber" required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+            @if (departmentListForm.get('contactPersonPhoneNumber')?.hasError('required')) {
+            <mat-error>
+              Contact Person's Phone Number required
+            </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Estimated Funeral Expenses</mat-label>
+              <input matInput formControlName="estimatedFuneralExpenses" required>
+              <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
+              @if (departmentListForm.get('estimatedFuneralExpenses')?.hasError('required')) {
+              <mat-error>
+                Estimated Funeral Expenses is required
+              </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button mat-raised-button color="primary" [disabled]="!departmentListForm.valid" [mat-dialog-close]="1"
+              (click)="confirmAdd()">Save</button>
+            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+          </div>
+        </div>
+      </div>
+</div>

@@ -74,10 +74,10 @@ export class GenPrescriptionComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit {
   displayedColumns = [
-    'title',
     'createdDate',
     'symptoms',
     'patient email',
+      'suggestedMedicines',
     //'medicamentList',
     'actions',
   ];

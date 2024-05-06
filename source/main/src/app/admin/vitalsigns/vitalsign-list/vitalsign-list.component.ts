@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AmbulanceListService } from './ambulance-list.service';
+import { DepartmentListService } from './vitalsign-list.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { AmbulanceList } from './ambulance-list.model';
+import { DepartmentList } from './vitalsign-list.model';
 import { DataSource } from '@angular/cdk/collections';
 import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component';
 import { DeleteDialogComponent } from './dialog/delete/delete.component';
@@ -22,11 +22,11 @@ import {
   TableElement,
   UnsubscribeOnDestroyAdapter,
 } from '@shared';
+import { formatDate, NgClass, DatePipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { NgClass } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,9 +34,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
-  selector: 'app-ambulance-list',
-  templateUrl: './ambulance-list.component.html',
-  styleUrls: ['./ambulance-list.component.scss'],
+  selector: 'app-department-list',
+  templateUrl: './vitalsign-list.component.html',
+  styleUrls: ['./vitalsign-list.component.scss'],
   standalone: true,
   imports: [
     BreadcrumbComponent,
@@ -51,32 +51,35 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
     MatRippleModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    DatePipe,
   ],
 })
-export class AmbulanceListComponent
+export class DepartmentListComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit {
   displayedColumns = [
     'select',
-    'vehicle_no',
-    'vehicle_name',
-    'year_made',
-    'driver_name',
-    'driver_license_no',
-    'driver_no',
-    'vehicle_type',
+    'bmi',
+    'heigh',
+    'weight',
+    'recordingLocation',
+    'heartRate',
+    'bloodPressure',
+    'respiratoryRate',
+    'temperature',
+    'oxygenSaturation',
     'actions',
   ];
-  exampleDatabase?: AmbulanceListService;
+  exampleDatabase?: DepartmentListService;
   dataSource!: ExampleDataSource;
-  selection = new SelectionModel<AmbulanceList>(true, []);
-  index?: number;
-  id?: number;
-  ambulanceList?: AmbulanceList;
+  selection = new SelectionModel<DepartmentList>(true, []);
+  index!: number;
+  id!: number;
+  departmentList!: DepartmentList;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public ambulanceListService: AmbulanceListService,
+    public departmentListService: DepartmentListService,
     private snackBar: MatSnackBar
   ) {
     super();
@@ -86,105 +89,82 @@ export class AmbulanceListComponent
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
   @ViewChild('filter', { static: true }) filter?: ElementRef;
-  
- /* AmbulanceLists: AmbulanceList[] =[];
-  loadData() : void{
-    this.ambulanceListService.findAllAmbulances().subscribe((ambulances:AmbulanceList[])=>{
-      this.AmbulanceLists=ambulances;
-      console.log('Ambulances Data :', this.AmbulanceLists);
-    });
-  }*/
   ngOnInit() {
     this.loadData();
   }
   refresh() {
     this.loadData();
   }
-addNew() {
-  let tempDirection: Direction;
-  if (localStorage.getItem('isRtl') === 'true') {
-    tempDirection = 'rtl';
-  } else {
-    tempDirection = 'ltr';
-  }
-
-  const dialogRef = this.dialog.open(FormDialogComponent, {
-    data: {
-      ambulanceList: this.ambulanceList,
-      action: 'add',
-    },
-    direction: tempDirection,
-  });
-
-  this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-    if (result === 1) {
-      const newAmbulanceList = this.ambulanceListService.getDialogData();
-
-      // Call the addAmbulanceList method passing the data obtained from the dialog
-      //this.ambulanceListService.addAmbulanceList(newAmbulanceList);
-
-      // After dialog is closed we're doing frontend updates
-      // For add, we're just pushing a new row inside DataService
-      this.exampleDatabase?.dataChange.value.unshift(newAmbulanceList);
-
-      this.refreshTable();
-      this.showNotification(
-        'snackbar-success',
-        'Add Record Successfully...!!!',
-        'bottom',
-        'center'
-      );
+  addNew() {
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
     }
-  });
-}
-editCall(row: AmbulanceList) {
-  this.id = row.id;
-  let tempDirection: Direction;
-  if (localStorage.getItem('isRtl') === 'true') {
-    tempDirection = 'rtl';
-  } else {
-    tempDirection = 'ltr';
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        departmentList: this.departmentList,
+        action: 'add',
+      },
+      direction: tempDirection,
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        // After dialog is closed we're doing frontend updates
+        // For add we're just pushing a new row inside DataService
+        this.exampleDatabase?.dataChange.value.unshift(
+          this.departmentListService.getDialogData()
+        );
+        this.refreshTable();
+        this.showNotification(
+          'snackbar-success',
+          'Add Record Successfully...!!!',
+          'bottom',
+          'center'
+        );
+      }
+    });
   }
-  const dialogRef = this.dialog.open(FormDialogComponent, {
-    data: {
-      ambulanceList: row,
-      action: 'edit',
-    },
-    direction: tempDirection,
-  });
-  this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-    if (result === 1) {
-      // When using an edit, things are a little different
-      // Firstly, update the record using data from dialogData (values you entered)
-      const updatedData = this.ambulanceListService.getDialogData();
-      this.ambulanceListService.updateAmbulanceList(updatedData).subscribe(
-        () => {
-          // Assuming the server responds successfully, update the record in DataService
-          const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-            (x) => x.id === this.id
+  editCall(row: DepartmentList) {
+    this.id = row.vitalSignId;
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        departmentList: row,
+        action: 'edit',
+      },
+      direction: tempDirection,
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
+          (x) => x.vitalSignId === this.id
+        );
+        // Then you update that record using data from dialogData (values you enetered)
+        if (foundIndex != null && this.exampleDatabase) {
+          this.exampleDatabase.dataChange.value[foundIndex] =
+            this.departmentListService.getDialogData();
+          // And lastly refresh table
+          this.refreshTable();
+          this.showNotification(
+            'black',
+            'Edit Record Successfully...!!!',
+            'bottom',
+            'center'
           );
-          if (foundIndex != null && this.exampleDatabase) {
-            this.exampleDatabase.dataChange.value[foundIndex] = updatedData;
-            // Immediately refresh the table
-            this.refreshTable();
-            this.showNotification(
-              'black',
-              'Edit Record Successfully...!!!',
-              'bottom',
-              'center'
-            );
-          }
-        },
-        (error) => {
-          console.error('Error updating ambulance list:', error);
-          // Handle error and show appropriate notification
         }
-      );
-    }
-  });
-}
-  deleteItem(row: AmbulanceList) {
-    this.id = row.id;
+      }
+    });
+  }
+  deleteItem(row: DepartmentList) {
+    this.id = row.vitalSignId;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -198,7 +178,7 @@ editCall(row: AmbulanceList) {
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.vitalSignId === this.id
         );
         // for delete we use splice in order to remove single object from DataService
         if (foundIndex != null && this.exampleDatabase) {
@@ -242,7 +222,7 @@ editCall(row: AmbulanceList) {
       // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
       this.exampleDatabase?.dataChange.value.splice(index, 1);
       this.refreshTable();
-      this.selection = new SelectionModel<AmbulanceList>(true, []);
+      this.selection = new SelectionModel<DepartmentList>(true, []);
     });
     this.showNotification(
       'snackbar-danger',
@@ -252,7 +232,7 @@ editCall(row: AmbulanceList) {
     );
   }
   public loadData() {
-    this.exampleDatabase = new AmbulanceListService(this.httpClient);
+    this.exampleDatabase = new DepartmentListService(this.httpClient);
     this.dataSource = new ExampleDataSource(
       this.exampleDatabase,
       this.paginator,
@@ -272,14 +252,18 @@ editCall(row: AmbulanceList) {
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        'Vehicle No': x.vehicle_no,
-        'Vehicle Name': x.vehicle_name,
-        'Year Made': x.year_made,
-        'Driver Name': x.driver_name,
-        'Driver License No': x.driver_license_no,
-        'Driver No': x.driver_no,
-        'Vehicle Type': x.vehicle_type,
+        No: x.vitalSignId,
+        'BMI ': x.bmi,
+        'Height': x.heigh,
+        'Weight ': x.weight,
+        'Recording Location ': x.recordingLocation,
+        'Heart Rate ': x.heartRate,
+        'Blood Pressure ': x.bloodPressure,
+        'Respiratory Rate ': x.respiratoryRate,
+        'Temperature ': x.temperature,
+        'Oxygen Saturation' : x.oxygenSaturation,
       }));
+
     TableExportUtil.exportToExcel(exportData, 'excel');
   }
 
@@ -297,7 +281,7 @@ editCall(row: AmbulanceList) {
     });
   }
 }
-export class ExampleDataSource extends DataSource<AmbulanceList> {
+export class ExampleDataSource extends DataSource<DepartmentList> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -305,10 +289,10 @@ export class ExampleDataSource extends DataSource<AmbulanceList> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: AmbulanceList[] = [];
-  renderedData: AmbulanceList[] = [];
+  filteredData: DepartmentList[] = [];
+  renderedData: DepartmentList[] = [];
   constructor(
-    public exampleDatabase: AmbulanceListService,
+    public exampleDatabase: DepartmentListService,
     public paginator: MatPaginator,
     public _sort: MatSort
   ) {
@@ -317,7 +301,7 @@ export class ExampleDataSource extends DataSource<AmbulanceList> {
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<AmbulanceList[]> {
+  connect(): Observable<DepartmentList[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -325,21 +309,24 @@ export class ExampleDataSource extends DataSource<AmbulanceList> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllAmbulanceLists();
+    this.exampleDatabase.getAllDepartmentLists();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((ambulanceList: AmbulanceList) => {
+          .filter((departmentList: DepartmentList) => {
             const searchStr = (
-              ambulanceList.vehicle_no +
-              ambulanceList.vehicle_name +
-              ambulanceList.year_made +
-              ambulanceList.driver_name +
-              ambulanceList.driver_license_no +
-              ambulanceList.driver_no +
-              ambulanceList.vehicle_type
+              departmentList.bmi+
+              departmentList.heigh +
+              departmentList.weight +
+              departmentList.recordingLocation +
+              departmentList.heartRate +
+              departmentList.bloodPressure+
+              departmentList.respiratoryRate+
+              departmentList.temperature+
+              departmentList.oxygenSaturation
+
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -358,7 +345,7 @@ export class ExampleDataSource extends DataSource<AmbulanceList> {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() { }
   /** Returns a sorted copy of the database data. */
-  sortData(data: AmbulanceList[]): AmbulanceList[] {
+  sortData(data: DepartmentList[]): DepartmentList[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -366,30 +353,36 @@ export class ExampleDataSource extends DataSource<AmbulanceList> {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch (this._sort.active) {
-        case 'id':
-          [propertyA, propertyB] = [a.id, b.id];
+        case 'vitalSignId':
+          [propertyA, propertyB] = [a.vitalSignId, b.vitalSignId];
           break;
-        case 'vehicle_no':
-          [propertyA, propertyB] = [a.vehicle_no, b.vehicle_no];
+          case 'bmi':
+            [propertyA, propertyB] = [a.bmi, b.bmi];
+            break;
+        case 'heigh':
+          [propertyA, propertyB] = [a.heigh, b.heigh];
           break;
-        case 'vehicle_name':
-          [propertyA, propertyB] = [a.vehicle_name, b.vehicle_name];
+        case 'weight':
+          [propertyA, propertyB] = [a.weight, b.weight];
           break;
-        case 'year_made':
-          [propertyA, propertyB] = [a.year_made, b.year_made];
+        case 'recordingLocation':
+          [propertyA, propertyB] = [a.recordingLocation, b.recordingLocation];
           break;
-        case 'driver_name':
-          [propertyA, propertyB] = [a.driver_name, b.driver_name];
+        case 'heartRate':
+          [propertyA, propertyB] = [a.heartRate, b.heartRate];
           break;
-        case 'driver_license_no':
-          [propertyA, propertyB] = [a.driver_license_no, b.driver_license_no];
+        case 'bloodPressure':
+          [propertyA, propertyB] = [a.bloodPressure, b.bloodPressure];
           break;
-        case 'driver_no':
-          [propertyA, propertyB] = [a.driver_no, b.driver_no];
-          break;
-        case 'vehicle_type':
-          [propertyA, propertyB] = [a.vehicle_type, b.vehicle_type];
-          break;
+        case 'respiratoryRate':
+            [propertyA, propertyB] = [a.respiratoryRate, b.respiratoryRate];
+            break;
+        case 'temperature':
+              [propertyA, propertyB] = [a.temperature, b.temperature];
+              break;
+        case 'oxygenSaturation':
+                [propertyA, propertyB] = [a.oxygenSaturation, b.oxygenSaturation];
+                break;
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;

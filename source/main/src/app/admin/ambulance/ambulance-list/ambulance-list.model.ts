@@ -1,16 +1,16 @@
 export class AmbulanceList {
-  id: number;
-  vehicle_no: string;
-  vehicle_name: string;
-  year_made: string;
-  driver_name: string;
-  driver_license_no: string;
-  driver_no: string;
-  vehicle_type: string;
-  note: string;
+  id!: number;
+  vehicle_no!: string;
+  vehicle_name!: string;
+  year_made!: string;
+  driver_name!: string;
+  driver_license_no!: string;
+  driver_no!: string;
+  vehicle_type!: string;
+  note?: string;
   constructor(ambulanceList: AmbulanceList) {
     {
-      this.id = ambulanceList.id || this.getRandomID();
+      this.id = ambulanceList.id ;/*|| this.getRandomID();*/
       this.vehicle_no = ambulanceList.vehicle_no || '';
       this.vehicle_name = ambulanceList.vehicle_name || '';
       this.year_made = ambulanceList.year_made || '';
