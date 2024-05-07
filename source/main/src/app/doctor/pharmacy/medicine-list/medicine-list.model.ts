@@ -9,6 +9,9 @@ export class MedicineList {
   price: string;
   edate: Date;
   stock: string;
+  ///j'ajoute et je supprime 
+  //Service : string;
+  //Prix :number;
   constructor(medicineList: MedicineList) {
     {
       this.id = medicineList.id || this.getRandomID();
@@ -22,6 +25,9 @@ export class MedicineList {
       /*this.edate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';*/
       this.edate = medicineList.edate ? new Date(medicineList.edate) : new Date();
       this.stock = medicineList.stock || '';
+     
+
+
     }
   }
   public getRandomID(): number {

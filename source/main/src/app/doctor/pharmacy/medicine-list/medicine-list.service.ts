@@ -4,6 +4,7 @@ import { MedicineList } from './medicine-list.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 
+const categoryOrder = ['Service et Prix', 'Service', 'Prix'];
 @Injectable({
   providedIn: 'root',
 })
@@ -79,4 +80,42 @@ export class MedicineListService extends UnsubscribeOnDestroyAdapter {
            },
          });
   }
+  // pour trier le tableau 
+  /// nouvvvvvvvvvvvv 
+getAllMedicineListsByCategory(): void {
+  this.subs.sink = this.httpClient
+    .get<MedicineList[]>('http://localhost:8085/Examen/complaint/getall')
+    .subscribe({
+      next: (data) => {
+        this.isTblLoading = false;
+        // Classer les réclamations par catégorie
+        const sortedData = this.sortDataByCategory(data);
+        this.dataChange.next(sortedData);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.isTblLoading = false;
+        console.log(error.name + ' ' + error.message);
+      },
+    });
+}
+
+private sortDataByCategory(data: MedicineList[]): MedicineList[] {
+  // Triez les données en fonction de la catégorie
+  const sortedData = data.sort((a, b) => {
+    // Si les deux ont une catégorie "service" ou une catégorie "prix",
+    // alors triez en fonction de la priorité de la catégorie
+    if ((a.category === 'service' && b.category === 'prix') || (a.category === 'prix' && b.category === 'service')) {
+      // Si a est "service" et b est "prix", alors "service" vient en premier
+      return a.category === 'service' ? -1 : 1;
+    }
+    // Sinon, triez normalement en fonction de la catégorie
+    return a.category.localeCompare(b.category);
+  });
+
+  return sortedData;
+}
+
+
+
+
 }
