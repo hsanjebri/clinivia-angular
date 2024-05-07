@@ -80,6 +80,14 @@
       this.fetch((data: Task[]) => {
         this.tasks = data;
       });
+      this.taskService.getTasksByPatientId().subscribe({
+        next: (data: Task[]) => {
+          this.tasks = data;
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error fetching tasks:', error);
+        }
+      });
     }
     dateValidator() {
       return (control: AbstractControl) => {

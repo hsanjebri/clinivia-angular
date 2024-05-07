@@ -57,16 +57,16 @@
                     <mat-label>protein</mat-label>
                     <mat-select formControlName="protein" required>
                       <mat-option [value]="'1'">
-                        1
+                        10
                       </mat-option>
                       <mat-option [value]="'2'">
-                        2
+                        20
                       </mat-option>
                       <mat-option [value]="'3'">
-                        3
+                        30
                       </mat-option>
                       <mat-option [value]="'4'">
-                        4
+                        40
                       </mat-option>
                     </mat-select>
                     @if (billForm.get('protein')?.hasError('required')) {

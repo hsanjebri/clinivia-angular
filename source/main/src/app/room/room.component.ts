@@ -35,9 +35,8 @@ export class RoomComponent implements OnInit, AfterViewInit {
       appID,
       serverSecret,
       roomID, // Use the dynamically generated roomID here
-      appID.toString(),
-      'ggg',
-      Date.now(),
+      Date.now().toString(),
+      Date.now().toString(),
     );
 
     // Create instance object from token

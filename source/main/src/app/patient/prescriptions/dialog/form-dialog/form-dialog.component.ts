@@ -3,26 +3,24 @@ import {Component, Inject, OnInit} from '@angular/core';
 import { PrescriptionService } from '../../prescriptions.service';
 import {
   FormGroup,
-  FormBuilder,
-  Validators,
   AbstractControl,
   FormArray,
   ReactiveFormsModule,
   FormsModule
 } from '@angular/forms';
 import { Prescription } from '../../../../doctor/prescription/prescription.model';
+// @ts-ignore
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import {AuthService} from "@core";
 
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import {formatDate, NgIf} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 export interface DialogData {
   id : number ;
   action: string;
@@ -31,7 +29,6 @@ export interface DialogData {
 }
 
 
-// @ts-ignore
 @Component({
   selector: 'app-form-dialog:not(h)',
   templateUrl: './form-dialog.component.html',

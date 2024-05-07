@@ -282,8 +282,15 @@ export class AllroomComponent
     });
   }
 
-  goToMealPreparation(): void {
-    this.router.navigate(['/admin/billing/add-bill']);
+  goToMealPreparation(row: any) {
+    const dietPlanId = row.idDiet; // Assuming 'idDiet' is the ID property
+    if (dietPlanId) {
+      this.router.navigate(['/admin/meal/add-meal', dietPlanId]).catch((error) => {
+        console.error('Navigation error:', error);
+      });
+    } else {
+      console.warn('Row data missing required ID property (idDiet).'); // Handle missing ID (optional)
+    }
   }
 
 

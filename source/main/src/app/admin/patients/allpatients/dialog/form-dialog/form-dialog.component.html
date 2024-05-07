@@ -65,11 +65,11 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput formControlName="patientPassword" [type]="hidePassword ? 'password' : 'text'" required>
+            <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" required>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix (click)="togglePasswordVisibility()">
               {{ hidePassword ? 'visibility' : 'visibility_off' }}
             </mat-icon>
-            <mat-error *ngIf="patientForm.get('patientPassword')?.hasError('required')">
+            <mat-error *ngIf="patientForm.get('password')?.hasError('required')">
               Password is required
             </mat-error>
           </mat-form-field>

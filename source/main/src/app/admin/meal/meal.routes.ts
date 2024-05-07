@@ -10,7 +10,7 @@ export const MEAL_ROUTE: Route[] = [
     component: MealListComponent,
   },
   {
-    path: 'add-meal',
+    path: 'add-meal/:dietPlanId',
     component: AddMealComponent,
   },
   {

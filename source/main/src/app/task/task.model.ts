@@ -1,5 +1,4 @@
 import { formatDate } from '@angular/common';
-import {AuthService} from "@core";
 export class Task {
   idTask: string;
   img: string;
@@ -8,6 +7,8 @@ export class Task {
   note: string;
   priority: string;
   due_date: string;
+  idPatient: number;
+
   constructor(appointment: Task) {
     {
       this.idTask = appointment.idTask ;
@@ -17,6 +18,8 @@ export class Task {
       this.due_date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
       this.note = appointment.note || '';
       this.priority = appointment.priority || '';
+      this.idPatient = appointment.idPatient ;
+
     }
   }
   public getRandomID(): string {

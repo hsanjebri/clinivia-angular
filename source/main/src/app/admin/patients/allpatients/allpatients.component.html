@@ -172,6 +172,11 @@
                     <button mat-icon-button (click)="makeCall()" class="tbl-action-btn">
                       <app-feather-icons [icon]="'phone'" [class]="'tbl-call'"></app-feather-icons>
                     </button>
+                    <button mat-icon-button (click)="taskr()" class="tbl-action-btn">
+                      <app-feather-icons [icon]="'plus'" [class]="'tbl-add-task'"></app-feather-icons>
+                      <span>Add Task</span>
+                    </button>
+
                     <button mat-icon-button (click)="$event.stopPropagation()" (click)="editCall(row)"
                       class="tbl-action-btn">
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>

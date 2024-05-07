@@ -96,26 +96,26 @@ export class FormDialogComponent implements OnInit{
     }
     this.itemStockListForm = this.creerFormulaire();
   }
-ngOnInit() {
-     this.id_doctor =this.AuthService.currentUserValue.id;
-  this.itemStockListForm = this.formBuilder.group({
-    id: [this.itemStockList.id],
-    title: [this.itemStockList.title, [Validators.required]],
-    diseases: [this.itemStockList.diseases, [Validators.required]],
-    prescPhoto: [this.itemStockList.prescPhoto],
-    createdDate: [
-      formatDate(this.itemStockList.createdDate, 'yyyy-MM-dd', 'en'),
-      [Validators.required, validateurDate(0)]
-    ],
-    emailPatient: [this.itemStockList.emailPatient, [Validators.required]],
-    description: [this.itemStockList.description, [Validators.required]],
-    medicines: this.formBuilder.array([], [Validators.required])
+  ngOnInit() {
+    this.id_doctor =this.AuthService.currentUserValue.id;
+    this.itemStockListForm = this.formBuilder.group({
+      id: [this.itemStockList.id],
+      title: [this.itemStockList.title, [Validators.required]],
+      diseases: [this.itemStockList.diseases, [Validators.required]],
+      prescPhoto: [this.itemStockList.prescPhoto],
+      createdDate: [
+        formatDate(this.itemStockList.createdDate, 'yyyy-MM-dd', 'en'),
+        [Validators.required, validateurDate(0)]
+      ],
+      emailPatient: [this.itemStockList.emailPatient, [Validators.required]],
+      description: [this.itemStockList.description, [Validators.required]],
+      medicines: this.formBuilder.array([], [Validators.required])
 
-  });
+    });
 
 
     this.chargerMedicaments()
-}
+  }
   creerFormulaire(): FormGroup {
     return this.formBuilder.group({
       id: [this.itemStockList.id],
@@ -130,21 +130,21 @@ ngOnInit() {
       description: [this.itemStockList.description, [Validators.required]],
       medicines: this.formBuilder.array([], [Validators.required])
     });
- /*   this.listMedicaments.forEach(medicament => {
-      this.medicin.push(this.formBuilder.group({
-        dosage: [medicament.medDosage], // Ajouter le dosage du médicament
-        medForm: [medicament.medForm],
-        medDescription: [medicament.medDescription], // Ajouter d'autres champs au besoin
-      }));
-    });*/
-}
+    /*   this.listMedicaments.forEach(medicament => {
+         this.medicin.push(this.formBuilder.group({
+           dosage: [medicament.medDosage], // Ajouter le dosage du médicament
+           medForm: [medicament.medForm],
+           medDescription: [medicament.medDescription], // Ajouter d'autres champs au besoin
+         }));
+       });*/
+  }
 
   submit() {
     if (this.itemStockListForm.valid) {
       // Extract selected medicines
       const selectedMedicines = this.itemStockListForm.value.medicines
-          .map((checked: boolean, index: number) => checked ? this.listMedicaments[index].id : null)
-          .filter((medicine: MedicineList | null) => medicine !== null);
+        .map((checked: boolean, index: number) => checked ? this.listMedicaments[index].id : null)
+        .filter((medicine: MedicineList | null) => medicine !== null);
 
 
       const prescription: Prescription = {
@@ -215,8 +215,8 @@ ngOnInit() {
     this.listMedicaments.forEach(() =>
       this.medicin.push(this.formBuilder.control(false))); // Créez un FormControl pour chaque médicament
 
-    }
-    get medicin (){
+  }
+  get medicin (){
     return this.itemStockListForm.get('medicines')as FormArray;
-    }
+  }
 }

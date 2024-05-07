@@ -1,4 +1,3 @@
-import {Room} from "../../room/allroom/room.model";
 
 export class BillList {
   idRecommendation: number;
@@ -11,7 +10,7 @@ export class BillList {
   carbohydrates: number;
   fat: number;
   cholesterol: number;
-  dietPlan: Room | number;
+  dietPlan:  number;
 
   constructor(billList: BillList) {
     {

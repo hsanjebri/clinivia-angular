@@ -114,7 +114,7 @@
                         class="tbl-action-btn">
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
-                      <button mat-icon-button (click)="$event.stopPropagation(); goToMealPreparation()" class="tbl-action-btn">
+                      <button mat-icon-button (click)="$event.stopPropagation(); goToMealPreparation(row)" class="tbl-action-btn">
                         <app-feather-icons [icon]="'arrow-right'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
                     </mat-cell>

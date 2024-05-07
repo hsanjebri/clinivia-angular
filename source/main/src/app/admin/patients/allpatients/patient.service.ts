@@ -17,6 +17,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URLL = 'http://localhost:8085/Examen/patients'; // Replace with your actual API base URL
   private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/'; // Replace with your actual URL
   private readonly API_CALL = 'http://localhost:8085/Examen/call/assess/'; // Replace with your actual URL
+  private readonly API_Stat = 'http://localhost:8085/Examen/patients/common-allergies';
 
   isTblLoading = true;
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);

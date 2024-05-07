@@ -121,17 +121,19 @@ export class FormDialogComponent {
       idPatient: [this.patient.idPatient],
       img: [this.patient.image],
       name: [this.patient.name],
-      email: [this.patient.email],
+      email: [this.patient.email, [Validators.required, Validators.email]],
       gender: [this.patient.gender],
       date: [this.patient.date],
       bgroupe: [this.patient.bgroupe],
       mobile: [this.patient.mobile],
-      address: [this.patient.address, Validators.maxLength(20)],
+      address: [this.patient.address, Validators.maxLength(30)],
       patientPassword: [this.patient.patientPassword], // Add patientPassword attribute
       patientContactEmergencies: [this.patient.patientContactEmergencies], // Add patientContactEmergencies attribute
       medicalHistory: [this.patient.medicalHistory], // Add medicalHistory attribute
       patientAlergies: [this.patient.patientAlergies], // Add patientAlergies attribute
       treatment: [this.patient.treatment],
+      password: [this.patient.password], // Add patientPassword attribute
+
     });
   }
 

@@ -56,11 +56,17 @@
           <mat-form-field class="example-full-width " appearance="outline">
             <mat-label>protein</mat-label>
             <mat-select formControlName="protein" required>
-              <mat-option [value]="'3'">
-                3
+              <mat-option [value]="'1'">
+                10
               </mat-option>
-              <mat-option [value]="'20'">
+              <mat-option [value]="'2'">
                 20
+              </mat-option>
+              <mat-option [value]="'3'">
+                30
+              </mat-option>
+              <mat-option [value]="'4'">
+                40
               </mat-option>
             </mat-select>
             @if (billListForm.get('protein')?.hasError('required')) {

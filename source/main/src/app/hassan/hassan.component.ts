@@ -32,14 +32,15 @@ export class HassanComponent implements OnInit {
   }
 
   async loadModels() {
-    // Load face detection models
+    // Load face detection models from the 'hassan/models' directory
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-      faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-      faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-      faceapi.nets.faceExpressionNet.loadFromUri('/models')
+      faceapi.nets.tinyFaceDetector.loadFromUri('/hassan/models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('/hassan/models'),
+      faceapi.nets.faceRecognitionNet.loadFromUri('/hassan/models'),
+      faceapi.nets.faceExpressionNet.loadFromUri('/hassan/models')
     ]);
   }
+
 
   startVideo() {
     const video = this.videoElement.nativeElement;

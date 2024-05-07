@@ -46,6 +46,8 @@ export class AddPatientComponent {
       treatment: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       image: [''],
+      password: ['', [Validators.required]],
+
     });
   }
   onSubmit() {

@@ -74,7 +74,7 @@ export class AllpatientsComponent
    //  'treatment',
     'Progress',
    // 'patientContactEmergencies',
-     'medicalHistory',
+     //'medicalHistory',
      'patientAlergies',
     'actions',
 
@@ -426,6 +426,11 @@ export class AllpatientsComponent
         );
       }
     );
+  }
+
+  taskr() {
+    this.router.navigate(['/task']);
+
   }
 }
 export class ExampleDataSource extends DataSource<Patient> {
