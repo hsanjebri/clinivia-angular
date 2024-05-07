@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import {BehaviorSubject, filter, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { Patient } from './patient.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +16,7 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
   private readonly API_UPDATE = 'http://localhost:8085/Examen/patients/update';
   private readonly API_URLL = 'http://localhost:8085/Examen/patients'; // Replace with your actual API base URL
   private readonly API_ASSESS_INTAKE = 'http://localhost:8085/Examen/dietplan/assess/'; // Replace with your actual URL
+  private readonly API_CALL = 'http://localhost:8085/Examen/call/assess/'; // Replace with your actual URL
 
   isTblLoading = true;
   dataChange: BehaviorSubject<Patient[]> = new BehaviorSubject<Patient[]>([]);
@@ -85,17 +85,23 @@ export class PatientService extends UnsubscribeOnDestroyAdapter {
 
 
 
-  updatePatient(patient:Patient): void {
-    this.httpClient.put(this.API_UPDATE,patient)
-      .subscribe({
-        next: (data) => {
-          this.dialogData = patient;
-          console.log('Patient updated successfully:', data);
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('Error updating patient:', error);
-        },
-      });
+  // updatePatient(patient:Patient): void {
+  //   this.httpClient.put(this.API_UPDATE,patient)
+  //     .subscribe({
+  //       next: (data) => {
+  //         this.dialogData = patient;
+  //         console.log('Patient updated successfully:', data);
+  //       },
+  //       error: (error: HttpErrorResponse) => {
+  //         console.error('Error updating patient:', error);
+  //       },
+  //     });
+  // }
+
+  updatePatient(patient: Patient): Observable<any> {
+    this.dialogData = patient;
+
+    return this.httpClient.put(this.API_UPDATE + patient.idPatient, patient);
   }
   deletePatient(id: number): void {
     console.log(id);

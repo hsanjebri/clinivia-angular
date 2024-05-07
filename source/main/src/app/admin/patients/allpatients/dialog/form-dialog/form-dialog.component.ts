@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {NgIf} from "@angular/common";
 
 export interface DialogData {
   id: number;
@@ -23,20 +24,21 @@ export interface DialogData {
     templateUrl: './form-dialog.component.html',
     styleUrls: ['./form-dialog.component.scss'],
     standalone: true,
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        MatDatepickerModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatDialogClose,
-    ],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatDialogClose,
+    NgIf,
+  ],
 })
 export class FormDialogComponent {
   action: string;
@@ -116,7 +118,7 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.patient.idPatient],
+      idPatient: [this.patient.idPatient],
       img: [this.patient.image],
       name: [this.patient.name],
       email: [this.patient.email],

@@ -128,7 +128,7 @@
     }
     createFormGroup(data: Task) {
       return this.fb.group({
-        id: [data ? data.idTask : this.getRandomID()],
+        idTask: [data ? data.idTask : this.getRandomID()],
         img: [data ? data.img : 'assets/images/user/user1.jpg'],
         title: [data ? data.title : null],
         done: [data ? data.done : null],
@@ -139,24 +139,38 @@
     }
     saveTask() {
       this.tasks.unshift(this.taskForm.value);
+      console.log("adding");
       const newTask = this.taskForm.value;
       this.taskService.addTask(newTask);
       this.resetFormField();
 
     }
-    editTask() {
-      const targetIdx = this.tasks
-        .map((item) => item.idTask)
-        .indexOf(this.taskForm.value.id);
-      this.tasks[targetIdx] = this.taskForm.value;
+    editTask(): void {
+      const editedTask = this.taskForm.value;
+
+      console.log("task body",editedTask);
+
+      const targetIdx = this.tasks.findIndex(item => item.idTask === editedTask.idTask);
+      if (targetIdx !== -1) {
+        this.tasks[targetIdx] = editedTask;
+       // Update the task object directly
+      }
+
+        console.log("editing");
+        this.taskService.updateTask(editedTask).subscribe(() => {
+          console.log("edited");
+        });
+
 
     }
+
+
     deleteTask(nav: MatSidenav) {
-      const taskIdToDelete = this.taskForm.value.id;
+      const taskIdToDelete = this.taskForm.value.idTask;
       this.taskService.deleteTask(taskIdToDelete);
       const targetIdx = this.tasks
         .map((item) => item.idTask)
-        .indexOf(this.taskForm.value.id);
+        .indexOf(this.taskForm.value.idTask);
       this.tasks.splice(targetIdx, 1);
       nav.close();
     }

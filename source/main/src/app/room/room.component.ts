@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-room',
@@ -28,16 +28,19 @@ export class RoomComponent implements OnInit, AfterViewInit {
     const appID = 854354614;
     const serverSecret = '3d062cae7846e32a26ad3efbfe1b78f5';
 
+    // Generate a unique room ID dynamically
+    const roomID = Math.random().toString(36).substring(2, 15);
+
     const token = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
-      this.roomID,
-      appID.toString(), // Convert appID to string
+      roomID, // Use the dynamically generated roomID here
+      appID.toString(),
       'ggg',
       Date.now(),
     );
 
-    // create instance object from token
+    // Create instance object from token
     const zp = ZegoUIKitPrebuilt.create(token);
     zp.joinRoom({
       container: this.root.nativeElement,
@@ -49,11 +52,12 @@ export class RoomComponent implements OnInit, AfterViewInit {
             window.location.host +
             window.location.pathname +
             '?roomID=' +
-             this.roomID,
+            roomID, // Use the dynamically generated roomID here
         },
       ],
       scenario: {
         mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
       },
-    });  }
+    });
+  }
 }

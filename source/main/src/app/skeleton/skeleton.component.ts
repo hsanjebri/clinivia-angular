@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreadcrumbComponent } from "@shared/components/breadcrumb/breadcrumb.component";
 import { FormsModule } from "@angular/forms";
 import { GemeniService } from "../gemeni.service";
@@ -18,13 +18,14 @@ declare var webkitSpeechRecognition: any;
   templateUrl: './skeleton.component.html',
   styleUrl: './skeleton.component.scss'
 })
-export class SkeletonComponent {
+export class SkeletonComponent implements OnInit{
 
   title = 'gemenie-inte';
   prompt: string = '';
   generatedText: string = ''; // Add a variable to store the generated text
   chatHistory: { from: string; message: string }[] = []; // Corrected type
   private client: AssemblyAI;
+  speechSynthesis: SpeechSynthesis | null = null;
 
   constructor(private geminiService: GemeniService) {
     this.client = new AssemblyAI({
@@ -36,6 +37,22 @@ export class SkeletonComponent {
       }
     });
   }
+
+  ngOnInit(): void {
+    if (typeof window.SpeechSynthesis !== 'undefined') {
+      this.speechSynthesis = window.SpeechSynthesis as unknown as SpeechSynthesis & {
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        onvoiceschanged: Function; // Less strict type
+        paused: boolean;
+        pending: boolean;
+        speaking: boolean;
+        // ... other missing properties
+      };
+    } else {
+      alert('Text-to-speech is not supported by your browser.');
+    }
+  }
+
 
   async sendData() {
     if (this.prompt) {
@@ -69,6 +86,13 @@ export class SkeletonComponent {
   getResult() {
     console.log(this.results);
   }
-
+  speakText(text: string) {
+    if (this.speechSynthesis && this.speechSynthesis.speak) { // Check for speak function
+      const utterance = new SpeechSynthesisUtterance(text);
+      this.speechSynthesis.speak(utterance);
+    } else {
+      alert('Text-to-speech is not supported by your browser.');
+    }
+  }
 
 }
